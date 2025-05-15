@@ -10,9 +10,9 @@ import java.io.IOException;
 public class EcoDeliApplication extends Application {
     @Override
     public void start(Stage stage) throws IOException {
-        FXMLLoader fxmlLoader = new FXMLLoader(EcoDeliApplication.class.getResource("hello-view.fxml"));
+        FXMLLoader fxmlLoader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/AuthView.fxml"));
         Scene scene = new Scene(fxmlLoader.load(), 320, 240);
-        stage.setTitle("EcoDeli !");
+        stage.setTitle("EcoDeli");
         stage.setScene(scene);
         stage.show();
     }
