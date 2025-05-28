@@ -11,7 +11,6 @@ public class StatsViewController {
 
     @FXML
     public void initialize() {
-        // Exemple : PieChart fictif sur les utilisateurs
         PieChart pieChart = new PieChart();
         pieChart.setTitle("Répartition des utilisateurs");
 
