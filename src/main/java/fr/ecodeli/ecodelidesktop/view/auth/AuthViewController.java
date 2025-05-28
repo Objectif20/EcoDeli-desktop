@@ -4,9 +4,15 @@ import fr.ecodeli.ecodelidesktop.api.AuthApi;
 import fr.ecodeli.ecodelidesktop.model.AuthResponse;
 import fr.ecodeli.ecodelidesktop.model.LoginRequest;
 import fr.ecodeli.ecodelidesktop.service.TokenStorage;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.stage.Stage;
 
 import java.io.IOException;
 
@@ -56,6 +62,22 @@ public class AuthViewController {
             }
         } catch (IOException e) {
             System.out.println("Erreur : Une erreur est survenue pendant la connexion : " + e.getMessage());
+        }
+    }
+
+    @FXML
+    private void handleGoToStats(ActionEvent event) {
+        try {
+            System.out.println("FXML path: " + getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
+            Parent statsRoot = loader.load();
+
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(statsRoot));
+            stage.setTitle("Dashboard EcoDeli");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }

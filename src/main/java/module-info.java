@@ -14,6 +14,8 @@ module fr.ecodeli.ecodelidesktop {
     opens fr.ecodeli.ecodelidesktop to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.auth to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.model to com.google.gson;
+    opens fr.ecodeli.ecodelidesktop.dashboard to javafx.fxml;
     exports fr.ecodeli.ecodelidesktop;
     exports fr.ecodeli.ecodelidesktop.view.auth;
+    exports fr.ecodeli.ecodelidesktop.dashboard to javafx.fxml;
 }
