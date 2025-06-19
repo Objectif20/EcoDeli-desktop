@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.ecodeli.ecodelidesktop.services.ServiceTableController"
+      alignment="CENTER" spacing="10" prefWidth="800" prefHeight="600">
+
+    <TableView fx:id="serviceTable" prefHeight="550">
+        <columns>
+            <TableColumn fx:id="nameColumn" text="Nom" prefWidth="150"/>
+            <TableColumn fx:id="cityColumn" text="Ville" prefWidth="100"/>
+            <TableColumn fx:id="priceColumn" text="Prix (€)" prefWidth="100"/>
+            <TableColumn fx:id="durationColumn" text="Durée (min)" prefWidth="120"/>
+            <TableColumn fx:id="availableColumn" text="Disponible" prefWidth="100"/>
+        </columns>
+    </TableView>
+</VBox>

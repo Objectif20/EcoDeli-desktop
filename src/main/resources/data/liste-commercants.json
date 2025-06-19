@@ -1,0 +1,48 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "companyName": "Boulangerie Dupont",
+      "siret": "12345678901234",
+      "city": "Paris",
+      "address": "1 rue de la Paix",
+      "postalCode": "75001",
+      "country": "France",
+      "phone": "0102030405",
+      "description": "Boulangerie artisanale",
+      "profilePicture": null,
+      "firstName": "Jean",
+      "lastName": "Dupont",
+      "pays": "France",
+      "entreprise": "Boulangerie Dupont",
+      "nomAbonnement": "Pro",
+      "nbDemandeDeLivraison": 12,
+      "nbSignalements": 0
+    },
+    {
+      "id": "2",
+      "companyName": "Librairie Martin",
+      "siret": "23456789012345",
+      "city": "Lyon",
+      "address": "2 rue des Livres",
+      "postalCode": "69001",
+      "country": "France",
+      "phone": "0607080910",
+      "description": "Librairie indépendante",
+      "profilePicture": null,
+      "firstName": "Marie",
+      "lastName": "Martin",
+      "pays": "France",
+      "entreprise": "Librairie Martin",
+      "nomAbonnement": "Premium",
+      "nbDemandeDeLivraison": 8,
+      "nbSignalements": 1
+    }
+  ],
+  "meta": {
+    "total": 2,
+    "page": 1,
+    "limit": 10
+  },
+  "totalRows": 2
+}

@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.ecodeli.ecodelidesktop.clients.ClientTableController"
+      spacing="10" alignment="CENTER" prefWidth="800" prefHeight="600">
+
+    <TableView fx:id="clientTable" prefHeight="550">
+        <columns>
+            <TableColumn fx:id="idColumn" text="ID" prefWidth="100"/>
+            <TableColumn fx:id="firstNameColumn" text="Prénom" prefWidth="100"/>
+            <TableColumn fx:id="lastNameColumn" text="Nom" prefWidth="100"/>
+            <TableColumn fx:id="emailColumn" text="Email" prefWidth="150"/>
+            <TableColumn fx:id="nomAbonnementColumn" text="Abonnement" prefWidth="100"/>
+            <TableColumn fx:id="nbLivraisonsColumn" text="Livraisons" prefWidth="80"/>
+            <TableColumn fx:id="nbPrestationsColumn" text="Prestations" prefWidth="80"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -1,0 +1,73 @@
+{
+  "data": [
+    {
+      "service_id": "s1",
+      "service_type": "Transport",
+      "status": "active",
+      "name": "Livraison express",
+      "city": "Paris",
+      "price": 50.0,
+      "price_admin": 5.0,
+      "duration_time": 15,
+      "available": true,
+      "keywords": ["express", "rapide"],
+      "images": [],
+      "description": "Livraison de colis rapide",
+      "author": {
+        "id": "a1",
+        "name": "EcoDeli",
+        "email": "contact@ecodeli.com",
+        "photo": null
+      },
+      "rate": 4.8,
+      "comments": []
+    },
+    {
+      "service_id": "s2",
+      "service_type": "Transport",
+      "status": "active",
+      "name": "Livraison standard",
+      "city": "Lyon",
+      "price": 30.0,
+      "price_admin": 3.0,
+      "duration_time": 35,
+      "available": true,
+      "keywords": ["standard"],
+      "images": [],
+      "description": "Livraison standard",
+      "author": {
+        "id": "a1",
+        "name": "EcoDeli",
+        "email": "contact@ecodeli.com",
+        "photo": null
+      },
+      "rate": 4.5,
+      "comments": []
+    },
+    {
+      "service_id": "s3",
+      "service_type": "Transport",
+      "status": "active",
+      "name": "Livraison longue",
+      "city": "Marseille",
+      "price": 70.0,
+      "price_admin": 7.0,
+      "duration_time": 60,
+      "available": true,
+      "keywords": ["longue", "premium"],
+      "images": [],
+      "description": "Livraison longue distance",
+      "author": {
+        "id": "a1",
+        "name": "EcoDeli",
+        "email": "contact@ecodeli.com",
+        "photo": null
+      },
+      "rate": 4.9,
+      "comments": []
+    }
+  ],
+  "total": 3,
+  "page": 1,
+  "limit": 10
+}

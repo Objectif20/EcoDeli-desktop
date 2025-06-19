@@ -1,0 +1,75 @@
+{
+  "data": [
+    {
+      "id": "1",
+      "profile_picture": null,
+      "first_name": "Alice",
+      "last_name": "Durand",
+      "email": "alice@example.com",
+      "nbDemandeDeLivraison": 5,
+      "nbSignalements": 0,
+      "nomAbonnement": "Premium",
+      "nombreDePrestations": 3,
+      "profilTransporteur": false,
+      "idTransporteur": null
+    },
+    {
+      "id": "2",
+      "profile_picture": null,
+      "first_name": "Bob",
+      "last_name": "Martin",
+      "email": "bob@example.com",
+      "nbDemandeDeLivraison": 10,
+      "nbSignalements": 2,
+      "nomAbonnement": "Standard",
+      "nombreDePrestations": 8,
+      "profilTransporteur": false,
+      "idTransporteur": null
+    },
+    {
+      "id": "3",
+      "profile_picture": null,
+      "first_name": "Claire",
+      "last_name": "Dupuis",
+      "email": "claire@example.com",
+      "nbDemandeDeLivraison": 2,
+      "nbSignalements": 1,
+      "nomAbonnement": "Pro",
+      "nombreDePrestations": 4,
+      "profilTransporteur": false,
+      "idTransporteur": null
+    },
+    {
+      "id": "4",
+      "profile_picture": null,
+      "first_name": "David",
+      "last_name": "Bernard",
+      "email": "david@example.com",
+      "nbDemandeDeLivraison": 15,
+      "nbSignalements": 0,
+      "nomAbonnement": "Premium",
+      "nombreDePrestations": 10,
+      "profilTransporteur": false,
+      "idTransporteur": null
+    },
+    {
+      "id": "5",
+      "profile_picture": null,
+      "first_name": "Eva",
+      "last_name": "Moreau",
+      "email": "eva@example.com",
+      "nbDemandeDeLivraison": 20,
+      "nbSignalements": 0,
+      "nomAbonnement": "Pro",
+      "nombreDePrestations": 15,
+      "profilTransporteur": false,
+      "idTransporteur": null
+    }
+  ],
+  "meta": {
+    "total": 5,
+    "page": 1,
+    "limit": 10
+  },
+  "totalRows": 5
+}
