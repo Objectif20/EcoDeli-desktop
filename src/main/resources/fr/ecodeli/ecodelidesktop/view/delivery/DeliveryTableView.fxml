@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="fr.ecodeli.ecodelidesktop.delivery.DeliveryTableController"
+      spacing="10" alignment="CENTER" prefWidth="900" prefHeight="600">
+
+    <TableView fx:id="livraisonTable" prefHeight="550">
+        <columns>
+            <TableColumn fx:id="departureDateColumn" text="Départ" prefWidth="140"/>
+            <TableColumn fx:id="arrivalDateColumn" text="Arrivée" prefWidth="140"/>
+            <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
+            <TableColumn fx:id="isBoxColumn" text="Box ?" prefWidth="60"/>
+            <TableColumn fx:id="departureCityColumn" text="Ville départ" prefWidth="120"/>
+            <TableColumn fx:id="arrivalCityColumn" text="Ville arrivée" prefWidth="120"/>
+        </columns>
+    </TableView>
+</VBox>

@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.geometry.Insets?>
+
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="fr.ecodeli.ecodelidesktop.controller.NavigationController">
+    <top>
+        <HBox spacing="10">
+            <padding>
+                <Insets top="10" right="10" bottom="10" left="10"/>
+            </padding>
+            <Button text="Dashboard" onAction="#goToDashboard" />
+            <Button text="Clients" onAction="#goToClients" />
+            <Button text="Commercants" onAction="#goToMerchants" />
+            <Button text="Livraisons" onAction="#goToDeliveries" />
+            <Button text="Prestations" onAction="#goToServices" />
+        </HBox>
+    </top>
+    <center>
+        <AnchorPane fx:id="mainContent" />
+    </center>
+</BorderPane>

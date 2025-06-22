@@ -1,0 +1,42 @@
+[
+  {
+    "departure_date": "2024-05-01T10:00:00",
+    "arrival_date": "2024-05-01T12:00:00",
+    "status": "finished",
+    "cart_dropped": false,
+    "isBox": true,
+    "departure": {
+      "city": "Paris",
+      "address": "1 rue A",
+      "postalCode": "75001",
+      "coordinates": [48.8566, 2.3522]
+    },
+    "arrival": {
+      "city": "Lyon",
+      "address": "2 rue B",
+      "postalCode": "69001",
+      "coordinates": [45.75, 4.85]
+    },
+    "packages": []
+  },
+  {
+    "departure_date": "2024-05-02T11:00:00",
+    "arrival_date": "2024-05-02T13:00:00",
+    "status": "pending",
+    "cart_dropped": false,
+    "isBox": false,
+    "departure": {
+      "city": "Lyon",
+      "address": "3 rue C",
+      "postalCode": "69001",
+      "coordinates": [45.75, 4.85]
+    },
+    "arrival": {
+      "city": "Marseille",
+      "address": "4 rue D",
+      "postalCode": "13001",
+      "coordinates": [43.3, 5.4]
+    },
+    "packages": []
+  }
+]
