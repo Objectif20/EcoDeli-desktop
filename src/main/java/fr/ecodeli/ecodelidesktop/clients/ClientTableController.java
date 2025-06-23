@@ -36,7 +36,6 @@ public class ClientTableController {
         nbLivraisonsColumn.setCellValueFactory(new PropertyValueFactory<>("nbDemandeDeLivraison"));
         nbPrestationsColumn.setCellValueFactory(new PropertyValueFactory<>("nombreDePrestations"));
 
-        // Chargement des données
         ObservableList<Client> clients = FXCollections.observableArrayList(loadClientsFromJson());
         System.out.println("Clients chargés : " + clients.size());
         for (Client client : clients) {
