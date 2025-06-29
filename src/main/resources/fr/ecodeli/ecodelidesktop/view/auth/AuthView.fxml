@@ -3,13 +3,80 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<GridPane xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ecodeli.ecodelidesktop.view.auth.AuthViewController">
-    <Label text="Email:" GridPane.rowIndex="0" GridPane.columnIndex="0"/>
-    <TextField fx:id="emailField" GridPane.rowIndex="0" GridPane.columnIndex="1"/>
-    <Label text="Password:" GridPane.rowIndex="1" GridPane.columnIndex="0"/>
-    <PasswordField fx:id="passwordField" GridPane.rowIndex="1" GridPane.columnIndex="1"/>
-    <Label text="2FA Code:" GridPane.rowIndex="2" GridPane.columnIndex="0"/>
-    <TextField fx:id="codeField" GridPane.rowIndex="2" GridPane.columnIndex="1"/>
-    <Button text="Login" onAction="#handleLogin" GridPane.rowIndex="3" GridPane.columnIndex="1"/>
-    <Button text="Voir les statistiques" onAction="#handleGoToMainView" GridPane.rowIndex="4" GridPane.columnIndex="1"/>
-</GridPane>
+<HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ecodeli.ecodelidesktop.view.auth.AuthViewController" styleClass="root-container">
+
+    <VBox styleClass="login-section" HBox.hgrow="ALWAYS">
+        <children>
+            <VBox styleClass="header-section">
+                <children>
+                    <Label styleClass="app-title" text="EcoDeli" />
+                    <Label styleClass="app-subtitle" text="Connexion au tableau de bord" />
+                </children>
+            </VBox>
+
+            <VBox fx:id="loginForm" styleClass="form-container">
+                <children>
+                    <VBox styleClass="field-group">
+                        <children>
+                            <Label styleClass="field-label" text="Email" />
+                            <TextField fx:id="emailField" styleClass="input-field" promptText="votre@email.com" />
+                        </children>
+                    </VBox>
+
+                    <VBox styleClass="field-group">
+                        <children>
+                            <Label styleClass="field-label" text="Mot de passe" />
+                            <PasswordField fx:id="passwordField" styleClass="input-field" promptText="••••••••" />
+                        </children>
+                    </VBox>
+
+                    <Button fx:id="loginButton" styleClass="primary-button" onAction="#handleLogin" text="Se connecter" />
+                </children>
+            </VBox>
+
+            <VBox fx:id="twoFactorForm" styleClass="form-container, two-factor-form" visible="false" managed="false">
+                <children>
+                    <VBox styleClass="two-factor-header">
+                        <children>
+                            <Label styleClass="two-factor-title" text="Authentification à deux facteurs" />
+                            <Label styleClass="two-factor-description" text="Entrez le code à 6 chiffres généré par votre application d'authentification" wrapText="true" />
+                        </children>
+                    </VBox>
+
+                    <HBox fx:id="otpContainer" styleClass="otp-container">
+                        <children>
+                            <TextField fx:id="otp1" styleClass="otp-field" />
+                            <TextField fx:id="otp2" styleClass="otp-field" />
+                            <TextField fx:id="otp3" styleClass="otp-field" />
+                            <TextField fx:id="otp4" styleClass="otp-field" />
+                            <TextField fx:id="otp5" styleClass="otp-field" />
+                            <TextField fx:id="otp6" styleClass="otp-field" />
+                        </children>
+                    </HBox>
+
+                    <HBox styleClass="button-group">
+                        <children>
+                            <Button fx:id="backButton" styleClass="secondary-button" onAction="#handleBackToLogin" text="Retour" />
+                            <Button fx:id="verifyButton" styleClass="primary-button" onAction="#handleVerify2FA" text="Vérifier" />
+                        </children>
+                    </HBox>
+                </children>
+            </VBox>
+
+            <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true" />
+
+        </children>
+    </VBox>
+
+    <StackPane styleClass="welcome-section" HBox.hgrow="ALWAYS">
+        <children>
+            <VBox styleClass="welcome-content">
+                <children>
+                    <Label styleClass="welcome-title" text="Bienvenue sur EcoDeli" />
+                    <Label styleClass="welcome-description" text="Gérez votre plateforme de livraison écologique" wrapText="true" />
+                </children>
+            </VBox>
+        </children>
+    </StackPane>
+
+</HBox>

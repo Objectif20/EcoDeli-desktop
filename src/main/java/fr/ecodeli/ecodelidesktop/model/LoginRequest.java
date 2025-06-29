@@ -1,12 +1,10 @@
 package fr.ecodeli.ecodelidesktop.model;
 
-import com.google.gson.annotations.Expose;
-
 public class LoginRequest {
-    @Expose
     private String email;
-    @Expose
     private String password;
+
+    public LoginRequest() {}
 
     public LoginRequest(String email, String password) {
         this.email = email;
@@ -28,5 +26,12 @@ public class LoginRequest {
     public void setPassword(String password) {
         this.password = password;
     }
-}
 
+    @Override
+    public String toString() {
+        return "LoginRequest{" +
+                "email='" + email + '\'' +
+                ", password='[PROTECTED]'" +
+                '}';
+    }
+}
