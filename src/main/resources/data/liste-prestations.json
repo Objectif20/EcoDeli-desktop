@@ -2,72 +2,162 @@
   "data": [
     {
       "service_id": "s1",
-      "service_type": "Transport",
+      "service_type": "Bien-\u00eatre",
       "status": "active",
-      "name": "Livraison express",
+      "name": "Massage relaxant",
       "city": "Paris",
-      "price": 50.0,
-      "price_admin": 5.0,
-      "duration_time": 15,
+      "price": 60.0,
+      "price_admin": 6.0,
+      "duration_time": 45,
       "available": true,
-      "keywords": ["express", "rapide"],
+      "keywords": [
+        "massage",
+        "relaxation"
+      ],
       "images": [],
-      "description": "Livraison de colis rapide",
+      "description": "Massage corps complet pour se d\u00e9tendre.",
       "author": {
         "id": "a1",
         "name": "EcoDeli",
         "email": "contact@ecodeli.com",
         "photo": null
       },
-      "rate": 4.8,
-      "comments": []
+      "rate": 4.7,
+      "comments": [],
+      "nbDemandeDeLivraison": 28
     },
     {
       "service_id": "s2",
-      "service_type": "Transport",
+      "service_type": "Promenade",
       "status": "active",
-      "name": "Livraison standard",
+      "name": "Promenade chien",
       "city": "Lyon",
-      "price": 30.0,
-      "price_admin": 3.0,
-      "duration_time": 35,
+      "price": 20.0,
+      "price_admin": 2.0,
+      "duration_time": 30,
       "available": true,
-      "keywords": ["standard"],
+      "keywords": [
+        "chien",
+        "balade"
+      ],
       "images": [],
-      "description": "Livraison standard",
+      "description": "Promenade personnalis\u00e9e pour votre chien.",
       "author": {
-        "id": "a1",
-        "name": "EcoDeli",
-        "email": "contact@ecodeli.com",
+        "id": "a2",
+        "name": "DogPro",
+        "email": "contact@dogpro.com",
         "photo": null
       },
-      "rate": 4.5,
-      "comments": []
+      "rate": 4.6,
+      "comments": [],
+      "nbDemandeDeLivraison": 34
     },
     {
       "service_id": "s3",
-      "service_type": "Transport",
+      "service_type": "Nettoyage",
       "status": "active",
-      "name": "Livraison longue",
+      "name": "M\u00e9nage appartement",
       "city": "Marseille",
-      "price": 70.0,
-      "price_admin": 7.0,
+      "price": 45.0,
+      "price_admin": 4.5,
+      "duration_time": 90,
+      "available": true,
+      "keywords": [
+        "m\u00e9nage",
+        "nettoyage"
+      ],
+      "images": [],
+      "description": "Nettoyage complet de votre appartement.",
+      "author": {
+        "id": "a3",
+        "name": "CleanPlus",
+        "email": "contact@cleanplus.fr",
+        "photo": null
+      },
+      "rate": 4.5,
+      "comments": [],
+      "nbDemandeDeLivraison": 21
+    },
+    {
+      "service_id": "s4",
+      "service_type": "Cours",
+      "status": "active",
+      "name": "Cours de yoga",
+      "city": "Bordeaux",
+      "price": 25.0,
+      "price_admin": 2.5,
       "duration_time": 60,
       "available": true,
-      "keywords": ["longue", "premium"],
+      "keywords": [
+        "yoga",
+        "bien-\u00eatre"
+      ],
       "images": [],
-      "description": "Livraison longue distance",
+      "description": "Cours de yoga collectif ou individuel.",
       "author": {
-        "id": "a1",
-        "name": "EcoDeli",
-        "email": "contact@ecodeli.com",
+        "id": "a4",
+        "name": "ZenLife",
+        "email": "contact@zenlife.fr",
         "photo": null
       },
       "rate": 4.9,
-      "comments": []
+      "comments": [],
+      "nbDemandeDeLivraison": 17
+    },
+    {
+      "service_id": "s5",
+      "service_type": "Bien-\u00eatre",
+      "status": "active",
+      "name": "R\u00e9flexologie plantaire",
+      "city": "Paris",
+      "price": 35.0,
+      "price_admin": 3.5,
+      "duration_time": 40,
+      "available": true,
+      "keywords": [
+        "r\u00e9flexologie",
+        "pieds"
+      ],
+      "images": [],
+      "description": "Soulagez votre corps par les pieds.",
+      "author": {
+        "id": "a5",
+        "name": "RelaxPoint",
+        "email": "contact@relaxpoint.fr",
+        "photo": null
+      },
+      "rate": 4.5,
+      "comments": [],
+      "nbDemandeDeLivraison": 19
+    },
+    {
+      "service_id": "s6",
+      "service_type": "Cours",
+      "status": "active",
+      "name": "Cours de guitare",
+      "city": "Paris",
+      "price": 40.0,
+      "price_admin": 4.0,
+      "duration_time": 45,
+      "available": true,
+      "keywords": [
+        "musique",
+        "guitare"
+      ],
+      "images": [],
+      "description": "Apprenez la guitare avec un professeur certifi\u00e9.",
+      "author": {
+        "id": "a6",
+        "name": "MusicPro",
+        "email": "contact@musicpro.fr",
+        "photo": null
+      },
+      "rate": 3,
+      "comments": [],
+      "nbDemandeDeLivraison": 25
     }
   ],
-  "total": 3,
+  "total": 6,
   "page": 1,
   "limit": 10
 }

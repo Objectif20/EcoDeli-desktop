@@ -5,75 +5,141 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.PieChart;
 import javafx.scene.chart.BarChart;
 import javafx.scene.layout.GridPane;
-import javafx.embed.swing.SwingFXUtils;
-import javafx.scene.SnapshotParameters;
-import javafx.scene.image.WritableImage;
+
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
 import org.apache.pdfbox.pdmodel.common.PDRectangle;
-import org.apache.pdfbox.pdmodel.graphics.image.LosslessFactory;
 
-import java.awt.image.BufferedImage;
+import de.rototor.pdfbox.graphics2d.PdfBoxGraphics2D;
+import de.rototor.pdfbox.graphics2d.PdfBoxGraphics2DFontTextDrawer;
+
+import org.jfree.chart.ChartFactory;
+import org.jfree.chart.JFreeChart;
+import org.jfree.data.general.DefaultPieDataset;
+import org.jfree.data.category.DefaultCategoryDataset;
+
+import java.awt.geom.Rectangle2D;
 import java.io.File;
+import java.util.Comparator;
+import java.util.List;
+import java.util.Map;
+import java.util.stream.Collectors;
 
 public class StatsViewController {
 
     @FXML
-    private GridPane statsGrid; // C’est ton conteneur des stats
+    private GridPane statsGrid;
 
     private final StatsService statsService = new StatsService();
 
+    private PieChart repartitionUtilisateursChart;
+    private PieChart colisRepartitionChart;
+    private PieChart chiffreAffairesChart;
+    private PieChart abonnementChart;
+    private BarChart<String, Number> topClientsChart;
+
     @FXML
     public void initialize() {
-        PieChart pieChart = new PieChart();
-        pieChart.setTitle("Répartition des utilisateurs");
-        pieChart.getData().add(new PieChart.Data("Commerçants", 40));
-        pieChart.getData().add(new PieChart.Data("Clients", 35));
-        pieChart.getData().add(new PieChart.Data("Livreurs", 25));
+        repartitionUtilisateursChart = statsService.getRepartitionUtilisateursChart();
+        colisRepartitionChart = statsService.getColisRepartitionChart();
+        chiffreAffairesChart = statsService.getChiffreAffairesChart(); // ⚠️ pense à mettre à jour aussi côté JavaFX si besoin
+        abonnementChart = statsService.getAbonnementChart();
+        topClientsChart = statsService.getTopClientsChart();
 
-        PieChart colisRepartitionChart = statsService.getColisRepartitionChart();
-        PieChart chiffreAffairesChart = statsService.getChiffreAffairesChart();
-        PieChart abonnementChart = statsService.getAbonnementChart();
-        BarChart<String, Number> topClientsChart = statsService.getTopClientsChart();
-
-        // Ajoute les graphiques au GridPane (2 colonnes)
-        statsGrid.add(pieChart, 0, 0);
+        statsGrid.add(repartitionUtilisateursChart, 0, 0);
         statsGrid.add(colisRepartitionChart, 1, 0);
         statsGrid.add(chiffreAffairesChart, 0, 1);
         statsGrid.add(abonnementChart, 1, 1);
-        statsGrid.add(topClientsChart, 0, 2, 2, 1); // Prend toute la largeur
+        statsGrid.add(topClientsChart, 0, 2, 2, 1);
     }
 
     @FXML
     private void handleExportPdf() {
-        exportDashboardToPdf();
+        exportChartsToPdf();
     }
 
-    private void exportDashboardToPdf() {
-        try {
-            // Capture l’image du GridPane (statsGrid est ton conteneur principal)
-            WritableImage snapshot = statsGrid.snapshot(new SnapshotParameters(), null);
-            BufferedImage bufferedImage = SwingFXUtils.fromFXImage(snapshot, null);
-
-            // Crée le document PDF
-            PDDocument document = new PDDocument();
-            PDPage page = new PDPage(new PDRectangle(bufferedImage.getWidth(), bufferedImage.getHeight()));
+    private void exportChartsToPdf() {
+        try (PDDocument document = new PDDocument()) {
+            PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
 
-            // Ajoute l’image au PDF
+            float margin = 20f;
+            float spacing = 10f;
+            float pageWidth = PDRectangle.A4.getWidth();
+            float pageHeight = PDRectangle.A4.getHeight();
+            float chartWidth = (pageWidth - 3 * margin) / 2;
+            float chartHeight = (pageHeight - 4 * margin) / 3;
+
+            // Recréer les datasets à partir des données
+            DefaultPieDataset datasetUsers = new DefaultPieDataset();
+            long nbClients = statsService.loadClients().stream().filter(c -> !c.profilTransporteur).count();
+            long nbLivreurs = statsService.loadClients().stream().filter(c -> c.profilTransporteur).count();
+            long nbCommercants = statsService.loadMerchants().size();
+            datasetUsers.setValue("Commerçants", nbCommercants);
+            datasetUsers.setValue("Clients", nbClients);
+            datasetUsers.setValue("Livreurs", nbLivreurs);
+
+            DefaultPieDataset datasetColis = new DefaultPieDataset();
+            statsService.loadDeliveries().stream()
+                    .collect(Collectors.groupingBy(d -> d.status, Collectors.counting()))
+                    .forEach(datasetColis::setValue);
+
+            // ✅ Chiffre d'affaires : Livreurs vs Commerçants
+            DefaultPieDataset datasetCA = new DefaultPieDataset();
+            double caLivreurs = statsService.loadClients().stream()
+                    .filter(c -> c.profilTransporteur)
+                    .mapToDouble(c -> c.nbDemandeDeLivraison * 20)
+                    .sum();
+            double caMerchants = statsService.loadServices().stream()
+                    .mapToDouble(s -> s.price)
+                    .sum();
+            datasetCA.setValue("Livreurs", caLivreurs);
+            datasetCA.setValue("Commerçants", caMerchants);
+
+            DefaultPieDataset datasetAbo = new DefaultPieDataset();
+            statsService.loadClients().stream()
+                    .collect(Collectors.groupingBy(c -> c.nomAbonnement, Collectors.counting()))
+                    .forEach(datasetAbo::setValue);
+
+            DefaultCategoryDataset datasetTopClients = new DefaultCategoryDataset();
+            statsService.loadClients().stream()
+                    .sorted(Comparator.comparingInt(c -> -c.nbDemandeDeLivraison))
+                    .limit(5)
+                    .forEach(c -> {
+                        String name = c.first_name + " " + c.last_name;
+                        datasetTopClients.addValue(c.nbDemandeDeLivraison, "Livraisons", name);
+                    });
+
+            // Créer les charts
+            JFreeChart chartUsers = ChartFactory.createPieChart("Répartition des utilisateurs", datasetUsers, true, true, false);
+            JFreeChart chartColis = ChartFactory.createPieChart("Répartition des colis (statuts)", datasetColis, true, true, false);
+            JFreeChart chartCA = ChartFactory.createPieChart("Chiffre d'affaires : Livreurs / Commerçants", datasetCA, true, true, false);
+            JFreeChart chartAbo = ChartFactory.createPieChart("Répartition des abonnements", datasetAbo, true, true, false);
+            JFreeChart chartTop = ChartFactory.createBarChart("Top 5 clients par livraisons", "Client", "Nb livraisons", datasetTopClients);
+
+            // Dessiner les charts en vectoriel
+            PdfBoxGraphics2D g2 = new PdfBoxGraphics2D(document, (int) pageWidth, (int) pageHeight);
+            g2.setFontTextDrawer(new PdfBoxGraphics2DFontTextDrawer());
+
+            chartUsers.draw(g2, new Rectangle2D.Double(margin, pageHeight - chartHeight - margin, chartWidth, chartHeight));
+            chartColis.draw(g2, new Rectangle2D.Double(margin * 2 + chartWidth, pageHeight - chartHeight - margin, chartWidth, chartHeight));
+            chartCA.draw(g2, new Rectangle2D.Double(margin, pageHeight - 2 * chartHeight - 2 * margin, chartWidth, chartHeight));
+            chartAbo.draw(g2, new Rectangle2D.Double(margin * 2 + chartWidth, pageHeight - 2 * chartHeight - 2 * margin, chartWidth, chartHeight));
+            chartTop.draw(g2, new Rectangle2D.Double(margin, margin, pageWidth - 2 * margin, chartHeight));
+
+            g2.dispose();
+
+            // Ajouter au PDF
             PDPageContentStream contentStream = new PDPageContentStream(document, page);
-            var pdImage = LosslessFactory.createFromImage(document, bufferedImage);
-            contentStream.drawImage(pdImage, 0, 0);
+            contentStream.drawForm(g2.getXFormObject());
             contentStream.close();
 
-            // Sauvegarde le fichier PDF
-            String userHome = System.getProperty("user.home") + File.separator + "Downloads";
-            String filePath = userHome + File.separator + "dashboard.pdf";
+            // Sauvegarde
+            String filePath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "dashboard.pdf";
             document.save(filePath);
-            document.close();
+            System.out.println("✅ PDF vectoriel généré : " + filePath);
 
-            System.out.println("✅ PDF généré : " + filePath);
         } catch (Exception e) {
             e.printStackTrace();
         }

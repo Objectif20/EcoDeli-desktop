@@ -9,7 +9,7 @@ import javafx.scene.control.Button;
 public class MainController {
 
     @FXML private StackPane contentArea;
-    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices;
+    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnStatspresta;
 
     @FXML
     public void initialize() {
@@ -18,6 +18,7 @@ public class MainController {
         btnMerchants.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantView.fxml"));
         btnDeliveries.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
         btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/servicesView.fxml"));
+        btnStatspresta.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsPrestationsView.fxml"));
         loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml");
     }
 

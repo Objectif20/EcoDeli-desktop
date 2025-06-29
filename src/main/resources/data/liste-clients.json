@@ -75,7 +75,7 @@
       "nbSignalements": 4,
       "nomAbonnement": "Premium",
       "nombreDePrestations": 19,
-      "profilTransporteur": false,
+      "profilTransporteur": true,
       "idTransporteur": null
     },
     {
@@ -101,7 +101,7 @@
       "nbSignalements": 2,
       "nomAbonnement": "Pro",
       "nombreDePrestations": 10,
-      "profilTransporteur": false,
+      "profilTransporteur": true,
       "idTransporteur": null
     },
     {
@@ -166,7 +166,7 @@
       "nbSignalements": 5,
       "nomAbonnement": "Pro",
       "nombreDePrestations": 4,
-      "profilTransporteur": false,
+      "profilTransporteur": true,
       "idTransporteur": null
     },
     {
