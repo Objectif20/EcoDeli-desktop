@@ -13,7 +13,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
-import fr.ecodeli.ecodelidesktop.controller.NavigationController;
 
 import java.io.IOException;
 
@@ -66,21 +65,15 @@ public class AuthViewController {
     }
 
     @FXML
-    private void handleGoToStats(ActionEvent event) {
+    private void handleGoToMainView(ActionEvent event) {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
-            Parent navigationRoot = loader.load();
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/navigation/MainView.fxml"));
+            Parent mainView = loader.load();
 
-            // Affiche la nouvelle scène contenant la navbar
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(navigationRoot));
+            stage.setScene(new Scene(mainView));
             stage.setTitle("EcoDeli - Tableau de bord");
             stage.show();
-
-            // Appelle la méthode du controller pour charger la vue de stats
-            NavigationController controller = loader.getController();
-            System.out.println("DEBUG - Le controller de navigation a été trouvé correctement");
-            controller.goToDashboard(); // ✅ méthode déjà existante dans NavigationController
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -88,8 +81,23 @@ public class AuthViewController {
     }
 
 
+    @FXML
+    private void handleGoToStats(ActionEvent event) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
+            Parent navigationRoot = loader.load();
 
-    // Ces boutons changent toute la scène et ne passent pas par la navbar
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.setScene(new Scene(navigationRoot));
+            stage.setTitle("EcoDeli - Tableau de bord");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
+
     @FXML
     public void handleGoToMerchants(ActionEvent event) {
         try {
@@ -143,20 +151,6 @@ public class AuthViewController {
             Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
             stage.setScene(new Scene(view));
             stage.setTitle("Liste des Prestations");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
-
-
-    private void loadScene(String fxmlPath, String title, ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getClassLoader().getResource(fxmlPath));
-            Parent root = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(root));
-            stage.setTitle(title);
             stage.show();
         } catch (IOException e) {
             e.printStackTrace();

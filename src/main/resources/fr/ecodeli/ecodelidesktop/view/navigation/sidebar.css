@@ -1,0 +1,23 @@
+/* sidebar.css */
+
+.button {
+    -fx-background-color: #4CAF50;
+    -fx-text-fill: white;
+    -fx-font-size: 14px;
+    -fx-pref-width: 140px;
+    -fx-pref-height: 40px;
+    -fx-background-radius: 8;
+    -fx-border-radius: 8;
+    -fx-border-color: transparent;
+    -fx-cursor: hand;
+}
+
+.button:hover {
+    -fx-background-color: #C8E6C9;
+}
+
+.button:selected,
+.button:focused {
+    -fx-border-color: white;
+    -fx-border-width: 2;
+}

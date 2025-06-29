@@ -189,6 +189,7 @@ public class StatsService {
         public Author author;
         public double rate;
         public List<Comment> comments;
+        public int nbDemandeDeLivraison;
 
         public String getService_id() { return service_id; }
         public String getService_type() { return service_type; }
@@ -205,6 +206,7 @@ public class StatsService {
         public Author getAuthor() { return author; }
         public double getRate() { return rate; }
         public List<Comment> getComments() { return comments; }
+        public int getNbDemandeDeLivraison() { return nbDemandeDeLivraison; }
 
         public static class Author {
             public String id;
@@ -285,7 +287,6 @@ public class StatsService {
 
 
 
-    // 📦 Chargement des clients
     public List<Client> loadClients() {
         try (InputStreamReader reader = new InputStreamReader(
                 getClass().getResourceAsStream("/data/liste-clients.json"))) {
@@ -298,7 +299,6 @@ public class StatsService {
         }
     }
 
-    // 📦 Chargement des commerçants
     public List<Merchant> loadMerchants() {
         try (InputStreamReader reader = new InputStreamReader(
                 getClass().getResourceAsStream("/data/liste-commercants.json"))) {
@@ -311,7 +311,6 @@ public class StatsService {
         }
     }
 
-    // 📦 Chargement des livraisons
     public List<Delivery> loadDeliveries() {
         try (InputStreamReader reader = new InputStreamReader(
                 getClass().getResourceAsStream("/data/liste-livraisons.json"))) {
@@ -323,7 +322,6 @@ public class StatsService {
         }
     }
 
-    // 📦 Chargement des prestations
     public List<MyService> loadServices() {
         try (InputStreamReader reader = new InputStreamReader(
                 getClass().getResourceAsStream("/data/liste-prestations.json"))) {
@@ -336,7 +334,6 @@ public class StatsService {
         }
     }
 
-    // 1️⃣ Répartition des abonnements
     public PieChart getAbonnementChart() {
         List<Client> clients = loadClients();
         Map<String, Long> abonnementCounts = clients.stream()
@@ -351,28 +348,32 @@ public class StatsService {
         return chart;
     }
 
-    // 2️⃣ Top 5 des meilleurs clients (fictif)
+    // 📊 Top 5 clients par nombre de livraisons
     public BarChart<String, Number> getTopClientsChart() {
         List<Client> clients = loadClients();
-        // 💡 Tu peux calculer chiffreAffaires dynamiquement ici si nécessaire
-        clients.forEach(c -> { if (c.chiffreAffaires == 0) c.chiffreAffaires = c.nbDemandeDeLivraison * 20; });
 
-        clients.sort(Comparator.comparingDouble(c -> -c.chiffreAffaires));
+        // Tri décroissant par nombre de livraisons
+        clients.sort(Comparator.comparingInt(c -> -c.nbDemandeDeLivraison));
         List<Client> top5 = clients.stream().limit(5).collect(Collectors.toList());
 
+        // Création des séries de données
         XYChart.Series<String, Number> series = new XYChart.Series<>();
         for (Client c : top5) {
             String nom = c.first_name + " " + c.last_name;
-            series.getData().add(new XYChart.Data<>(nom, c.chiffreAffaires));
+            series.getData().add(new XYChart.Data<>(nom, c.nbDemandeDeLivraison));
         }
 
-        BarChart<String, Number> chart = new BarChart<>(new javafx.scene.chart.CategoryAxis(), new javafx.scene.chart.NumberAxis());
-        chart.setTitle("Top 5 des meilleurs clients");
+        // Création du graphique
+        BarChart<String, Number> chart = new BarChart<>(
+                new javafx.scene.chart.CategoryAxis(),
+                new javafx.scene.chart.NumberAxis()
+        );
+        chart.setTitle("Top 5 clients par nombre de livraisons");
         chart.getData().add(series);
+
         return chart;
     }
 
-    // 3️⃣ Répartition des colis expédiés (fictif)
     public PieChart getColisRepartitionChart() {
         List<Delivery> deliveries = loadDeliveries();
         Map<String, Long> repartition = deliveries.stream()
@@ -389,19 +390,27 @@ public class StatsService {
 
     // 4️⃣ Chiffre d'affaires global (fictif) : clients vs commerçants
     public PieChart getChiffreAffairesChart() {
-        double totalClients = loadClients().stream()
-                .mapToDouble(c -> c.nbDemandeDeLivraison * 20).sum();
+        // 💰 CA des livreurs : nombre de livraisons * 20
+        double totalLivreurs = loadClients().stream()
+                .filter(Client::isProfilTransporteur)
+                .mapToDouble(c -> c.nbDemandeDeLivraison * 20)
+                .sum();
+
+        // 💰 CA des commerçants : somme des prix des prestations proposées
         double totalMerchants = loadServices().stream()
-                .mapToDouble(s -> s.price).sum();
+                .mapToDouble(s -> s.price)
+                .sum();
 
         ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
-                new PieChart.Data("Clients", totalClients),
+                new PieChart.Data("Livreurs", totalLivreurs),
                 new PieChart.Data("Commerçants", totalMerchants)
         );
+
         PieChart chart = new PieChart(data);
-        chart.setTitle("Chiffre d'affaires : Clients / Commerçants");
+        chart.setTitle("Chiffre d'affaires : Livreurs / Commerçants");
         return chart;
     }
+
 
     // 5️⃣ Répartition des prestations par durée
     public PieChart getPrestationsParDureeChart() {
@@ -425,4 +434,116 @@ public class StatsService {
         chart.setTitle("Répartition des prestations par durée");
         return chart;
     }
+
+    public PieChart getRepartitionUtilisateursChart() {
+        List<Client> clients = loadClients();
+        List<Merchant> merchants = loadMerchants();
+
+        long nbClients = clients.stream().filter(c -> !c.profilTransporteur).count();
+        long nbLivreurs = clients.stream().filter(Client::isProfilTransporteur).count();
+        long nbCommercants = merchants.size();
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList(
+                new PieChart.Data("Commerçants", nbCommercants),
+                new PieChart.Data("Clients", nbClients),
+                new PieChart.Data("Livreurs", nbLivreurs)
+        );
+
+        PieChart chart = new PieChart(data);
+        chart.setTitle("Répartition des utilisateurs");
+        return chart;
+    }
+
+    public PieChart getPrestationsParTypeChart() {
+        List<MyService> services = loadServices();
+        Map<String, Long> typeCounts = services.stream()
+                .collect(Collectors.groupingBy(s -> s.service_type, Collectors.counting()));
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        typeCounts.forEach((type, count) -> data.add(new PieChart.Data(type, count)));
+
+        PieChart chart = new PieChart(data);
+        chart.setTitle("Répartition des prestations par type");
+        return chart;
+    }
+
+    public PieChart getPrestationsParFrequenceChart() {
+        List<MyService> services = loadServices();
+        Map<String, Long> frequenceBuckets = new HashMap<>();
+        frequenceBuckets.put("Peu demandées", 0L);
+        frequenceBuckets.put("Demandées", 0L);
+        frequenceBuckets.put("Très demandées", 0L);
+
+        for (MyService s : services) {
+            int nb = s.nbDemandeDeLivraison;
+            if (nb < 10) frequenceBuckets.put("Peu demandées", frequenceBuckets.get("Peu demandées") + 1);
+            else if (nb < 30) frequenceBuckets.put("Demandées", frequenceBuckets.get("Demandées") + 1);
+            else frequenceBuckets.put("Très demandées", frequenceBuckets.get("Très demandées") + 1);
+        }
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        frequenceBuckets.forEach((label, count) -> data.add(new PieChart.Data(label, count)));
+
+        PieChart chart = new PieChart(data);
+        chart.setTitle("Fréquence d'utilisation des prestations");
+        return chart;
+    }
+
+    public BarChart<String, Number> getTopServicesChart() {
+        List<MyService> services = loadServices();
+
+        // Tri décroissant selon le nombre de demandes
+        services.sort(Comparator.comparingInt(s -> -s.nbDemandeDeLivraison));
+        List<MyService> top5 = services.stream().limit(5).collect(Collectors.toList());
+
+        XYChart.Series<String, Number> series = new XYChart.Series<>();
+        for (MyService s : top5) {
+            series.getData().add(new XYChart.Data<>(s.name, s.nbDemandeDeLivraison));
+        }
+
+        BarChart<String, Number> chart = new BarChart<>(
+                new javafx.scene.chart.CategoryAxis(),
+                new javafx.scene.chart.NumberAxis()
+        );
+        chart.setTitle("Top 5 prestations les plus demandées");
+        chart.getData().add(series);
+
+        return chart;
+    }
+
+    public PieChart getPrestationsParNoteChart() {
+        List<MyService> services = loadServices();
+        Map<String, Long> parNote = new HashMap<>();
+        parNote.put("Note < 4", 0L);
+        parNote.put("Note 4 - 4.5", 0L);
+        parNote.put("Note > 4.5", 0L);
+
+        for (MyService s : services) {
+            if (s.rate < 4) parNote.put("Note < 4", parNote.get("Note < 4") + 1);
+            else if (s.rate <= 4.5) parNote.put("Note 4 - 4.5", parNote.get("Note 4 - 4.5") + 1);
+            else parNote.put("Note > 4.5", parNote.get("Note > 4.5") + 1);
+        }
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        parNote.forEach((label, count) -> data.add(new PieChart.Data(label, count)));
+
+        PieChart chart = new PieChart(data);
+        chart.setTitle("Répartition des prestations par note");
+        return chart;
+    }
+
+    public PieChart getPrestationsParVilleChart() {
+        List<MyService> services = loadServices();
+        Map<String, Long> parVille = services.stream()
+                .collect(Collectors.groupingBy(s -> s.city, Collectors.counting()));
+
+        ObservableList<PieChart.Data> data = FXCollections.observableArrayList();
+        parVille.forEach((ville, count) -> data.add(new PieChart.Data(ville, count)));
+
+        PieChart chart = new PieChart(data);
+        chart.setTitle("Répartition des prestations par ville");
+        return chart;
+    }
 }
+
+

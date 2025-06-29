@@ -12,6 +12,9 @@ module fr.ecodeli.ecodelidesktop {
     requires com.google.gson;
     requires javafx.swing;
     requires org.apache.pdfbox;
+    requires org.jfree.jfreechart;
+    requires de.rototor.pdfbox.graphics2d;
+
 
     opens fr.ecodeli.ecodelidesktop to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.auth to javafx.fxml;
