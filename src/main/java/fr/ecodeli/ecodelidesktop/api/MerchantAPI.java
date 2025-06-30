@@ -8,6 +8,8 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 import java.io.IOException;
+import java.net.URLEncoder;
+import java.nio.charset.StandardCharsets;
 import java.util.List;
 
 public class MerchantAPI {
@@ -52,7 +54,30 @@ public class MerchantAPI {
             }
             assert response.body() != null;
             String responseBody = response.body().string();
+            System.out.println("Response JSON: " + responseBody); // Pour debug
             return gson.fromJson(responseBody, MerchantDetails.class);
+        }
+    }
+
+    public byte[] downloadDocument(String documentUrl) throws IOException {
+        String[] tokens = TokenStorage.loadTokens();
+        String accessToken = tokens[0].split("=")[1];
+
+        String encodedUrl = URLEncoder.encode(documentUrl, StandardCharsets.UTF_8);
+        String apiUrl = "/client/utils/document?url=" + encodedUrl;
+
+        Request request = new Request.Builder()
+                .url(CustomOkHttpClient.BASE_URL + apiUrl)
+                .addHeader("Authorization", "Bearer " + accessToken)
+                .get()
+                .build();
+
+        try (Response response = CustomOkHttpClient.getInstance().newCall(request).execute()) {
+            if (!response.isSuccessful()) {
+                throw new IOException("Erreur lors du téléchargement du document: " + response.code());
+            }
+            assert response.body() != null;
+            return response.body().bytes();
         }
     }
 
@@ -87,56 +112,74 @@ public class MerchantAPI {
         }
     }
 
+    // Nouvelle structure pour correspondre au backend
     public static class MerchantDetails {
-        public String id;
-        public String firstName;
-        public String lastName;
-        public String companyName;
-        public String city;
-        public String nomAbonnement;
-        public int nbDemandeDeLivraison;
-        public String email;
-        public String phone;
-        public String address;
+        public MerchantInfo info;
 
+        public MerchantInfo getInfo() {
+            return info;
+        }
+
+        // Méthodes de compatibilité pour le contrôleur existant
         public String getId() {
-            return id;
+            return info != null ? info.id : null;
         }
 
         public String getFirstName() {
-            return firstName;
+            return info != null ? info.first_name : null;
         }
 
         public String getLastName() {
-            return lastName;
+            return info != null ? info.last_name : null;
         }
 
         public String getCompanyName() {
-            return companyName;
+            return info != null ? info.entreprise : null;
         }
 
         public String getCity() {
-            return city;
+            return info != null ? info.pays : null; // Ou créer un nouveau champ city si nécessaire
         }
 
         public String getNomAbonnement() {
-            return nomAbonnement;
+            return info != null ? info.nomAbonnement : null;
         }
 
         public int getNbDemandeDeLivraison() {
-            return nbDemandeDeLivraison;
+            return info != null ? info.nbDemandeDeLivraison : 0;
         }
 
         public String getEmail() {
-            return email;
+            return info != null ? info.email : null;
         }
 
         public String getPhone() {
-            return phone;
+            return info != null ? info.phone : null;
         }
 
         public String getAddress() {
-            return address;
+            return info != null ? info.description : null; // Ou créer un nouveau champ address
         }
+
+        public String getContractUrl() {
+            return info != null ? info.contractUrl : null;
+        }
+    }
+
+    public static class MerchantInfo {
+        public String id;
+        public String profile_picture;
+        public String first_name;
+        public String last_name;
+        public String description;
+        public String email;
+        public String phone;
+        public int nbDemandeDeLivraison;
+        public String nomAbonnement;
+        public int nbSignalements;
+        public String entreprise;
+        public String siret;
+        public String pays;
+        public String contractUrl;
     }
 }

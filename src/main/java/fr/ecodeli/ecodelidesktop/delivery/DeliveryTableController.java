@@ -158,7 +158,7 @@ public class DeliveryTableController {
             Parent detailView = loader.load();
 
             DeliveryDetailsController detailController = loader.getController();
-            detailController.setClientId(delivery.getId());
+            detailController.setDeliveryId(delivery.getId());
 
             MainController.setContent(detailView);
         } catch (IOException e) {
