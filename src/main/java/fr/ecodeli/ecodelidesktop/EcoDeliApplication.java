@@ -29,7 +29,8 @@ public class EcoDeliApplication extends Application {
         scene.getStylesheets().addAll(
                 getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css").toExternalForm(),
                 getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/merchant-list.css").toExternalForm(),
-                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/client-list.css").toExternalForm()
+                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/client-list.css").toExternalForm(),
+                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/dashboard.css").toExternalForm()
         );
 
         stage.setTitle("EcoDeli - Connexion");

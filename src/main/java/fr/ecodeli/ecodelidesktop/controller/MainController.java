@@ -9,17 +9,16 @@ import javafx.scene.control.Button;
 public class MainController {
 
     @FXML private StackPane contentArea;
-    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnStatspresta;
+    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices;
 
     @FXML
     public void initialize() {
-        btnStats.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
+        btnStats.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsWrapperView.fxml"));
         btnClients.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/client/ClientView.fxml"));
         btnMerchants.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantView.fxml"));
         btnDeliveries.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
         btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/servicesView.fxml"));
-        btnStatspresta.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsPrestationsView.fxml"));
-        loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml");
+        loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsWrapperView.fxml");
     }
 
     private void loadPage(String fxmlPath) {
