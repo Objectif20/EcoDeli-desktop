@@ -1,10 +1,14 @@
 package fr.ecodeli.ecodelidesktop.merchant;
 
 import fr.ecodeli.ecodelidesktop.api.MerchantAPI;
+import fr.ecodeli.ecodelidesktop.controller.MainController;
+import fr.ecodeli.ecodelidesktop.delivery.DeliveryDetailsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -241,7 +245,17 @@ public class MerchantTableController {
     }
 
     private void viewMerchantDetails(Merchant merchant) {
-        System.out.println("Affichage des détails pour le merchant ID: " + merchant.getId());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantDetailsView.fxml"));
+            Parent detailView = loader.load();
+
+            MerchantDetailsController detailController = loader.getController();
+            detailController.setClientId(merchant.getId());
+
+            MainController.setContent(detailView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

@@ -1,10 +1,13 @@
 package fr.ecodeli.ecodelidesktop.clients;
 
 import fr.ecodeli.ecodelidesktop.api.ClientAPI;
+import fr.ecodeli.ecodelidesktop.controller.MainController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -195,7 +198,17 @@ public class ClientTableController {
     }
 
     private void viewClientDetails(Client client) {
-        System.out.println("Affichage des détails pour le client ID: " + client.getId());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/ClientDetailsView.fxml"));
+            Parent detailView = loader.load();
+
+            ClientDetailController detailController = loader.getController();
+            detailController.setClientId(client.getId());
+
+            MainController.setContent(detailView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

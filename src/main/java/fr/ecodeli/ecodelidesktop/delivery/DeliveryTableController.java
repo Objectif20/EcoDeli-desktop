@@ -2,9 +2,13 @@ package fr.ecodeli.ecodelidesktop.delivery;
 
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI;
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI.DeliveryResponse;
+import fr.ecodeli.ecodelidesktop.clients.ClientDetailController;
+import fr.ecodeli.ecodelidesktop.controller.MainController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
@@ -149,7 +153,17 @@ public class DeliveryTableController {
     }
 
     private void viewDeliveryDetails(DeliveryRow delivery) {
-        System.out.println("Affichage des détails pour la livraison ID: " + delivery.getId());
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryDetailsView.fxml"));
+            Parent detailView = loader.load();
+
+            DeliveryDetailsController detailController = loader.getController();
+            detailController.setClientId(delivery.getId());
+
+            MainController.setContent(detailView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
     private void showAlert(String title, String message) {

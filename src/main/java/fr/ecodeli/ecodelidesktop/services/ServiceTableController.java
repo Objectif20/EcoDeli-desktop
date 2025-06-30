@@ -1,9 +1,14 @@
 package fr.ecodeli.ecodelidesktop.services;
 
 import fr.ecodeli.ecodelidesktop.api.ServicesAPI;
+import fr.ecodeli.ecodelidesktop.controller.MainController;
+import fr.ecodeli.ecodelidesktop.merchant.Merchant;
+import fr.ecodeli.ecodelidesktop.merchant.MerchantDetailsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.util.Callback;
@@ -119,6 +124,20 @@ public class ServiceTableController {
         column.setCellFactory(getCenteredCellFactory());
     }
 
+    private void viewServiceDetails(Service service) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/service/ServicesDetailsView.fxml"));
+            Parent detailView = loader.load();
+
+            ServiceDetailsController detailController = loader.getController();
+            detailController.setClientId(service.getId());
+
+            MainController.setContent(detailView);
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     private <T> Callback<TableColumn<Service, T>, TableCell<Service, T>> getCenteredCellFactory() {
         return new Callback<TableColumn<Service, T>, TableCell<Service, T>>() {
             @Override
@@ -165,12 +184,16 @@ public class ServiceTableController {
             @Override
             public TableCell<Service, Void> call(final TableColumn<Service, Void> param) {
                 return new TableCell<>() {
-                    private final Button btn = new Button("Afficher ID");
+                    private final Button btn = new Button("Afficher");
 
                     {
                         btn.setOnAction(event -> {
                             Service service = getTableView().getItems().get(getIndex());
-                            System.out.println("ID du service : " + service.getServiceId());
+                            if (service != null) {
+                                viewServiceDetails(service);
+                            } else {
+                                System.err.println("Aucun marchand associé au service.");
+                            }
                         });
                     }
 

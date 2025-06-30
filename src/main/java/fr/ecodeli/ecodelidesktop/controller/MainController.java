@@ -14,25 +14,25 @@ public class MainController {
 
     @FXML private StackPane contentArea;
     @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnGeneratePdf;
+    private static StackPane staticContentArea;
 
-    // Références aux contrôleurs pour la génération PDF
     private StatsViewController statsViewController;
     private StatsPrestationsViewController statsPrestationsViewController;
 
     @FXML
     public void initialize() {
+
+        staticContentArea = contentArea;
         btnStats.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsWrapperView.fxml"));
         btnClients.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/client/ClientView.fxml"));
         btnMerchants.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantView.fxml"));
         btnDeliveries.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
         btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/servicesView.fxml"));
 
-        // Action pour générer le PDF complet
         btnGeneratePdf.setOnAction(e -> generateCompletePdf());
 
         loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsWrapperView.fxml");
 
-        // Initialiser les contrôleurs de stats
         initializeStatsControllers();
     }
 
@@ -57,6 +57,10 @@ public class MainController {
             e.printStackTrace();
             System.err.println("Erreur lors de l'initialisation des contrôleurs de stats");
         }
+    }
+
+    public static void setContent(Parent node) {
+        staticContentArea.getChildren().setAll(node);
     }
 
     @FXML

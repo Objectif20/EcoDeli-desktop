@@ -33,6 +33,7 @@
             <!-- Séparateur -->
             <Region VBox.vgrow="ALWAYS"/>
 
+            <!-- Bouton de génération PDF complet -->
             <Button text="📄 Générer PDF" fx:id="btnGeneratePdf"
                     styleClass="pdf-button"
                     style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 10;"/>

@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane xmlns:fx="http://javafx.com/fxml" fx:controller="fr.ecodeli.ecodelidesktop.clients.ClientDetailController">
+    <children>
+        <VBox alignment="TOP_LEFT" spacing="20" AnchorPane.topAnchor="20" AnchorPane.leftAnchor="20">
+            <Label fx:id="clientIdLabel" text="Détail du client" style="-fx-font-size: 18px;" />
+            <Button text="⬅ Retour" onAction="#handleRetour"/>
+        </VBox>
+    </children>
+</AnchorPane>

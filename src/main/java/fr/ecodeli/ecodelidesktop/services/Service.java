@@ -58,4 +58,8 @@ public class Service {
                 ", validated=" + validated +
                 '}';
     }
+
+    public String getId() {
+        return serviceId;
+    }
 }
