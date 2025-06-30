@@ -60,6 +60,11 @@ public class StatsViewController {
     }
 
     private void exportChartsToPdf() {
+        String filePath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "dashboard.pdf";
+        exportChartsToPdf(filePath);
+    }
+
+    public void exportChartsToPdf(String customPath) {
         try (PDDocument document = new PDDocument()) {
             PDPage page = new PDPage(PDRectangle.A4);
             document.addPage(page);
@@ -132,9 +137,8 @@ public class StatsViewController {
             contentStream.close();
 
             // Sauvegarde
-            String filePath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "dashboard.pdf";
-            document.save(filePath);
-            System.out.println("✅ PDF vectoriel généré : " + filePath);
+            document.save(customPath);
+            System.out.println("✅ PDF vectoriel généré : " + customPath);
         } catch (Exception e) {
             e.printStackTrace();
         }

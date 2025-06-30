@@ -22,11 +22,20 @@
                 </ImageView>
                 <Label text="EcoDeli" style="-fx-text-fill: white; -fx-font-size: 24;" />
             </HBox>
+
+            <!-- Boutons de navigation -->
             <Button text="Accueil" fx:id="btnStats" styleClass="button"/>
             <Button text="Clients" fx:id="btnClients" styleClass="button"/>
             <Button text="Marchands" fx:id="btnMerchants" styleClass="button"/>
             <Button text="Livraisons" fx:id="btnDeliveries" styleClass="button"/>
             <Button text="Services" fx:id="btnServices" styleClass="button"/>
+
+            <!-- Séparateur -->
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text="📄 Générer PDF" fx:id="btnGeneratePdf"
+                    styleClass="pdf-button"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 10;"/>
         </VBox>
     </left>
 
