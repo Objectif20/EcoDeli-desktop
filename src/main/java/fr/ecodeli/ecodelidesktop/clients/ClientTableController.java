@@ -11,6 +11,7 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.util.Callback;
 
 import java.io.IOException;
 
@@ -23,7 +24,6 @@ public class ClientTableController {
     @FXML private TableColumn<Client, Integer> nbLivraisonsColumn;
     @FXML private TableColumn<Client, Integer> nbPrestationsColumn;
     @FXML private TableColumn<Client, Void> actionsColumn;
-
     @FXML private Button prevButton;
     @FXML private Button nextButton;
     @FXML private Label pageLabel;
@@ -37,27 +37,44 @@ public class ClientTableController {
     @FXML
     public void initialize() {
         clientAPI = new ClientAPI();
-
         setupClientColumn();
         emailColumn.setCellValueFactory(new PropertyValueFactory<>("email"));
         nomAbonnementColumn.setCellValueFactory(new PropertyValueFactory<>("nomAbonnement"));
         nbLivraisonsColumn.setCellValueFactory(new PropertyValueFactory<>("nbDemandeDeLivraison"));
         nbPrestationsColumn.setCellValueFactory(new PropertyValueFactory<>("nombreDePrestations"));
 
-        setupAbonnementColumn();
-        setupNumberColumns();
+        centerCellContent(emailColumn);
+        centerCellContent(nomAbonnementColumn);
+        centerCellContent(nbLivraisonsColumn);
+        centerCellContent(nbPrestationsColumn);
+
         setupActionsColumn();
-
         loadClients();
-
-        setupColumnWidths();
-
         prevButton.setOnAction(e -> previousPage());
         nextButton.setOnAction(e -> nextPage());
     }
 
+    private <T> void centerCellContent(TableColumn<Client, T> column) {
+        column.setCellFactory(getCenteredCellFactory());
+    }
+
+    private <T> Callback<TableColumn<Client, T>, TableCell<Client, T>> getCenteredCellFactory() {
+        return param -> new TableCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setAlignment(Pos.CENTER);
+            }
+        };
+    }
+
     private void setupClientColumn() {
-        clientColumn.setCellFactory(param -> new TableCell<Client, Void>() {
+        clientColumn.setCellFactory(param -> new TableCell<>() {
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -93,16 +110,13 @@ public class ClientTableController {
 
         VBox infoBox = new VBox(2);
         infoBox.setAlignment(Pos.CENTER_LEFT);
-
         Label nameLabel = new Label(client.getFirstName() + " " + client.getLastName());
         nameLabel.getStyleClass().add("client-name");
-
         Label titleLabel = new Label("Client");
         titleLabel.getStyleClass().add("client-title");
-
         infoBox.getChildren().addAll(nameLabel, titleLabel);
-        container.getChildren().addAll(profileImage, infoBox);
 
+        container.getChildren().addAll(profileImage, infoBox);
         return container;
     }
 
@@ -111,38 +125,8 @@ public class ClientTableController {
             Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
             imageView.setImage(defaultImage);
         } catch (Exception e) {
+            // Handle exception
         }
-    }
-
-    private void setupAbonnementColumn() {
-        nbLivraisonsColumn.setCellFactory(param -> new TableCell<Client, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.toString());
-                    getStyleClass().add("number-cell");
-                }
-            }
-        });
-    }
-
-    private void setupNumberColumns() {
-
-        nbPrestationsColumn.setCellFactory(param -> new TableCell<Client, Integer>() {
-            @Override
-            protected void updateItem(Integer item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                } else {
-                    setText(item.toString());
-                    getStyleClass().add("number-cell");
-                }
-            }
-        });
     }
 
     private void setupActionsColumn() {
@@ -165,6 +149,7 @@ public class ClientTableController {
                 } else {
                     setGraphic(btn);
                 }
+                setAlignment(Pos.CENTER);
             }
         });
     }
@@ -172,20 +157,15 @@ public class ClientTableController {
     private void loadClients() {
         try {
             ClientAPI.ClientResponse response = clientAPI.getAllClients(currentPage, itemsPerPage);
-
             ObservableList<Client> clients = FXCollections.observableArrayList(response.getData());
             clientTable.setItems(clients);
-
             if (response.getMeta() != null) {
                 int total = response.getMeta().getTotal();
                 int limit = response.getMeta().getLimit();
-
                 totalPages = (int) Math.ceil((double) total / limit);
                 totalClientsLabel.setText(total + " clients au total");
-
                 updatePaginationControls();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible de charger les clients: " + e.getMessage());
@@ -224,14 +204,5 @@ public class ClientTableController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void setupColumnWidths() {
-        clientColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.25));
-        emailColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.20));
-        nomAbonnementColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.15));
-        nbLivraisonsColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.10));
-        nbPrestationsColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.10));
-        actionsColumn.prefWidthProperty().bind(clientTable.widthProperty().multiply(0.20));
     }
 }

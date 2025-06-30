@@ -12,6 +12,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.util.Callback;
+
 import java.io.IOException;
 
 public class MerchantTableController {
@@ -24,7 +25,6 @@ public class MerchantTableController {
     @FXML private TableColumn<Merchant, String> phoneColumn;
     @FXML private TableColumn<Merchant, String> descriptionColumn;
     @FXML private TableColumn<Merchant, Void> actionsColumn;
-
     @FXML private Button prevButton;
     @FXML private Button nextButton;
     @FXML private Label pageLabel;
@@ -38,7 +38,6 @@ public class MerchantTableController {
     @FXML
     public void initialize() {
         merchantAPI = new MerchantAPI();
-
         setupMerchantColumn();
         companyColumn.setCellValueFactory(new PropertyValueFactory<>("companyName"));
         siretColumn.setCellValueFactory(new PropertyValueFactory<>("siret"));
@@ -46,14 +45,41 @@ public class MerchantTableController {
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
 
+        centerCellContent(companyColumn);
+        centerCellContent(siretColumn);
+        centerCellContent(countryColumn);
+        centerCellContent(phoneColumn);
+
         setupDescriptionColumn();
         setupActionsColumn();
-        setupColumnWidths();
 
         loadMerchants();
-
         prevButton.setOnAction(e -> previousPage());
         nextButton.setOnAction(e -> nextPage());
+    }
+
+    private <T> void centerCellContent(TableColumn<Merchant, T> column) {
+        column.setCellFactory(getCenteredCellFactory());
+    }
+
+    private <T> Callback<TableColumn<Merchant, T>, TableCell<Merchant, T>> getCenteredCellFactory() {
+        return new Callback<TableColumn<Merchant, T>, TableCell<Merchant, T>>() {
+            @Override
+            public TableCell<Merchant, T> call(TableColumn<Merchant, T> param) {
+                return new TableCell<Merchant, T>() {
+                    @Override
+                    protected void updateItem(T item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                        } else {
+                            setText(item.toString());
+                        }
+                        setAlignment(javafx.geometry.Pos.CENTER);
+                    }
+                };
+            }
+        };
     }
 
     private void setupMerchantColumn() {
@@ -99,16 +125,13 @@ public class MerchantTableController {
 
         VBox infoBox = new VBox(2);
         infoBox.setAlignment(Pos.CENTER_LEFT);
-
         Label nameLabel = new Label(merchant.getFirstName() + " " + merchant.getLastName());
         nameLabel.getStyleClass().add("merchant-name");
-
         Label titleLabel = new Label("Commerçant");
         titleLabel.getStyleClass().add("merchant-title");
-
         infoBox.getChildren().addAll(nameLabel, titleLabel);
-        container.getChildren().addAll(profileImage, infoBox);
 
+        container.getChildren().addAll(profileImage, infoBox);
         return container;
     }
 
@@ -117,6 +140,7 @@ public class MerchantTableController {
             Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
             imageView.setImage(defaultImage);
         } catch (Exception e) {
+            // Handle exception
         }
     }
 
@@ -145,56 +169,49 @@ public class MerchantTableController {
     }
 
     private void setupActionsColumn() {
-        Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>> cellFactory =
-                new Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>>() {
+        Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>> cellFactory = new Callback<>() {
+            @Override
+            public TableCell<Merchant, Void> call(final TableColumn<Merchant, Void> param) {
+                final TableCell<Merchant, Void> cell = new TableCell<>() {
+                    private final Button btn = new Button("Voir détails");
+
+                    {
+                        btn.getStyleClass().add("action-button");
+                        btn.setOnAction((event) -> {
+                            Merchant merchant = getTableView().getItems().get(getIndex());
+                            viewMerchantDetails(merchant);
+                        });
+                    }
+
                     @Override
-                    public TableCell<Merchant, Void> call(final TableColumn<Merchant, Void> param) {
-                        final TableCell<Merchant, Void> cell = new TableCell<Merchant, Void>() {
-
-                            private final Button btn = new Button("Voir détails");
-
-                            {
-                                btn.getStyleClass().add("action-button");
-                                btn.setOnAction((event) -> {
-                                    Merchant merchant = getTableView().getItems().get(getIndex());
-                                    viewMerchantDetails(merchant);
-                                });
-                            }
-
-                            @Override
-                            public void updateItem(Void item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                } else {
-                                    setGraphic(btn);
-                                }
-                            }
-                        };
-                        return cell;
+                    public void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty) {
+                            setGraphic(null);
+                        } else {
+                            setGraphic(btn);
+                        }
+                        setAlignment(Pos.CENTER);
                     }
                 };
-
+                return cell;
+            }
+        };
         actionsColumn.setCellFactory(cellFactory);
     }
 
     private void loadMerchants() {
         try {
             MerchantAPI.MerchantResponse response = merchantAPI.getAllMerchants(currentPage, itemsPerPage);
-
             ObservableList<Merchant> merchants = FXCollections.observableArrayList(response.getData());
             merchantTable.setItems(merchants);
-
             if (response.getMeta() != null) {
                 int total = response.getMeta().getTotal();
                 int limit = response.getMeta().getLimit();
-
                 totalPages = (int) Math.ceil((double) total / limit);
                 totalMerchantsLabel.setText(total + " marchands au total");
-
                 updatePaginationControls();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
             showAlert("Erreur", "Impossible de charger les marchands: " + e.getMessage());
@@ -233,15 +250,5 @@ public class MerchantTableController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void setupColumnWidths() {
-        merchantColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.15)); // 15%
-        companyColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.12));  // 12%
-        siretColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.11));    // 11%
-        countryColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.08));  // 8%
-        phoneColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.10));    // 10%
-        descriptionColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.17)); // 17%
-        actionsColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.27));   // 27%
     }
 }

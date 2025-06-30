@@ -3,10 +3,10 @@ package fr.ecodeli.ecodelidesktop.services;
 import com.google.gson.annotations.SerializedName;
 
 public class Service {
-    @SerializedName("service_id")
+    @SerializedName("id")
     private String serviceId;
 
-    @SerializedName("service_type")
+    @SerializedName("type")
     private String serviceType;
 
     private String status;
@@ -17,13 +17,14 @@ public class Service {
     @SerializedName("price_admin")
     private double priceAdmin;
 
-    @SerializedName("duration_time")
+    @SerializedName("duration")
     private int durationTime;
 
     private boolean available;
     private String description;
     private Author author;
     private double rate;
+    private boolean validated;
 
     public String getServiceId() { return serviceId; }
     public String getServiceType() { return serviceType; }
@@ -37,4 +38,5 @@ public class Service {
     public String getDescription() { return description; }
     public Author getAuthor() { return author; }
     public double getRate() { return rate; }
+    public boolean isValidated() { return validated; }
 }

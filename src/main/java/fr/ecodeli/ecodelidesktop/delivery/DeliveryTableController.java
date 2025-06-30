@@ -1,7 +1,6 @@
 package fr.ecodeli.ecodelidesktop.delivery;
 
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI;
-import fr.ecodeli.ecodelidesktop.api.DeliveryAPI.DeliveryDetails;
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI.DeliveryResponse;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -46,44 +45,66 @@ public class DeliveryTableController {
         priceColumn.setCellValueFactory(new PropertyValueFactory<>("price"));
         packageCountColumn.setCellValueFactory(new PropertyValueFactory<>("packageCount"));
 
-        setupActionsColumn();
-        setupColumnWidths();
+        centerCellContent(departureDateColumn);
+        centerCellContent(arrivalDateColumn);
+        centerCellContent(statusColumn);
+        centerCellContent(isBoxColumn);
+        centerCellContent(departureCityColumn);
+        centerCellContent(arrivalCityColumn);
+        centerCellContent(priceColumn);
+        centerCellContent(packageCountColumn);
 
+        setupActionsColumn();
         previousButton.setOnAction(e -> previousPage());
         nextButton.setOnAction(e -> nextPage());
-
         loadDeliveries();
     }
 
+    private <T> void centerCellContent(TableColumn<DeliveryRow, T> column) {
+        column.setCellFactory(getCenteredCellFactory());
+    }
+
+    private <T> Callback<TableColumn<DeliveryRow, T>, TableCell<DeliveryRow, T>> getCenteredCellFactory() {
+        return param -> new TableCell<>() {
+            @Override
+            protected void updateItem(T item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || item == null) {
+                    setText(null);
+                } else {
+                    setText(item.toString());
+                }
+                setAlignment(javafx.geometry.Pos.CENTER);
+            }
+        };
+    }
+
     private void setupActionsColumn() {
-        Callback<TableColumn<DeliveryRow, Void>, TableCell<DeliveryRow, Void>> cellFactory =
-                new Callback<TableColumn<DeliveryRow, Void>, TableCell<DeliveryRow, Void>>() {
-                    @Override
-                    public TableCell<DeliveryRow, Void> call(final TableColumn<DeliveryRow, Void> param) {
-                        final TableCell<DeliveryRow, Void> cell = new TableCell<DeliveryRow, Void>() {
-                            private final Button btn = new Button("Voir détails");
+        Callback<TableColumn<DeliveryRow, Void>, TableCell<DeliveryRow, Void>> cellFactory = param -> {
+            final TableCell<DeliveryRow, Void> cell = new TableCell<>() {
+                private final Button btn = new Button("Voir détails");
 
-                            {
-                                btn.getStyleClass().add("action-button");
-                                btn.setOnAction((event) -> {
-                                    DeliveryRow delivery = getTableView().getItems().get(getIndex());
-                                    viewDeliveryDetails(delivery);
-                                });
-                            }
+                {
+                    btn.getStyleClass().add("action-button");
+                    btn.setOnAction(event -> {
+                        DeliveryRow delivery = getTableView().getItems().get(getIndex());
+                        viewDeliveryDetails(delivery);
+                    });
+                }
 
-                            @Override
-                            public void updateItem(Void item, boolean empty) {
-                                super.updateItem(item, empty);
-                                if (empty) {
-                                    setGraphic(null);
-                                } else {
-                                    setGraphic(btn);
-                                }
-                            }
-                        };
-                        return cell;
+                @Override
+                public void updateItem(Void item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty) {
+                        setGraphic(null);
+                    } else {
+                        setGraphic(btn);
                     }
-                };
+                    setAlignment(javafx.geometry.Pos.CENTER);
+                }
+            };
+            return cell;
+        };
         actionsColumn.setCellFactory(cellFactory);
     }
 
@@ -91,13 +112,11 @@ public class DeliveryTableController {
         try {
             DeliveryResponse response = deliveryAPI.getAllOngoingDeliveries(currentPage, limit);
             totalPages = (int) Math.ceil((double) response.getTotalRows() / limit);
-
             List<DeliveryAPI.DeliveryOngoing> ongoingList = response.getDeliveries();
             ObservableList<DeliveryRow> rows = FXCollections.observableArrayList();
             for (DeliveryAPI.DeliveryOngoing d : ongoingList) {
                 rows.add(new DeliveryRow(d));
             }
-
             livraisonTable.setItems(rows);
             totalDeliveriesLabel.setText(response.getTotalRows() + " livraisons au total");
             updatePaginationControls();
@@ -139,17 +158,5 @@ public class DeliveryTableController {
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
-    }
-
-    private void setupColumnWidths() {
-        departureDateColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.12));
-        arrivalDateColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.12));
-        statusColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.10));
-        isBoxColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.06));
-        departureCityColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.12));
-        arrivalCityColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.12));
-        priceColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.08));
-        packageCountColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.08));
-        actionsColumn.prefWidthProperty().bind(livraisonTable.widthProperty().multiply(0.20));
     }
 }
