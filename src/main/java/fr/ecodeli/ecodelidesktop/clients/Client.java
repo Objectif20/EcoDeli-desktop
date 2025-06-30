@@ -46,4 +46,13 @@ public class Client {
     public String getProfilePicture() { return profilePicture; }
     public int getNbSignalements() { return nbSignalements; }
     public boolean isProfilTransporteur() { return profilTransporteur; }
+
+
+    @Override
+    public String toString() {
+        return "Client [id=" + id + ", firstName=" + firstName
+                + ", profilePicture=" + profilePicture + ", nbSignalements="
+                + nbSignalements + ", profilTransporteur=" + profilTransporteur
+                + ", lastName=" + lastName + ", email=" + email;
+    }
 }

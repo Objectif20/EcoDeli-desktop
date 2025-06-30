@@ -39,4 +39,23 @@ public class Service {
     public Author getAuthor() { return author; }
     public double getRate() { return rate; }
     public boolean isValidated() { return validated; }
+
+    @Override
+    public String toString() {
+        return "Service{" +
+                "serviceId='" + serviceId + '\'' +
+                ", serviceType='" + serviceType + '\'' +
+                ", status='" + status + '\'' +
+                ", name='" + name + '\'' +
+                ", city='" + city + '\'' +
+                ", price=" + price +
+                ", priceAdmin=" + priceAdmin +
+                ", durationTime=" + durationTime +
+                ", available=" + available +
+                ", description='" + description + '\'' +
+                ", author=" + author +
+                ", rate=" + rate +
+                ", validated=" + validated +
+                '}';
+    }
 }
