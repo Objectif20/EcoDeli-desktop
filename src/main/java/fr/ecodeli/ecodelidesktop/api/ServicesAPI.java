@@ -4,6 +4,7 @@ import com.google.gson.Gson;
 import fr.ecodeli.ecodelidesktop.client.CustomOkHttpClient;
 import fr.ecodeli.ecodelidesktop.service.TokenStorage;
 import fr.ecodeli.ecodelidesktop.services.Service;
+import fr.ecodeli.ecodelidesktop.services.ServiceDetails;
 import okhttp3.Request;
 import okhttp3.Response;
 
@@ -39,7 +40,7 @@ public class ServicesAPI {
         }
     }
 
-    public Service getServiceById(String id) throws IOException {
+    public ServiceDetails getServiceById(String id) throws IOException {
         String[] tokens = TokenStorage.loadTokens();
         String accessToken = tokens[0].split("=")[1];
 
@@ -57,7 +58,7 @@ public class ServicesAPI {
 
             assert response.body() != null;
             String responseBody = response.body().string();
-            return gson.fromJson(responseBody, Service.class);
+            return gson.fromJson(responseBody, ServiceDetails.class);
         }
     }
 

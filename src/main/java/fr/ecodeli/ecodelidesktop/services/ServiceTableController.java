@@ -130,7 +130,7 @@ public class ServiceTableController {
             Parent detailView = loader.load();
 
             ServiceDetailsController detailController = loader.getController();
-            detailController.setClientId(service.getId());
+            detailController.setServiceId(service.getId());
 
             MainController.setContent(detailView);
         } catch (IOException e) {

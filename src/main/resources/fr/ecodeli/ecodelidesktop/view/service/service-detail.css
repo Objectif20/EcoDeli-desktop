@@ -1,0 +1,349 @@
+.root {
+    -fx-base: #4caf50;
+    -fx-accent: #4caf50;
+    -fx-default-button: #4caf50;
+    -fx-focus-color: #4caf50;
+    -fx-faint-focus-color: #4caf5022;
+}
+
+
+.main-scroll-pane {
+    -fx-background-color: #f8f9fa;
+    -fx-fit-to-width: true;
+    -fx-padding: 0 20% 0 20%;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-spacing: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-alignment: center; /* Centré au milieu */
+    -fx-max-width: 1040px; /* 800 * 1.3 = 1040 */
+    -fx-min-width: 650px; /* Pour assurer un minimum */
+}
+
+/* Header compact */
+.header-section {
+    -fx-padding: 0 0 10 0; /* 8 * 1.3 ≈ 10 */
+    -fx-alignment: center-left;
+    -fx-fill-width: true;
+}
+
+.back-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-padding: 8 16; /* 6*1.3≈8, 12*1.3≈16 */
+    -fx-background-radius: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-cursor: hand;
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.back-button:hover {
+    -fx-background-color: #45a049;
+}
+
+/* Bloc principal avec disposition horizontale */
+.main-info-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-spacing: 26; /* 20 * 1.3 = 26 */
+    -fx-background-radius: 13; /* 10 * 1.3 = 13 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.1), 7, 0, 0, 1); /* 5 * 1.3 ≈ 7 */
+}
+
+.left-info-section {
+    -fx-spacing: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-alignment: center-left;
+}
+
+.right-info-section {
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-alignment: center-right;
+    -fx-min-width: 260px; /* 200 * 1.3 = 260 */
+}
+
+.service-title {
+    -fx-font-size: 29px; /* 22 * 1.3 ≈ 29 */
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.location-duration-row {
+    -fx-spacing: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-padding: 4 0; /* 3 * 1.3 ≈ 4 */
+}
+
+.location-label, .duration-label {
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.price-label {
+    -fx-font-size: 26px; /* 20 * 1.3 = 26 */
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.rating-label {
+    -fx-font-size: 18px; /* 14 * 1.3 ≈ 18 */
+    -fx-text-fill: #ffc107;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-alignment: center-right;
+}
+
+.tags-row {
+    -fx-spacing: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-alignment: center-right;
+}
+
+.service-type-tag, .status-tag, .availability-tag, .keyword-tag {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-padding: 5 10; /* 4*1.3≈5, 8*1.3≈10 */
+    -fx-background-radius: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-font-size: 13px; /* 10 * 1.3 = 13 */
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.status-active, .available {
+    -fx-background-color: #4caf50;
+}
+
+.status-inactive, .unavailable {
+    -fx-background-color: #f44336;
+}
+
+.status-pending {
+    -fx-background-color: #ff9800;
+}
+
+/* Prestataire sur une ligne */
+.provider-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-spacing: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-background-radius: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-alignment: center-left;
+}
+
+.section-title-inline {
+    -fx-font-size: 18px; /* 14 * 1.3 ≈ 18 */
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-min-width: 130px; /* 100 * 1.3 = 130 */
+}
+
+.provider-info {
+    -fx-spacing: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-alignment: center-left;
+}
+
+.provider-avatar-container {
+    -fx-alignment: center;
+}
+
+.provider-avatar {
+    -fx-background-radius: 50%;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.1), 4, 0, 0, 1); /* 3 * 1.3 ≈ 4 */
+}
+
+.provider-avatar-placeholder {
+    -fx-font-size: 26px; /* 20 * 1.3 = 26 */
+    -fx-background-color: #e8f5e8;
+    -fx-text-fill: #4caf50;
+    -fx-background-radius: 50%;
+    -fx-padding: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-min-width: 52px; /* 40 * 1.3 = 52 */
+    -fx-min-height: 52px;
+    -fx-alignment: center;
+}
+
+.provider-details {
+    -fx-spacing: 3; /* 2 * 1.3 ≈ 3 */
+}
+
+.provider-name {
+    -fx-font-size: 18px; /* 14 * 1.3 ≈ 18 */
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.provider-email {
+    -fx-font-size: 14px; /* 11 * 1.3 ≈ 14 */
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.provider-rating {
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-text-fill: #ffc107;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Description compacte */
+.description-card-compact {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+.description-text-compact {
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-text-fill: #2e7d32;
+    -fx-line-spacing: 1;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Mots-clés et avis sur la même ligne */
+.keywords-reviews-row {
+    -fx-spacing: 20; /* 15 * 1.3 ≈ 20 */
+    -fx-alignment: center;
+}
+
+.keywords-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+.keywords-pane-compact {
+    -fx-hgap: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-vgap: 8;
+}
+
+.reviews-count-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16; /* 12 * 1.3 ≈ 16 */
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-min-width: 104px; /* 80 * 1.3 = 104 */
+    -fx-alignment: center;
+}
+
+.comments-count-compact {
+    -fx-font-size: 18px; /* 14 * 1.3 ≈ 18 */
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+/* Commentaires ultra-compacts */
+.comments-card-compact {
+    -fx-background-color: #ffffff;
+    -fx-padding: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+.comments-scroll-compact {
+    -fx-background-color: transparent;
+}
+
+.comments-container-compact {
+    -fx-spacing: 8; /* 6 * 1.3 ≈ 8 */
+}
+
+.comment-box {
+    -fx-background-color: #f8fff8;
+    -fx-padding: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-spacing: 8; /* 6 * 1.3 ≈ 8 */
+}
+
+.comment-header {
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-alignment: center-left;
+}
+
+.comment-avatar-image {
+    -fx-background-radius: 50%;
+}
+
+.comment-avatar-placeholder {
+    -fx-font-size: 21px; /* 16 * 1.3 ≈ 21 */
+    -fx-background-color: #e8f5e8;
+    -fx-text-fill: #4caf50;
+    -fx-background-radius: 50%;
+    -fx-padding: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-min-width: 39px; /* 30 * 1.3 = 39 */
+    -fx-min-height: 39px;
+    -fx-alignment: center;
+}
+
+.comment-author-name {
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.comment-content {
+    -fx-font-size: 14px; /* 11 * 1.3 ≈ 14 */
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Section admin inline */
+.admin-card-compact {
+    -fx-background-color: #fff8e1;
+    -fx-padding: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-spacing: 10; /* 8 * 1.3 ≈ 10 */
+    -fx-background-radius: 8; /* 6 * 1.3 ≈ 8 */
+    -fx-border-color: #4caf50;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-alignment: center-left;
+}
+
+.admin-label-inline, .admin-value-inline {
+    -fx-font-size: 16px; /* 12 * 1.3 ≈ 16 */
+    -fx-text-fill: #2e7d32;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+/* Scrollbar fine */
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 5px; /* 4 * 1.3 ≈ 5 */
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #e8f5e8;
+    -fx-background-radius: 3px; /* 2 * 1.3 ≈ 3 */
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 3px;
+}
