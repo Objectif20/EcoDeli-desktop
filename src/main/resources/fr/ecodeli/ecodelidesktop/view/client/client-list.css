@@ -74,6 +74,10 @@
     -fx-background-color: #e8f5e8;
     -fx-text-fill: #333333;
 }
+.modern-table .scroll-bar:horizontal {
+    -fx-opacity: 0;
+    -fx-max-height: 0;
+}
 
 .modern-table .table-row-cell:focused {
     -fx-background-color: #e8f5e8;

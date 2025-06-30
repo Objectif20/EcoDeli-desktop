@@ -115,36 +115,6 @@ public class ClientTableController {
     }
 
     private void setupAbonnementColumn() {
-        nomAbonnementColumn.setCellFactory(param -> new TableCell<>() {
-            @Override
-            protected void updateItem(String item, boolean empty) {
-                super.updateItem(item, empty);
-                if (empty || item == null) {
-                    setText(null);
-                    getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
-                } else {
-                    setText(item);
-                    getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
-
-                    switch (item.toLowerCase()) {
-                        case "basic":
-                        case "basique":
-                            getStyleClass().add("subscription-basic");
-                            break;
-                        case "premium":
-                            getStyleClass().add("subscription-premium");
-                            break;
-                        case "enterprise":
-                        case "entreprise":
-                            getStyleClass().add("subscription-enterprise");
-                            break;
-                    }
-                }
-            }
-        });
-    }
-
-    private void setupNumberColumns() {
         nbLivraisonsColumn.setCellFactory(param -> new TableCell<Client, Integer>() {
             @Override
             protected void updateItem(Integer item, boolean empty) {
@@ -157,6 +127,9 @@ public class ClientTableController {
                 }
             }
         });
+    }
+
+    private void setupNumberColumns() {
 
         nbPrestationsColumn.setCellFactory(param -> new TableCell<Client, Integer>() {
             @Override

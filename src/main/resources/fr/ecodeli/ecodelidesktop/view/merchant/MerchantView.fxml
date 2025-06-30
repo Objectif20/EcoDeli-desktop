@@ -17,7 +17,7 @@
         <Label fx:id="totalMerchantsLabel" text="0 marchands au total" styleClass="subtitle"/>
     </VBox>
 
-    <TableView fx:id="merchantTable" styleClass="modern-table" prefHeight="500">
+    <TableView fx:id="merchantTable" styleClass="modern-table" prefHeight="850">
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
@@ -28,7 +28,6 @@
             <TableColumn fx:id="countryColumn" text="Pays" styleClass="table-column"/>
             <TableColumn fx:id="phoneColumn" text="Téléphone" styleClass="table-column"/>
             <TableColumn fx:id="descriptionColumn" text="Description" styleClass="table-column"/>
-            <TableColumn fx:id="abonnementColumn" text="Abonnement" styleClass="table-column"/>
             <TableColumn fx:id="actionsColumn" text="Actions" sortable="false" styleClass="table-column"/>
         </columns>
     </TableView>

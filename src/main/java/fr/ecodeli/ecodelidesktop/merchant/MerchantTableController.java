@@ -23,7 +23,6 @@ public class MerchantTableController {
     @FXML private TableColumn<Merchant, String> countryColumn;
     @FXML private TableColumn<Merchant, String> phoneColumn;
     @FXML private TableColumn<Merchant, String> descriptionColumn;
-    @FXML private TableColumn<Merchant, String> abonnementColumn;
     @FXML private TableColumn<Merchant, Void> actionsColumn;
 
     @FXML private Button prevButton;
@@ -46,10 +45,8 @@ public class MerchantTableController {
         countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
         phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
         descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
-        abonnementColumn.setCellValueFactory(new PropertyValueFactory<>("nomAbonnement"));
 
         setupDescriptionColumn();
-        setupAbonnementColumn();
         setupActionsColumn();
         setupColumnWidths();
 
@@ -139,41 +136,6 @@ public class MerchantTableController {
                             setText(truncated);
                             if (item.length() > 30) {
                                 setTooltip(new Tooltip(item));
-                            }
-                        }
-                    }
-                };
-            }
-        });
-    }
-
-    private void setupAbonnementColumn() {
-        abonnementColumn.setCellFactory(new Callback<TableColumn<Merchant, String>, TableCell<Merchant, String>>() {
-            @Override
-            public TableCell<Merchant, String> call(TableColumn<Merchant, String> param) {
-                return new TableCell<Merchant, String>() {
-                    @Override
-                    protected void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty || item == null) {
-                            setText(null);
-                            getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
-                        } else {
-                            setText(item);
-                            getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
-
-                            switch (item.toLowerCase()) {
-                                case "basic":
-                                case "basique":
-                                    getStyleClass().add("subscription-basic");
-                                    break;
-                                case "premium":
-                                    getStyleClass().add("subscription-premium");
-                                    break;
-                                case "enterprise":
-                                case "entreprise":
-                                    getStyleClass().add("subscription-enterprise");
-                                    break;
                             }
                         }
                     }
@@ -280,7 +242,6 @@ public class MerchantTableController {
         countryColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.08));  // 8%
         phoneColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.10));    // 10%
         descriptionColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.17)); // 17%
-        abonnementColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.12)); // 12%
-        actionsColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.15));   // 15%
+        actionsColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.27));   // 27%
     }
 }
