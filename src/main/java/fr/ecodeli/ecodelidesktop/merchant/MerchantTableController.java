@@ -1,48 +1,286 @@
 package fr.ecodeli.ecodelidesktop.merchant;
 
-import com.google.gson.Gson;
-import com.google.gson.JsonObject;
-import com.google.gson.reflect.TypeToken;
+import fr.ecodeli.ecodelidesktop.api.MerchantAPI;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
+import javafx.geometry.Pos;
+import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
-
-import java.io.InputStreamReader;
-import java.lang.reflect.Type;
-import java.util.List;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
+import javafx.scene.layout.VBox;
+import javafx.util.Callback;
+import java.io.IOException;
 
 public class MerchantTableController {
 
     @FXML private TableView<Merchant> merchantTable;
-    @FXML private TableColumn<Merchant, String> idColumn;
-    @FXML private TableColumn<Merchant, String> firstNameColumn;
-    @FXML private TableColumn<Merchant, String> lastNameColumn;
+    @FXML private TableColumn<Merchant, Void> merchantColumn;
     @FXML private TableColumn<Merchant, String> companyColumn;
-    @FXML private TableColumn<Merchant, String> cityColumn;
+    @FXML private TableColumn<Merchant, String> siretColumn;
+    @FXML private TableColumn<Merchant, String> countryColumn;
+    @FXML private TableColumn<Merchant, String> phoneColumn;
+    @FXML private TableColumn<Merchant, String> descriptionColumn;
     @FXML private TableColumn<Merchant, String> abonnementColumn;
-    @FXML private TableColumn<Merchant, Integer> livraisonsColumn;
+    @FXML private TableColumn<Merchant, Void> actionsColumn;
+
+    @FXML private Button prevButton;
+    @FXML private Button nextButton;
+    @FXML private Label pageLabel;
+    @FXML private Label totalMerchantsLabel;
+
+    private MerchantAPI merchantAPI;
+    private int currentPage = 1;
+    private int itemsPerPage = 10;
+    private int totalPages = 1;
 
     @FXML
     public void initialize() {
-        idColumn.setCellValueFactory(new PropertyValueFactory<>("id"));
-        firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
-        lastNameColumn.setCellValueFactory(new PropertyValueFactory<>("lastName"));
-        companyColumn.setCellValueFactory(new PropertyValueFactory<>("companyName"));
-        cityColumn.setCellValueFactory(new PropertyValueFactory<>("city"));
-        abonnementColumn.setCellValueFactory(new PropertyValueFactory<>("nomAbonnement"));
-        livraisonsColumn.setCellValueFactory(new PropertyValueFactory<>("nbDemandeDeLivraison"));
+        merchantAPI = new MerchantAPI();
 
-        ObservableList<Merchant> merchants = FXCollections.observableArrayList(loadMerchantsFromJson());
-        merchantTable.setItems(merchants);
+        setupMerchantColumn();
+        companyColumn.setCellValueFactory(new PropertyValueFactory<>("companyName"));
+        siretColumn.setCellValueFactory(new PropertyValueFactory<>("siret"));
+        countryColumn.setCellValueFactory(new PropertyValueFactory<>("country"));
+        phoneColumn.setCellValueFactory(new PropertyValueFactory<>("phone"));
+        descriptionColumn.setCellValueFactory(new PropertyValueFactory<>("description"));
+        abonnementColumn.setCellValueFactory(new PropertyValueFactory<>("nomAbonnement"));
+
+        setupDescriptionColumn();
+        setupAbonnementColumn();
+        setupActionsColumn();
+        setupColumnWidths();
+
+        loadMerchants();
+
+        prevButton.setOnAction(e -> previousPage());
+        nextButton.setOnAction(e -> nextPage());
     }
 
-    private List<Merchant> loadMerchantsFromJson() {
-        InputStreamReader reader = new InputStreamReader(getClass().getResourceAsStream("/data/liste-commercants.json"));
-        JsonObject jsonObject = new Gson().fromJson(reader, JsonObject.class);
-        Type listType = new TypeToken<List<Merchant>>() {}.getType();
-        return new Gson().fromJson(jsonObject.getAsJsonArray("data"), listType);
+    private void setupMerchantColumn() {
+        merchantColumn.setCellFactory(new Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>>() {
+            @Override
+            public TableCell<Merchant, Void> call(TableColumn<Merchant, Void> param) {
+                return new TableCell<Merchant, Void>() {
+                    @Override
+                    protected void updateItem(Void item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || getIndex() >= getTableView().getItems().size()) {
+                            setGraphic(null);
+                        } else {
+                            Merchant merchant = getTableView().getItems().get(getIndex());
+                            setGraphic(createMerchantCell(merchant));
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private HBox createMerchantCell(Merchant merchant) {
+        HBox container = new HBox(12);
+        container.setAlignment(Pos.CENTER_LEFT);
+        container.getStyleClass().add("merchant-cell");
+
+        ImageView profileImage = new ImageView();
+        profileImage.setFitWidth(40);
+        profileImage.setFitHeight(40);
+        profileImage.getStyleClass().add("profile-image");
+
+        if (merchant.getProfilePicture() != null && !merchant.getProfilePicture().isEmpty()) {
+            try {
+                Image image = new Image(merchant.getProfilePicture(), true);
+                profileImage.setImage(image);
+            } catch (Exception e) {
+                setDefaultProfileImage(profileImage);
+            }
+        } else {
+            setDefaultProfileImage(profileImage);
+        }
+
+        VBox infoBox = new VBox(2);
+        infoBox.setAlignment(Pos.CENTER_LEFT);
+
+        Label nameLabel = new Label(merchant.getFirstName() + " " + merchant.getLastName());
+        nameLabel.getStyleClass().add("merchant-name");
+
+        Label titleLabel = new Label("Commerçant");
+        titleLabel.getStyleClass().add("merchant-title");
+
+        infoBox.getChildren().addAll(nameLabel, titleLabel);
+        container.getChildren().addAll(profileImage, infoBox);
+
+        return container;
+    }
+
+    private void setDefaultProfileImage(ImageView imageView) {
+        try {
+            Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+            imageView.setImage(defaultImage);
+        } catch (Exception e) {
+        }
+    }
+
+    private void setupDescriptionColumn() {
+        descriptionColumn.setCellFactory(new Callback<TableColumn<Merchant, String>, TableCell<Merchant, String>>() {
+            @Override
+            public TableCell<Merchant, String> call(TableColumn<Merchant, String> param) {
+                return new TableCell<Merchant, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            setTooltip(null);
+                        } else {
+                            String truncated = item.length() > 30 ? item.substring(0, 30) + "..." : item;
+                            setText(truncated);
+                            if (item.length() > 30) {
+                                setTooltip(new Tooltip(item));
+                            }
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private void setupAbonnementColumn() {
+        abonnementColumn.setCellFactory(new Callback<TableColumn<Merchant, String>, TableCell<Merchant, String>>() {
+            @Override
+            public TableCell<Merchant, String> call(TableColumn<Merchant, String> param) {
+                return new TableCell<Merchant, String>() {
+                    @Override
+                    protected void updateItem(String item, boolean empty) {
+                        super.updateItem(item, empty);
+                        if (empty || item == null) {
+                            setText(null);
+                            getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
+                        } else {
+                            setText(item);
+                            getStyleClass().removeAll("subscription-basic", "subscription-premium", "subscription-enterprise");
+
+                            switch (item.toLowerCase()) {
+                                case "basic":
+                                case "basique":
+                                    getStyleClass().add("subscription-basic");
+                                    break;
+                                case "premium":
+                                    getStyleClass().add("subscription-premium");
+                                    break;
+                                case "enterprise":
+                                case "entreprise":
+                                    getStyleClass().add("subscription-enterprise");
+                                    break;
+                            }
+                        }
+                    }
+                };
+            }
+        });
+    }
+
+    private void setupActionsColumn() {
+        Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>> cellFactory =
+                new Callback<TableColumn<Merchant, Void>, TableCell<Merchant, Void>>() {
+                    @Override
+                    public TableCell<Merchant, Void> call(final TableColumn<Merchant, Void> param) {
+                        final TableCell<Merchant, Void> cell = new TableCell<Merchant, Void>() {
+
+                            private final Button btn = new Button("Voir détails");
+
+                            {
+                                btn.getStyleClass().add("action-button");
+                                btn.setOnAction((event) -> {
+                                    Merchant merchant = getTableView().getItems().get(getIndex());
+                                    viewMerchantDetails(merchant);
+                                });
+                            }
+
+                            @Override
+                            public void updateItem(Void item, boolean empty) {
+                                super.updateItem(item, empty);
+                                if (empty) {
+                                    setGraphic(null);
+                                } else {
+                                    setGraphic(btn);
+                                }
+                            }
+                        };
+                        return cell;
+                    }
+                };
+
+        actionsColumn.setCellFactory(cellFactory);
+    }
+
+    private void loadMerchants() {
+        try {
+            MerchantAPI.MerchantResponse response = merchantAPI.getAllMerchants(currentPage, itemsPerPage);
+
+            ObservableList<Merchant> merchants = FXCollections.observableArrayList(response.getData());
+            merchantTable.setItems(merchants);
+
+            if (response.getMeta() != null) {
+                int total = response.getMeta().getTotal();
+                int limit = response.getMeta().getLimit();
+
+                totalPages = (int) Math.ceil((double) total / limit);
+                totalMerchantsLabel.setText(total + " marchands au total");
+
+                updatePaginationControls();
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            showAlert("Erreur", "Impossible de charger les marchands: " + e.getMessage());
+        }
+    }
+
+    private void updatePaginationControls() {
+        pageLabel.setText(String.format("Page %d sur %d", currentPage, totalPages));
+        prevButton.setDisable(currentPage <= 1);
+        nextButton.setDisable(currentPage >= totalPages);
+    }
+
+    @FXML
+    private void previousPage() {
+        if (currentPage > 1) {
+            currentPage--;
+            loadMerchants();
+        }
+    }
+
+    @FXML
+    private void nextPage() {
+        if (currentPage < totalPages) {
+            currentPage++;
+            loadMerchants();
+        }
+    }
+
+    private void viewMerchantDetails(Merchant merchant) {
+        System.out.println("Affichage des détails pour le merchant ID: " + merchant.getId());
+    }
+
+    private void showAlert(String title, String message) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle(title);
+        alert.setHeaderText(null);
+        alert.setContentText(message);
+        alert.showAndWait();
+    }
+
+    private void setupColumnWidths() {
+        merchantColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.15)); // 15%
+        companyColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.12));  // 12%
+        siretColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.11));    // 11%
+        countryColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.08));  // 8%
+        phoneColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.10));    // 10%
+        descriptionColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.17)); // 17%
+        abonnementColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.12)); // 12%
+        actionsColumn.prefWidthProperty().bind(merchantTable.widthProperty().multiply(0.15));   // 15%
     }
 }

@@ -10,6 +10,15 @@ public class Client {
     @SerializedName("first_name")
     private String firstName;
 
+    @SerializedName("profile_picture")
+    private String profilePicture;
+
+    @SerializedName("nbSignalements")
+    private int nbSignalements;
+
+    @SerializedName("profilTransporteur")
+    private boolean profilTransporteur;
+
     @SerializedName("last_name")
     private String lastName;
 
@@ -34,4 +43,7 @@ public class Client {
     public String getNomAbonnement() { return nomAbonnement; }
     public int getNbDemandeDeLivraison() { return nbDemandeDeLivraison; }
     public int getNombreDePrestations() { return nombreDePrestations; }
+    public String getProfilePicture() { return profilePicture; }
+    public int getNbSignalements() { return nbSignalements; }
+    public boolean isProfilTransporteur() { return profilTransporteur; }
 }

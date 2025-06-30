@@ -11,6 +11,9 @@ import javafx.scene.image.Image;
 
 public class EcoDeliApplication extends Application {
 
+    private static final double MIN_WIDTH = 800;
+    private static final double MIN_HEIGHT = 600;
+
     @Override
     public void start(Stage stage) throws Exception {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/AuthView.fxml"));
@@ -18,22 +21,40 @@ public class EcoDeliApplication extends Application {
 
         Rectangle2D screenBounds = Screen.getPrimary().getVisualBounds();
 
-        Scene scene = new Scene(root, screenBounds.getWidth(), screenBounds.getHeight());
+        double preferredWidth = Math.max(screenBounds.getWidth() * 0.9, MIN_WIDTH);
+        double preferredHeight = Math.max(screenBounds.getHeight() * 0.9, MIN_HEIGHT);
 
-        String css = getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css").toExternalForm();
-        scene.getStylesheets().add(css);
+        Scene scene = new Scene(root, preferredWidth, preferredHeight);
+
+        scene.getStylesheets().addAll(
+                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css").toExternalForm(),
+                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/merchant-list.css").toExternalForm(),
+                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/client-list.css").toExternalForm()
+        );
 
         stage.setTitle("EcoDeli - Connexion");
-        stage.setX(screenBounds.getMinX());
-        stage.setY(screenBounds.getMinY());
+
+        stage.setMinWidth(MIN_WIDTH);
+        stage.setMinHeight(MIN_HEIGHT);
+
+        stage.setX((screenBounds.getWidth() - preferredWidth) / 2 + screenBounds.getMinX());
+        stage.setY((screenBounds.getHeight() - preferredHeight) / 2 + screenBounds.getMinY());
+
         stage.setScene(scene);
-        stage.setWidth(screenBounds.getWidth());
-        stage.setHeight(screenBounds.getHeight());
-        stage.setMaximized(true);
-        stage.getIcons().add(new Image(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
+        stage.setWidth(preferredWidth);
+        stage.setHeight(preferredHeight);
+
+        if (screenBounds.getWidth() > MIN_WIDTH * 1.5 && screenBounds.getHeight() > MIN_HEIGHT * 1.5) {
+            stage.setMaximized(true);
+        }
+
+        try {
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
+        } catch (Exception e) {
+            System.out.println("Impossible de charger l'icône de l'application: " + e.getMessage());
+        }
 
         stage.show();
-
         stage.requestFocus();
     }
 

@@ -26,6 +26,7 @@ module fr.ecodeli.ecodelidesktop {
     opens fr.ecodeli.ecodelidesktop.delivery to javafx.fxml, com.google.gson, javafx.base;
     opens fr.ecodeli.ecodelidesktop.merchant to com.google.gson, javafx.fxml, javafx.base;
     opens fr.ecodeli.ecodelidesktop.services to javafx.fxml, com.google.gson, javafx.base;
+    opens fr.ecodeli.ecodelidesktop.api to com.google.gson;
 
     opens fr.ecodeli.ecodelidesktop.view.client to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.merchant to javafx.fxml;
