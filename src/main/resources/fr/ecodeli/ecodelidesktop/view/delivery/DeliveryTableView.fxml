@@ -1,21 +1,46 @@
 <?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx/8"
-      xmlns:fx="http://javafx.com/fxml"
+<VBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fr.ecodeli.ecodelidesktop.delivery.DeliveryTableController"
-      spacing="10" alignment="CENTER" prefWidth="900" prefHeight="600">
+      styleClass="main-container"
+      spacing="20"
+      prefWidth="1200"
+      prefHeight="700"
+      stylesheets="@delivery-list.css">
 
-    <TableView fx:id="livraisonTable" prefHeight="550">
+    <VBox styleClass="header-section" spacing="10">
+        <Label text="Gestion des Livraisons" styleClass="page-title"/>
+        <Label fx:id="totalDeliveriesLabel" text="0 livraisons au total" styleClass="subtitle"/>
+    </VBox>
+
+    <TableView fx:id="livraisonTable" styleClass="modern-table" prefHeight="850">
+        <columnResizePolicy>
+            <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+        </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="departureDateColumn" text="Départ" prefWidth="140"/>
-            <TableColumn fx:id="arrivalDateColumn" text="Arrivée" prefWidth="140"/>
-            <TableColumn fx:id="statusColumn" text="Statut" prefWidth="100"/>
-            <TableColumn fx:id="isBoxColumn" text="Box ?" prefWidth="60"/>
-            <TableColumn fx:id="departureCityColumn" text="Ville départ" prefWidth="120"/>
-            <TableColumn fx:id="arrivalCityColumn" text="Ville arrivée" prefWidth="120"/>
+            <TableColumn fx:id="departureDateColumn" text="Date de départ" styleClass="table-column"/>
+            <TableColumn fx:id="arrivalDateColumn" text="Date d'arrivée" styleClass="table-column"/>
+            <TableColumn fx:id="statusColumn" text="Statut" styleClass="table-column"/>
+            <TableColumn fx:id="isBoxColumn" text="Box ?" styleClass="table-column"/>
+            <TableColumn fx:id="departureCityColumn" text="Ville de départ" styleClass="table-column"/>
+            <TableColumn fx:id="arrivalCityColumn" text="Ville d'arrivée" styleClass="table-column"/>
+            <TableColumn fx:id="priceColumn" text="Prix" styleClass="table-column"/>
+            <TableColumn fx:id="packageCountColumn" text="Nombre de Colis" styleClass="table-column"/>
+            <TableColumn fx:id="actionsColumn" text="Actions" sortable="false" styleClass="table-column"/>
         </columns>
     </TableView>
+
+    <HBox styleClass="pagination-container" spacing="15" alignment="CENTER">
+        <Button fx:id="previousButton" text="← Précédent" styleClass="pagination-button"/>
+        <Label fx:id="pageLabel" text="Page 1 sur 1" styleClass="page-info"/>
+        <Button fx:id="nextButton" text="Suivant →" styleClass="pagination-button"/>
+    </HBox>
 </VBox>
