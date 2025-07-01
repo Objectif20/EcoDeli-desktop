@@ -9,24 +9,20 @@
         <ScrollPane fitToWidth="true" styleClass="main-scroll-pane" stylesheets="@service-detail.css">
             <content>
                 <VBox styleClass="main-container" alignment="TOP_CENTER">
-                    <!-- Bouton retour -->
                     <HBox styleClass="header-section">
                         <Button fx:id="backButton" onAction="#handleRetour" styleClass="back-button" text="← Retour" />
                     </HBox>
 
-                    <!-- Bloc principal : infos service à gauche, détails à droite -->
                     <HBox styleClass="main-info-card">
-                        <!-- Colonne gauche : Titre, prix, localisation -->
                         <VBox styleClass="left-info-section" HBox.hgrow="ALWAYS">
                             <Label fx:id="serviceNameLabel" styleClass="service-title" text="Nom du service" />
                             <HBox styleClass="location-duration-row">
-                                <Label fx:id="locationLabel" styleClass="location-label" text="📍 Ville" />
-                                <Label fx:id="durationLabel" styleClass="duration-label" text="🕐 Durée" />
+                                <Label fx:id="locationLabel" styleClass="location-label" text="Ville" />
+                                <Label fx:id="durationLabel" styleClass="duration-label" text="Durée" />
                             </HBox>
                             <Label fx:id="priceLabel" styleClass="price-label" text="€ 0.00" />
                         </VBox>
 
-                        <!-- Colonne droite : Note, catégories, disponibilité -->
                         <VBox styleClass="right-info-section">
                             <Label fx:id="ratingLabel" styleClass="rating-label" text="⭐ 0.0" />
                             <HBox styleClass="tags-row">
@@ -37,9 +33,7 @@
                         </VBox>
                     </HBox>
 
-                    <!-- Informations prestataire sur une ligne -->
                     <HBox styleClass="provider-card">
-                        <Label styleClass="section-title-inline" text="Proposé par" />
                         <HBox styleClass="provider-info" HBox.hgrow="ALWAYS">
                             <VBox styleClass="provider-avatar-container">
                                 <ImageView fx:id="authorAvatarImage" styleClass="provider-avatar" fitWidth="50" fitHeight="50" preserveRatio="true" />
@@ -53,30 +47,26 @@
                         </HBox>
                     </HBox>
 
-                    <!-- Description compacte -->
                     <VBox styleClass="description-card-compact">
                         <Label styleClass="section-title-inline" text="Description" />
                         <Label fx:id="descriptionLabel" styleClass="description-text-compact" text="Description du service..." wrapText="true" />
                     </VBox>
 
-                    <!-- Mots-clés et avis sur la même ligne -->
                     <HBox styleClass="keywords-reviews-row">
-                        <!-- Mots-clés -->
                         <VBox fx:id="keywordsSection" styleClass="keywords-section" HBox.hgrow="ALWAYS">
                             <Label styleClass="section-title-inline" text="Mots-clés" />
                             <FlowPane fx:id="keywordsPane" styleClass="keywords-pane-compact" />
                         </VBox>
 
-                        <!-- Compteur d'avis -->
                         <VBox styleClass="reviews-count-section">
                             <Label styleClass="section-title-inline" text="Avis" />
                             <Label fx:id="commentsCountLabel" styleClass="comments-count-compact" text="💬 0" />
                         </VBox>
                     </HBox>
 
-                    <!-- Avis clients compacts -->
                     <VBox fx:id="commentsSection" styleClass="comments-card-compact">
-                        <ScrollPane styleClass="comments-scroll-compact" fitToWidth="true" maxHeight="200">
+                        <Label styleClass="section-title-inline" text="Commentaires" />
+                        <ScrollPane styleClass="comments-scroll-compact" fitToWidth="true" maxHeight="500">
                             <VBox fx:id="commentsContainer" styleClass="comments-container-compact" />
                         </ScrollPane>
                     </VBox>

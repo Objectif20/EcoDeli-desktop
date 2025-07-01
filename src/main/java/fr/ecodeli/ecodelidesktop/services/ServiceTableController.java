@@ -2,8 +2,6 @@ package fr.ecodeli.ecodelidesktop.services;
 
 import fr.ecodeli.ecodelidesktop.api.ServicesAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
-import fr.ecodeli.ecodelidesktop.merchant.Merchant;
-import fr.ecodeli.ecodelidesktop.merchant.MerchantDetailsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -106,18 +104,18 @@ public class ServiceTableController {
         prevButton.setOnAction(e -> {
             if (currentPage > 1) {
                 currentPage--;
-                loadServicesFromAPI(currentPage, limit);
+                loadServicesFromAPI(currentPage);
             }
         });
 
         nextButton.setOnAction(e -> {
             if (currentPage < totalPages) {
                 currentPage++;
-                loadServicesFromAPI(currentPage, limit);
+                loadServicesFromAPI(currentPage);
             }
         });
 
-        loadServicesFromAPI(currentPage, limit);
+        loadServicesFromAPI(currentPage);
     }
 
     private <T> void centerCellContent(TableColumn<Service, T> column) {
@@ -158,13 +156,13 @@ public class ServiceTableController {
         };
     }
 
-    private void loadServicesFromAPI(int page, int limit) {
+    private void loadServicesFromAPI(int page) {
         try {
-            ServicesAPI.ServiceResponse response = servicesAPI.getAllServices(page, limit);
+            ServicesAPI.ServiceResponse response = servicesAPI.getAllServices(page, 10);
             List<Service> services = response.getData();
             int totalItems = response.getTotal();
 
-            totalPages = (int) Math.ceil((double) totalItems / limit);
+            totalPages = (int) Math.ceil((double) totalItems / 10);
 
             ObservableList<Service> observableList = FXCollections.observableArrayList(services);
             serviceTable.setItems(observableList);

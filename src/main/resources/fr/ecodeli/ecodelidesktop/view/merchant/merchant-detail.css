@@ -1,0 +1,302 @@
+.root {
+    -fx-base: #4caf50;
+    -fx-accent: #4caf50;
+    -fx-default-button: #4caf50;
+    -fx-focus-color: #4caf50;
+    -fx-faint-focus-color: #4caf5022;
+}
+
+.main-scroll-pane {
+    -fx-background-color: #f8f9fa;
+    -fx-fit-to-width: true;
+    -fx-padding: 0 5% 0 5%;
+}
+
+.main-container {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 20;
+    -fx-spacing: 16;
+    -fx-alignment: center;
+    -fx-pref-width: 100%;
+}
+
+.header-section {
+    -fx-padding: 0 0 10 0;
+    -fx-alignment: center-left;
+    -fx-fill-width: true;
+}
+
+.back-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-padding: 8 16;
+    -fx-background-radius: 20;
+    -fx-cursor: hand;
+    -fx-font-size: 16px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.back-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.main-info-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 20;
+    -fx-spacing: 26;
+    -fx-background-radius: 13;
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 13px;
+    -fx-effect: dropshadow(gaussian, rgba(76, 175, 80, 0.1), 7, 0, 0, 1);
+    -fx-fill-width: true;
+}
+
+.left-info-section {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+    -fx-pref-width: 100%;
+}
+
+.right-info-section {
+    -fx-spacing: 10;
+    -fx-alignment: center-right;
+    -fx-min-width: 200px;
+}
+
+.merchant-title {
+    -fx-font-size: 29px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.contact-row {
+    -fx-spacing: 20;
+    -fx-padding: 4 0;
+}
+
+.email-label,
+.phone-label {
+    -fx-font-size: 16px;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.city-label {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.id-label {
+    -fx-font-size: 18px;
+    -fx-text-fill: #666;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-alignment: center-right;
+}
+
+.tags-row {
+    -fx-spacing: 8;
+    -fx-alignment: center-right;
+}
+
+.status-tag {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-padding: 5 10;
+    -fx-background-radius: 16;
+    -fx-font-size: 13px;
+    -fx-font-weight: bold;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.company-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16;
+    -fx-spacing: 20;
+    -fx-background-radius: 10;
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-alignment: center-left;
+    -fx-fill-width: true;
+}
+
+.section-title-inline {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-min-width: 130px;
+}
+
+.company-info {
+    -fx-spacing: 8;
+    -fx-alignment: center-left;
+}
+
+.company-name {
+    -fx-font-size: 18px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.company-address {
+    -fx-font-size: 14px;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.subscription-row {
+    -fx-spacing: 20;
+    -fx-alignment: center;
+    -fx-fill-width: true;
+}
+
+.subscription-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16;
+    -fx-spacing: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+}
+
+.subscription-type {
+    -fx-font-size: 16px;
+    -fx-text-fill: #2e7d32;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+}
+
+.delivery-count-section {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16;
+    -fx-spacing: 10;
+    -fx-background-radius: 10;
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-min-width: 150px;
+    -fx-alignment: center;
+}
+
+.delivery-count {
+    -fx-font-size: 18px;
+    -fx-text-fill: #4caf50;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+    -fx-font-weight: bold;
+    -fx-alignment: center;
+}
+
+.contract-card {
+    -fx-background-color: #ffffff;
+    -fx-padding: 16;
+    -fx-spacing: 16;
+    -fx-background-radius: 10;
+    -fx-border-color: #e8f5e8;
+    -fx-border-width: 1px;
+    -fx-border-radius: 10px;
+    -fx-fill-width: true;
+}
+
+.contract-header {
+    -fx-spacing: 20;
+    -fx-alignment: center-left;
+}
+
+.contract-controls {
+    -fx-spacing: 10;
+    -fx-alignment: center-right;
+}
+
+.contract-button {
+    -fx-background-color: #4caf50;
+    -fx-text-fill: white;
+    -fx-padding: 6 12;
+    -fx-background-radius: 15;
+    -fx-font-size: 12px;
+    -fx-font-weight: bold;
+    -fx-cursor: hand;
+}
+
+.contract-button:hover {
+    -fx-background-color: #45a049;
+}
+
+.nav-button,
+.zoom-button {
+    -fx-background-color: #f0f0f0;
+    -fx-text-fill: #333;
+    -fx-padding: 6 10;
+    -fx-background-radius: 12;
+    -fx-font-size: 12px;
+    -fx-cursor: hand;
+}
+
+.nav-button:hover,
+.zoom-button:hover {
+    -fx-background-color: #e0e0e0;
+}
+
+.nav-button:disabled {
+    -fx-opacity: 0.5;
+    -fx-cursor: default;
+}
+
+.page-info,
+.zoom-info {
+    -fx-font-size: 12px;
+    -fx-text-fill: #666;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.pdf-container {
+    -fx-border-color: #ddd;
+    -fx-border-width: 1px;
+    -fx-border-radius: 8px;
+    -fx-background-color: white;
+    -fx-background-radius: 8px;
+}
+
+.pdf-scroll {
+    -fx-background-color: transparent;
+    -fx-pref-height: 600px;
+}
+
+.no-pdf-message {
+    -fx-background-color: #f8f9fa;
+    -fx-padding: 40;
+}
+
+.pdf-icon {
+    -fx-font-size: 48px;
+}
+
+.pdf-message {
+    -fx-font-size: 16px;
+    -fx-text-fill: #6c757d;
+    -fx-font-family: "Segoe UI", "Arial", sans-serif;
+}
+
+.scroll-pane .scroll-bar:vertical {
+    -fx-background-color: transparent;
+    -fx-pref-width: 5px;
+}
+
+.scroll-pane .scroll-bar:vertical .track {
+    -fx-background-color: #e8f5e8;
+    -fx-background-radius: 3px;
+}
+
+.scroll-pane .scroll-bar:vertical .thumb {
+    -fx-background-color: #4caf50;
+    -fx-background-radius: 3px;
+}

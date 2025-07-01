@@ -50,17 +50,14 @@ public class DeliveryDetailsController implements Initializable {
         try {
             DeliveryAPI.DeliveryDetails details = deliveryAPI.getDeliveryById(deliveryId);
 
-            // Header
             titleLabel.setText("Détails de la livraison");
             deliveryIdLabel.setText("Référence: " + deliveryId);
 
-            // Itinéraire
             departureLabel.setText(details.departure.city + " - " + details.departure.address);
             arrivalLabel.setText(details.arrival.city + " - " + details.arrival.address);
             departureDateLabel.setText(formatDate(details.departure_date));
             arrivalDateLabel.setText(details.arrival_date != null ? formatDate(details.arrival_date) : "À déterminer");
 
-            // Prix et statut
             totalPriceLabel.setText(String.format("%.2f €", details.total_price));
 
             if (details.cart_dropped) {
@@ -75,10 +72,8 @@ public class DeliveryDetailsController implements Initializable {
                 cartDroppedIcon.getStyleClass().add("error");
             }
 
-            // Nombre de colis
             packageCountLabel.setText("(" + details.packages.size() + ")");
 
-            // Chargement des colis et prix détaillé
             loadPackages(details.packages);
             loadPriceBreakdown(details.packages);
 
@@ -108,7 +103,7 @@ public class DeliveryDetailsController implements Initializable {
 
         if (pkg.picture != null && !pkg.picture.isEmpty()) {
             try {
-                Image image = new Image(pkg.picture.get(0), true);
+                Image image = new Image(pkg.picture.getFirst(), true);
                 imageView.setImage(image);
             } catch (Exception e) {
                 imageView.setImage(new Image("/icons/package-default.png"));
@@ -117,7 +112,6 @@ public class DeliveryDetailsController implements Initializable {
             imageView.setImage(new Image("/icons/package-default.png"));
         }
 
-        // Informations du colis
         VBox infoBox = new VBox(8);
         infoBox.setMaxWidth(Double.MAX_VALUE);
         HBox.setHgrow(infoBox, javafx.scene.layout.Priority.ALWAYS);
@@ -141,7 +135,6 @@ public class DeliveryDetailsController implements Initializable {
 
         infoBox.getChildren().addAll(nameLabel, detailsBox);
 
-        // Prix
         VBox priceBox = new VBox(5);
         priceBox.setAlignment(javafx.geometry.Pos.CENTER_RIGHT);
 

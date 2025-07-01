@@ -33,19 +33,14 @@ public class StatsViewController {
     private GridPane statsGrid;
 
     private final StatsService statsService = new StatsService();
-    private PieChart repartitionUtilisateursChart;
-    private PieChart colisRepartitionChart;
-    private PieChart chiffreAffairesChart;
-    private PieChart abonnementChart;
-    private BarChart<String, Number> topClientsChart;
 
     @FXML
     public void initialize() {
-        repartitionUtilisateursChart = statsService.getRepartitionUtilisateursChart();
-        colisRepartitionChart = statsService.getColisRepartitionChart();
-        chiffreAffairesChart = statsService.getChiffreAffairesChart();
-        abonnementChart = statsService.getAbonnementChart();
-        topClientsChart = statsService.getTopClientsChart();
+        PieChart repartitionUtilisateursChart = statsService.getRepartitionUtilisateursChart();
+        PieChart colisRepartitionChart = statsService.getColisRepartitionChart();
+        PieChart chiffreAffairesChart = statsService.getChiffreAffairesChart();
+        PieChart abonnementChart = statsService.getAbonnementChart();
+        BarChart<String, Number> topClientsChart = statsService.getTopClientsChart();
 
         statsGrid.add(repartitionUtilisateursChart, 0, 0);
         statsGrid.add(colisRepartitionChart, 1, 0);

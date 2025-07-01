@@ -112,7 +112,6 @@ public class MerchantAPI {
         }
     }
 
-    // Nouvelle structure pour correspondre au backend
     public static class MerchantDetails {
         public MerchantInfo info;
 
@@ -120,7 +119,6 @@ public class MerchantAPI {
             return info;
         }
 
-        // Méthodes de compatibilité pour le contrôleur existant
         public String getId() {
             return info != null ? info.id : null;
         }
@@ -138,7 +136,7 @@ public class MerchantAPI {
         }
 
         public String getCity() {
-            return info != null ? info.pays : null; // Ou créer un nouveau champ city si nécessaire
+            return info != null ? info.pays : null;
         }
 
         public String getNomAbonnement() {
@@ -158,7 +156,7 @@ public class MerchantAPI {
         }
 
         public String getAddress() {
-            return info != null ? info.description : null; // Ou créer un nouveau champ address
+            return info != null ? info.description : null;
         }
 
         public String getContractUrl() {

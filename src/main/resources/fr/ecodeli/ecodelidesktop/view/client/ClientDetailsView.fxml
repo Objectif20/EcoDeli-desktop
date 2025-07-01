@@ -2,6 +2,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.geometry.*?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.shape.Circle?>
 
 <ScrollPane xmlns:fx="http://javafx.com/fxml" fx:controller="fr.ecodeli.ecodelidesktop.clients.ClientDetailController"
             fitToWidth="true" style="-fx-background-color: #f8f9fa;">
@@ -26,11 +28,24 @@
                     <Insets top="30" right="30" bottom="30" left="30"/>
                 </padding>
                 <HBox spacing="20" alignment="CENTER_LEFT">
-                    <StackPane fx:id="profileContainer" prefWidth="80" prefHeight="80"
-                               style="-fx-background-color: #e9ecef; -fx-background-radius: 40;">
-                        <Label fx:id="initialsLabel" text="--"
-                               style="-fx-font-size: 24px; -fx-font-weight: bold; -fx-text-fill: #6c757d;"/>
+                    <!-- Photo de profil ronde améliorée -->
+                    <StackPane prefWidth="80" prefHeight="80">
+                        <ImageView fx:id="profileImageView"
+                                   fitWidth="80"
+                                   fitHeight="80"
+                                   preserveRatio="false"
+                                   smooth="true">
+                            <clip>
+                                <Circle centerX="40" centerY="40" radius="40"/>
+                            </clip>
+                        </ImageView>
+                        <!-- Cercle de bordure optionnel pour un effet plus propre -->
+                        <Circle centerX="40" centerY="40" radius="40"
+                                fill="transparent"
+                                stroke="#e9ecef"
+                                strokeWidth="2"/>
                     </StackPane>
+
                     <VBox spacing="8" VBox.vgrow="ALWAYS">
                         <HBox spacing="15" alignment="CENTER_LEFT">
                             <Label fx:id="nameLabel" text="Nom du client"

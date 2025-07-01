@@ -2,7 +2,6 @@ package fr.ecodeli.ecodelidesktop.delivery;
 
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI;
 import fr.ecodeli.ecodelidesktop.api.DeliveryAPI.DeliveryResponse;
-import fr.ecodeli.ecodelidesktop.clients.ClientDetailController;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -34,7 +33,6 @@ public class DeliveryTableController {
     @FXML private Label totalDeliveriesLabel;
 
     private int currentPage = 1;
-    private final int limit = 10;
     private int totalPages = 1;
     private final DeliveryAPI deliveryAPI = new DeliveryAPI();
 
@@ -85,7 +83,7 @@ public class DeliveryTableController {
 
     private void setupActionsColumn() {
         Callback<TableColumn<DeliveryRow, Void>, TableCell<DeliveryRow, Void>> cellFactory = param -> {
-            final TableCell<DeliveryRow, Void> cell = new TableCell<>() {
+            return new TableCell<>() {
                 private final Button btn = new Button("Voir détails");
 
                 {
@@ -107,13 +105,13 @@ public class DeliveryTableController {
                     setAlignment(javafx.geometry.Pos.CENTER);
                 }
             };
-            return cell;
         };
         actionsColumn.setCellFactory(cellFactory);
     }
 
     private void loadDeliveries() {
         try {
+            int limit = 10;
             DeliveryResponse response = deliveryAPI.getAllOngoingDeliveries(currentPage, limit);
             totalPages = (int) Math.ceil((double) response.getTotalRows() / limit);
             List<DeliveryAPI.DeliveryOngoing> ongoingList = response.getDeliveries();
@@ -126,7 +124,7 @@ public class DeliveryTableController {
             updatePaginationControls();
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les livraisons: " + e.getMessage());
+            showAlert("Impossible de charger les livraisons: " + e.getMessage());
         }
     }
 
@@ -166,9 +164,9 @@ public class DeliveryTableController {
         }
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Erreur");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();

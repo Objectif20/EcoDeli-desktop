@@ -5,15 +5,21 @@ import fr.ecodeli.ecodelidesktop.dashboard.StatsPrestationsViewController;
 import fr.ecodeli.ecodelidesktop.dashboard.StatsViewController;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.StackPane;
 import javafx.scene.Parent;
 import javafx.scene.control.Button;
 import javafx.scene.control.Alert;
+import javafx.stage.Stage;
+
+import java.io.IOException;
+import java.util.Objects;
 
 public class MainController {
 
     @FXML private StackPane contentArea;
-    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnGeneratePdf;
+    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnGeneratePdf, btnLogout;
     private static StackPane staticContentArea;
 
     private StatsViewController statsViewController;
@@ -28,7 +34,7 @@ public class MainController {
         btnMerchants.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantView.fxml"));
         btnDeliveries.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
         btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/servicesView.fxml"));
-
+        btnLogout.setOnAction(e -> handleLogout());
         btnGeneratePdf.setOnAction(e -> generateCompletePdf());
 
         loadPage("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsWrapperView.fxml");
@@ -56,6 +62,32 @@ public class MainController {
         } catch (Exception e) {
             e.printStackTrace();
             System.err.println("Erreur lors de l'initialisation des contrôleurs de stats");
+        }
+    }
+
+    @FXML
+    private void handleLogout() {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/AuthView.fxml"));
+            Parent loginRoot = loader.load();
+
+            Stage stage = (Stage) contentArea.getScene().getWindow();
+
+            Scene scene = new Scene(loginRoot);
+            scene.getStylesheets().add(
+                    Objects.requireNonNull(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css")).toExternalForm()
+            );
+
+            stage.setScene(scene);
+            stage.setTitle("Connexion - EcoDeli");
+            stage.getIcons().clear();
+            stage.getIcons().add(new Image(
+                    Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png"))
+            ));
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
@@ -90,6 +122,9 @@ public class MainController {
         alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(message);
+
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png"))));
         alert.showAndWait();
     }
 }

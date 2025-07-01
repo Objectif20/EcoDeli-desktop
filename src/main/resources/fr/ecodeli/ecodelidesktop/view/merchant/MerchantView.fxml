@@ -16,7 +16,7 @@
       stylesheets="@merchant-list.css">
 
     <VBox styleClass="header-section" spacing="10">
-        <Label text="Gestion des Marchands" styleClass="page-title"/>
+        <Label text="Gestion des Commerçants" styleClass="page-title"/>
         <Label fx:id="totalMerchantsLabel" text="0 marchands au total" styleClass="subtitle"/>
     </VBox>
 

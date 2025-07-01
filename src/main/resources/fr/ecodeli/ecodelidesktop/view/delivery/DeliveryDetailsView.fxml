@@ -14,7 +14,6 @@
                 <Insets top="30.0" right="30.0" bottom="30.0" left="30.0"/>
             </padding>
 
-            <!-- Header avec gradient -->
             <HBox alignment="CENTER_LEFT" spacing="20.0" styleClass="header-section">
                 <padding>
                     <Insets top="20.0" right="25.0" bottom="20.0" left="25.0"/>
@@ -26,54 +25,42 @@
                 </VBox>
             </HBox>
 
-            <!-- Contenu principal -->
             <HBox spacing="30.0" alignment="TOP_LEFT">
-                <!-- Colonne principale -->
                 <VBox spacing="25.0" HBox.hgrow="ALWAYS">
 
-                    <!-- Section Itinéraire -->
                     <VBox spacing="20.0" styleClass="card-container">
                         <padding>
                             <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
                         </padding>
 
                         <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="section-icon" text="🚚" />
                             <Label styleClass="section-title" text="Itinéraire de livraison" />
                         </HBox>
 
                         <HBox spacing="20.0" alignment="TOP_LEFT">
-                            <!-- Timeline visuelle -->
                             <VBox alignment="CENTER" spacing="0.0" styleClass="timeline">
                                 <Region styleClass="timeline-dot start-dot" />
                                 <Region styleClass="timeline-line" />
                                 <Region styleClass="timeline-dot end-dot" />
                             </VBox>
 
-                            <!-- Informations de trajet -->
                             <VBox spacing="40.0" VBox.vgrow="ALWAYS">
-                                <!-- Départ -->
                                 <VBox spacing="8.0" styleClass="location-info">
                                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                        <Label styleClass="location-icon start" text="📍" />
                                         <Label styleClass="location-label start" text="DÉPART" />
                                     </HBox>
                                     <Label fx:id="departureLabel" styleClass="location-address" text="Paris - 123 Rue de Rivoli" />
                                     <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                        <Label styleClass="date-icon" text="📅" />
                                         <Label fx:id="departureDateLabel" styleClass="date-text" text="15/01/2024 - 09:00" />
                                     </HBox>
                                 </VBox>
 
-                                <!-- Arrivée -->
                                 <VBox spacing="8.0" styleClass="location-info">
                                     <HBox alignment="CENTER_LEFT" spacing="8.0">
-                                        <Label styleClass="location-icon end" text="🏁" />
                                         <Label styleClass="location-label end" text="ARRIVÉE" />
                                     </HBox>
                                     <Label fx:id="arrivalLabel" styleClass="location-address" text="Lyon - 456 Avenue de la République" />
                                     <HBox spacing="8.0" alignment="CENTER_LEFT">
-                                        <Label styleClass="date-icon" text="📅" />
                                         <Label fx:id="arrivalDateLabel" styleClass="date-text" text="15/01/2024 - 15:30" />
                                     </HBox>
                                 </VBox>
@@ -81,14 +68,12 @@
                         </HBox>
                     </VBox>
 
-                    <!-- Section Colis -->
                     <VBox spacing="20.0" styleClass="card-container">
                         <padding>
                             <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
                         </padding>
 
                         <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="section-icon" text="📦" />
                             <Label styleClass="section-title" text="Colis à livrer" />
                             <Label fx:id="packageCountLabel" styleClass="package-count" text="(3)" />
                         </HBox>
@@ -97,17 +82,14 @@
                     </VBox>
                 </VBox>
 
-                <!-- Sidebar droite -->
                 <VBox spacing="25.0" minWidth="320.0" maxWidth="320.0">
 
-                    <!-- Résumé financier -->
                     <VBox spacing="20.0" styleClass="card-container summary-card">
                         <padding>
                             <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
                         </padding>
 
                         <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="section-icon" text="💰" />
                             <Label styleClass="section-title" text="Résumé financier" />
                         </HBox>
 
@@ -122,14 +104,12 @@
                         </HBox>
                     </VBox>
 
-                    <!-- Statut de livraison -->
                     <VBox spacing="20.0" styleClass="card-container status-card">
                         <padding>
                             <Insets top="25.0" right="25.0" bottom="25.0" left="25.0"/>
                         </padding>
 
                         <HBox alignment="CENTER_LEFT" spacing="12.0">
-                            <Label styleClass="section-icon" text="📊" />
                             <Label styleClass="section-title" text="Statut" />
                         </HBox>
 
@@ -145,7 +125,6 @@
                                 </VBox>
                             </HBox>
 
-                            <!-- Statut en cours -->
                             <VBox spacing="12.0" styleClass="current-status">
                                 <HBox alignment="CENTER_LEFT" spacing="8.0">
                                     <Region styleClass="status-indicator" />

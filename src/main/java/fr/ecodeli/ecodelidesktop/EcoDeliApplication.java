@@ -9,6 +9,8 @@ import javafx.stage.Screen;
 import javafx.stage.Stage;
 import javafx.scene.image.Image;
 
+import java.util.Objects;
+
 public class EcoDeliApplication extends Application {
 
     private static final double MIN_WIDTH = 800;
@@ -27,10 +29,10 @@ public class EcoDeliApplication extends Application {
         Scene scene = new Scene(root, preferredWidth, preferredHeight);
 
         scene.getStylesheets().addAll(
-                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css").toExternalForm(),
-                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/merchant-list.css").toExternalForm(),
-                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/client-list.css").toExternalForm(),
-                getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/dashboard.css").toExternalForm()
+                Objects.requireNonNull(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/auth/auth-style.css")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/merchant-list.css")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/client-list.css")).toExternalForm(),
+                Objects.requireNonNull(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/dashboard.css")).toExternalForm()
         );
 
         stage.setTitle("EcoDeli - Connexion");
@@ -50,7 +52,7 @@ public class EcoDeliApplication extends Application {
         }
 
         try {
-            stage.getIcons().add(new Image(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
+            stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png"))));
         } catch (Exception e) {
             System.out.println("Impossible de charger l'icône de l'application: " + e.getMessage());
         }

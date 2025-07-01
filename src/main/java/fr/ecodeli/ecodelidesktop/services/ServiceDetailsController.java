@@ -11,6 +11,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import fr.ecodeli.ecodelidesktop.api.ServicesAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
+import javafx.scene.shape.Circle;
+import javafx.geometry.Insets;
 
 import java.io.IOException;
 import java.text.DecimalFormat;
@@ -30,14 +32,12 @@ public class ServiceDetailsController {
     @FXML private Label authorRatingLabel;
     @FXML private Label descriptionLabel;
     @FXML private Label commentsCountLabel;
-    @FXML private Label adminPriceLabel;
     @FXML private ImageView authorAvatarImage;
     @FXML private Label authorAvatarPlaceholder;
     @FXML private FlowPane keywordsPane;
     @FXML private VBox commentsContainer;
     @FXML private VBox keywordsSection;
     @FXML private VBox commentsSection;
-    @FXML private VBox adminSection;
 
     private String serviceId;
     private ServicesAPI servicesAPI;
@@ -64,45 +64,35 @@ public class ServiceDetailsController {
     }
 
     private void populateServiceDetails(ServiceDetails service) {
-        // Basic service info
         serviceNameLabel.setText(service.getName() != null ? service.getName() : "Service sans nom");
         locationLabel.setText("📍 " + (service.getCity() != null ? service.getCity() : "Ville non spécifiée"));
         durationLabel.setText("🕐 " + service.getDurationTime() + " min");
         ratingLabel.setText("⭐ " + formatRating(service.getRate()));
         priceLabel.setText("€ " + priceFormat.format(service.getPrice()));
 
-        // Service type and status
         serviceTypeLabel.setText(service.getServiceType() != null ? service.getServiceType() : "Type non spécifié");
-        statusLabel.setText(service.getStatus() != null ? service.getStatus() : "Statut inconnu");
-        availabilityLabel.setText(service.isAvailable() ? "✅ Disponible" : "❌ Indisponible");
 
-        // Apply status-specific styles
+        String status = service.getStatus() != null ? service.getStatus() : "Statut inconnu";
+        statusLabel.setText(status);
+
+        availabilityLabel.setText(service.isAvailable() ? "Disponible" : "Indisponible");
+
         updateStatusStyles(service.getStatus(), service.isAvailable());
 
-        // Author info with photo
         if (service.getAuthor() != null) {
             authorNameLabel.setText(service.getAuthor().getName() != null ? service.getAuthor().getName() : "Auteur inconnu");
             authorEmailLabel.setText(service.getAuthor().getEmail() != null ? service.getAuthor().getEmail() : "Email non disponible");
             authorRatingLabel.setText("⭐ " + formatRating(service.getRate()));
 
-            // Load author photo
             loadAuthorPhoto(service.getAuthor().getPhoto());
         }
 
-        // Description
         descriptionLabel.setText(service.getDescription() != null ? service.getDescription() : "Aucune description disponible");
 
-        // Keywords
         populateKeywords(service);
 
-        // Comments
         populateComments(service);
 
-        // Admin info (show only if needed)
-        if (service.getPriceAdmin() > 0) {
-            adminPriceLabel.setText("€ " + priceFormat.format(service.getPriceAdmin()));
-            adminSection.setVisible(true);
-        }
     }
 
     private void loadAuthorPhoto(String photoUrl) {
@@ -117,6 +107,11 @@ public class ServiceDetailsController {
 
                 if (!image.isError()) {
                     authorAvatarImage.setImage(image);
+
+                    double radius = 25;
+                    Circle clip = new Circle(radius, radius, radius);
+                    authorAvatarImage.setClip(clip);
+
                     authorAvatarImage.setVisible(true);
                     authorAvatarPlaceholder.setVisible(false);
                 } else {
@@ -171,16 +166,17 @@ public class ServiceDetailsController {
         VBox commentBox = new VBox();
         commentBox.getStyleClass().add("comment-box");
 
-        // Comment header with author info
         HBox commentHeader = new HBox();
         commentHeader.getStyleClass().add("comment-header");
 
-        // Author avatar
         ImageView commentAvatar = new ImageView();
         commentAvatar.getStyleClass().add("comment-avatar-image");
         commentAvatar.setFitWidth(40);
         commentAvatar.setFitHeight(40);
         commentAvatar.setPreserveRatio(true);
+
+        Circle clip = new Circle(20, 20, 20);
+        commentAvatar.setClip(clip);
 
         Label avatarPlaceholder = new Label("👤");
         avatarPlaceholder.getStyleClass().add("comment-avatar-placeholder");
@@ -188,7 +184,6 @@ public class ServiceDetailsController {
         VBox avatarContainer = new VBox();
         avatarContainer.getStyleClass().add("comment-avatar-container");
 
-        // Load comment author photo
         if (comment.getAuthor() != null && comment.getAuthor().getPhoto() != null && !comment.getAuthor().getPhoto().trim().isEmpty()) {
             try {
                 Image image = new Image(comment.getAuthor().getPhoto(), true);
@@ -199,13 +194,28 @@ public class ServiceDetailsController {
                     }
                 });
 
-                if (!image.isError()) {
-                    commentAvatar.setImage(image);
-                    commentAvatar.setVisible(true);
-                    avatarPlaceholder.setVisible(false);
-                } else {
-                    commentAvatar.setVisible(false);
-                    avatarPlaceholder.setVisible(true);
+                image.progressProperty().addListener((obs, oldProgress, newProgress) -> {
+                    if (newProgress.doubleValue() >= 1.0) {
+                        if (!image.isError()) {
+                            commentAvatar.setImage(image);
+                            commentAvatar.setVisible(true);
+                            avatarPlaceholder.setVisible(false);
+                        } else {
+                            commentAvatar.setVisible(false);
+                            avatarPlaceholder.setVisible(true);
+                        }
+                    }
+                });
+
+                if (image.getProgress() >= 1.0) {
+                    if (!image.isError()) {
+                        commentAvatar.setImage(image);
+                        commentAvatar.setVisible(true);
+                        avatarPlaceholder.setVisible(false);
+                    } else {
+                        commentAvatar.setVisible(false);
+                        avatarPlaceholder.setVisible(true);
+                    }
                 }
             } catch (Exception e) {
                 commentAvatar.setVisible(false);
@@ -225,16 +235,15 @@ public class ServiceDetailsController {
 
         commentHeader.getChildren().addAll(avatarContainer, authorInfo);
 
-        // Comment content
         Label commentContent = new Label(comment.getContent() != null ? comment.getContent() : "Commentaire vide");
         commentContent.getStyleClass().add("comment-content");
         commentContent.setWrapText(true);
 
         commentBox.getChildren().addAll(commentHeader, commentContent);
 
-        // Add response if exists
         if (comment.getResponse() != null) {
             VBox responseBox = createResponseBox(comment.getResponse());
+            VBox.setMargin(responseBox, new Insets(10, 0, 0, 20));
             commentBox.getChildren().add(responseBox);
         }
 

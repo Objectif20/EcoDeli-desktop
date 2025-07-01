@@ -5,18 +5,20 @@ import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
 import javafx.scene.Parent;
 import javafx.scene.control.Label;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.VBox;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
 import fr.ecodeli.ecodelidesktop.api.ClientAPI;
 
 import java.io.IOException;
 import java.net.URL;
+import java.util.Objects;
 import java.util.ResourceBundle;
 
 public class ClientDetailController implements Initializable {
     @FXML private Label nameLabel;
     @FXML private Label emailLabel;
-    @FXML private Label initialsLabel;
     @FXML private Label subscriptionBadge;
     @FXML private Label transporterBadge;
     @FXML private Label livraisonsCount;
@@ -27,9 +29,11 @@ public class ClientDetailController implements Initializable {
     @FXML private Label transporterStatusLabel;
     @FXML private VBox transporterStatusContainer;
     @FXML private Label transporterStatusIcon;
+    @FXML private ImageView profileImageView;
+
 
     private String clientId;
-    private ClientAPI clientAPI;
+    private final ClientAPI clientAPI;
 
     public ClientDetailController() {
         this.clientAPI = new ClientAPI();
@@ -53,9 +57,14 @@ public class ClientDetailController implements Initializable {
             nameLabel.setText(fullName);
             emailLabel.setText(info.getEmail());
             contactEmailLabel.setText(info.getEmail());
-            String initials = getInitials(info.getFirstName(), info.getLastName());
-            initialsLabel.setText(initials);
             subscriptionBadge.setText(info.getNomAbonnement());
+            if (info.getProfilePicture() != null && !info.getProfilePicture().isBlank()) {
+                Image image = new Image(info.getProfilePicture(), true);
+                profileImageView.setImage(image);
+            } else {
+                Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
+                profileImageView.setImage(defaultImage);
+            }
             abonnementLabel.setText(info.getNomAbonnement());
             livraisonsCount.setText(String.valueOf(info.getNbDemandeDeLivraison()));
             prestationsCount.setText(String.valueOf(info.getNombreDePrestations()));
@@ -81,12 +90,6 @@ public class ClientDetailController implements Initializable {
             nameLabel.setText("Erreur lors du chargement");
             emailLabel.setText("Impossible de charger les données");
         }
-    }
-
-    private String getInitials(String firstName, String lastName) {
-        String firstInitial = (firstName != null && !firstName.isEmpty()) ? firstName.substring(0, 1).toUpperCase() : "";
-        String lastInitial = (lastName != null && !lastName.isEmpty()) ? lastName.substring(0, 1).toUpperCase() : "";
-        return firstInitial + lastInitial;
     }
 
     private void updateSubscriptionBadgeStyle(String subscription) {

@@ -2,7 +2,6 @@ package fr.ecodeli.ecodelidesktop.merchant;
 
 import fr.ecodeli.ecodelidesktop.api.MerchantAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
-import fr.ecodeli.ecodelidesktop.delivery.DeliveryDetailsController;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -15,9 +14,11 @@ import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class MerchantTableController {
 
@@ -141,10 +142,9 @@ public class MerchantTableController {
 
     private void setDefaultProfileImage(ImageView imageView) {
         try {
-            Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+            Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
             imageView.setImage(defaultImage);
         } catch (Exception e) {
-            // Handle exception
         }
     }
 
@@ -218,7 +218,7 @@ public class MerchantTableController {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les marchands: " + e.getMessage());
+            showAlert("Impossible de charger les marchands: " + e.getMessage());
         }
     }
 
@@ -258,11 +258,13 @@ public class MerchantTableController {
         }
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Erreur");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png"))));
         alert.showAndWait();
     }
 }

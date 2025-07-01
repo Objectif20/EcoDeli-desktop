@@ -29,11 +29,9 @@ public class AuthViewController implements Initializable {
 
     @FXML private VBox twoFactorForm;
     @FXML private TextField otp1, otp2, otp3, otp4, otp5, otp6;
-    @FXML private Button backButton;
     @FXML private Button verifyButton;
 
     @FXML private Label errorLabel;
-    @FXML private Button devButton;
 
     private final AuthApi authApi;
     private LoginRequest currentLoginRequest;
@@ -119,7 +117,7 @@ public class AuthViewController implements Initializable {
                 Platform.runLater(() -> {
                     loginButton.setDisable(false);
                     loginButton.setText("Se connecter");
-                    showError("Erreur de connexion : " + e.getMessage());
+                    showError("Email ou mot de passe incorrect");
                 });
             }
         }).start();

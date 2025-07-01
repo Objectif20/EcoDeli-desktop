@@ -7,13 +7,14 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
-import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.FileChooser;
 import fr.ecodeli.ecodelidesktop.api.MerchantAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
 
+import javafx.stage.Stage;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.rendering.PDFRenderer;
 
@@ -22,15 +23,12 @@ import java.io.ByteArrayInputStream;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
-import java.util.List;
-import java.util.ArrayList;
+import java.util.Objects;
+
 
 public class MerchantDetailsController {
 
-    @FXML private Label titleLabel;
-    @FXML private Label idLabel;
-    @FXML private Label firstNameLabel;
-    @FXML private Label lastNameLabel;
+    @FXML private Label merchantNameLabel;
     @FXML private Label emailLabel;
     @FXML private Label phoneLabel;
     @FXML private Label cityLabel;
@@ -38,25 +36,20 @@ public class MerchantDetailsController {
     @FXML private Label addressLabel;
     @FXML private Label subscriptionLabel;
     @FXML private Label deliveryRequestsLabel;
-    @FXML private VBox contractSection;
+    @FXML private Label statusLabel;
     @FXML private ScrollPane pdfScrollPane;
     @FXML private ImageView pdfImageView;
     @FXML private VBox noPdfMessage;
     @FXML private Button downloadButton;
-    @FXML private Button refreshPdfButton;
     @FXML private Button prevPageButton;
     @FXML private Button nextPageButton;
-    @FXML private Button zoomInButton;
-    @FXML private Button zoomOutButton;
     @FXML private Label pageLabel;
     @FXML private Label zoomLabel;
-    @FXML private StackPane loadingPane;
 
     private String clientId;
-    private MerchantAPI merchantAPI;
+    private final MerchantAPI merchantAPI;
     private MerchantAPI.MerchantDetails merchantDetails;
 
-    // PDF viewer state
     private PDDocument currentDocument;
     private PDFRenderer pdfRenderer;
     private int currentPage = 0;
@@ -74,7 +67,6 @@ public class MerchantDetailsController {
     }
 
     private void loadMerchantDetails() {
-        showLoading(true);
 
         Task<MerchantAPI.MerchantDetails> task = new Task<MerchantAPI.MerchantDetails>() {
             @Override
@@ -88,14 +80,12 @@ public class MerchantDetailsController {
             Platform.runLater(() -> {
                 displayMerchantDetails();
                 loadPdfContract();
-                showLoading(false);
             });
         });
 
         task.setOnFailed(e -> {
             Platform.runLater(() -> {
                 showError("Erreur lors du chargement des détails du commerçant");
-                showLoading(false);
             });
         });
 
@@ -105,21 +95,44 @@ public class MerchantDetailsController {
     private void displayMerchantDetails() {
         if (merchantDetails == null) return;
 
-        titleLabel.setText("Détails du Commerçant - " +
-                (merchantDetails.getCompanyName() != null && !merchantDetails.getCompanyName().isEmpty()
-                        ? merchantDetails.getCompanyName()
-                        : merchantDetails.getFirstName() + " " + merchantDetails.getLastName()));
+        String merchantName = "";
+        if (merchantDetails.getFirstName() != null && !merchantDetails.getFirstName().isEmpty()) {
+            merchantName += merchantDetails.getFirstName();
+        }
+        if (merchantDetails.getLastName() != null && !merchantDetails.getLastName().isEmpty()) {
+            if (!merchantName.isEmpty()) merchantName += " ";
+            merchantName += merchantDetails.getLastName();
+        }
+        if (merchantName.isEmpty()) merchantName = "Nom non renseigné";
+        merchantNameLabel.setText(merchantName);
 
-        idLabel.setText(merchantDetails.getId() != null ? merchantDetails.getId() : "-");
-        firstNameLabel.setText(merchantDetails.getFirstName() != null ? merchantDetails.getFirstName() : "-");
-        lastNameLabel.setText(merchantDetails.getLastName() != null ? merchantDetails.getLastName() : "-");
-        emailLabel.setText(merchantDetails.getEmail() != null ? merchantDetails.getEmail() : "-");
-        phoneLabel.setText(merchantDetails.getPhone() != null ? merchantDetails.getPhone() : "-");
-        cityLabel.setText(merchantDetails.getCity() != null ? merchantDetails.getCity() : "-");
-        companyNameLabel.setText(merchantDetails.getCompanyName() != null ? merchantDetails.getCompanyName() : "-");
-        addressLabel.setText(merchantDetails.getAddress() != null ? merchantDetails.getAddress() : "-");
-        subscriptionLabel.setText(merchantDetails.getNomAbonnement() != null ? merchantDetails.getNomAbonnement() : "-");
-        deliveryRequestsLabel.setText(String.valueOf(merchantDetails.getNbDemandeDeLivraison()));
+        String email = merchantDetails.getEmail() != null && !merchantDetails.getEmail().isEmpty()
+                ? merchantDetails.getEmail() : "Non renseigné";
+        emailLabel.setText("📧 " + email);
+
+        String phone = merchantDetails.getPhone() != null && !merchantDetails.getPhone().isEmpty()
+                ? merchantDetails.getPhone() : "Non renseigné";
+        phoneLabel.setText("📱 " + phone);
+
+        String city = merchantDetails.getCity() != null && !merchantDetails.getCity().isEmpty()
+                ? merchantDetails.getCity() : "Non renseignée";
+        cityLabel.setText("📍 " + city);
+
+        String companyName = merchantDetails.getCompanyName() != null && !merchantDetails.getCompanyName().isEmpty()
+                ? merchantDetails.getCompanyName() : "Non renseigné";
+        companyNameLabel.setText(companyName);
+
+        String address = merchantDetails.getAddress() != null && !merchantDetails.getAddress().isEmpty()
+                ? merchantDetails.getAddress() : "Non renseignée";
+        addressLabel.setText(address);
+
+        String subscription = merchantDetails.getNomAbonnement() != null && !merchantDetails.getNomAbonnement().isEmpty()
+                ? merchantDetails.getNomAbonnement() : "Non renseigné";
+        subscriptionLabel.setText(subscription);
+
+        deliveryRequestsLabel.setText("🚚 " + merchantDetails.getNbDemandeDeLivraison());
+
+        statusLabel.setText("Actif");
     }
 
     private void loadPdfContract() {
@@ -142,7 +155,7 @@ public class MerchantDetailsController {
 
         pdfTask.setOnFailed(e -> {
             Platform.runLater(() -> {
-                showError("Erreur lors du chargement du contrat PDF");
+                showError("Aucun PDF n'est disponible");
                 showNoPdfMessage();
             });
         });
@@ -152,19 +165,16 @@ public class MerchantDetailsController {
 
     private void displayPdf(byte[] pdfData) {
         try {
-            // Fermer le document précédent s'il existe
             if (currentDocument != null) {
                 currentDocument.close();
             }
 
-            // Charger le nouveau document PDF
             currentDocument = PDDocument.load(new ByteArrayInputStream(pdfData));
             pdfRenderer = new PDFRenderer(currentDocument);
             totalPages = currentDocument.getNumberOfPages();
             currentPage = 0;
-            zoomLevel = 1.0f;
+            zoomLevel = 0.8f;
 
-            // Afficher la première page
             renderCurrentPage();
             updateUI();
 
@@ -185,8 +195,7 @@ public class MerchantDetailsController {
         Task<BufferedImage> renderTask = new Task<BufferedImage>() {
             @Override
             protected BufferedImage call() throws Exception {
-                // Calculer la résolution basée sur le zoom (72 DPI * zoom = résolution finale)
-                float dpi = 72f * zoomLevel * 2f; // Factor 2 pour une meilleure qualité
+                float dpi = 72f * zoomLevel * 2f;
                 return pdfRenderer.renderImageWithDPI(currentPage, dpi);
             }
         };
@@ -201,7 +210,7 @@ public class MerchantDetailsController {
 
         renderTask.setOnFailed(e -> {
             Platform.runLater(() -> {
-                showError("Erreur lors du rendu de la page PDF");
+                showError("Aucun PDF n'est disponible");
             });
         });
 
@@ -220,7 +229,6 @@ public class MerchantDetailsController {
         noPdfMessage.setVisible(true);
         downloadButton.setDisable(true);
 
-        // Réinitialiser les contrôles
         pageLabel.setText("Page 0 / 0");
         prevPageButton.setDisable(true);
         nextPageButton.setDisable(true);
@@ -263,21 +271,18 @@ public class MerchantDetailsController {
         }
     }
 
-    private void showLoading(boolean show) {
-        loadingPane.setVisible(show);
-    }
-
     private void showError(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Erreur");
         alert.setHeaderText(null);
         alert.setContentText(message);
+        Stage stage = (Stage) alert.getDialogPane().getScene().getWindow();
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png"))));
         alert.showAndWait();
     }
 
     @FXML
     private void handleRetour() {
-        // Fermer le document PDF avant de quitter
         if (currentDocument != null) {
             try {
                 currentDocument.close();
@@ -321,7 +326,6 @@ public class MerchantDetailsController {
     }
 
     private void downloadContractToFile(File file) {
-        showLoading(true);
 
         Task<Void> downloadTask = new Task<Void>() {
             @Override
@@ -335,14 +339,12 @@ public class MerchantDetailsController {
 
         downloadTask.setOnSucceeded(e -> {
             Platform.runLater(() -> {
-                showLoading(false);
                 showInfo("Contrat téléchargé avec succès dans : " + file.getAbsolutePath());
             });
         });
 
         downloadTask.setOnFailed(e -> {
             Platform.runLater(() -> {
-                showLoading(false);
                 showError("Erreur lors du téléchargement du contrat");
             });
         });
@@ -363,7 +365,6 @@ public class MerchantDetailsController {
         alert.showAndWait();
     }
 
-    // Méthode pour nettoyer les ressources lors de la fermeture
     public void cleanup() {
         if (currentDocument != null) {
             try {

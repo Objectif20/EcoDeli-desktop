@@ -40,19 +40,13 @@ public class StatsPrestationsViewController {
     private final StatsService statsService = new StatsService();
     private final ServicesAPI servicesAPI = new ServicesAPI();
 
-    private PieChart prestationsParTypeChart;
-    private PieChart prestationsParVilleChart;
-    private PieChart prestationsParNoteChart;
-    private BarChart<String, Number> topPrestationsChart;
-    private LineChart<String, Number> prestationsParTempsChart;
-
     @FXML
     public void initialize() {
-        prestationsParTypeChart = statsService.getPrestationsParTypeChart();
-        prestationsParVilleChart = statsService.getPrestationsParVilleChart();
-        prestationsParNoteChart = statsService.getPrestationsParNoteChart();
-        topPrestationsChart = statsService.getTopServicesChart();
-        prestationsParTempsChart = statsService.getPrestationsParTempsChart();
+        PieChart prestationsParTypeChart = statsService.getPrestationsParTypeChart();
+        PieChart prestationsParVilleChart = statsService.getPrestationsParVilleChart();
+        PieChart prestationsParNoteChart = statsService.getPrestationsParNoteChart();
+        BarChart<String, Number> topPrestationsChart = statsService.getTopServicesChart();
+        LineChart<String, Number> prestationsParTempsChart = statsService.getPrestationsParTempsChart();
 
         statsPrestationsGrid.add(prestationsParTypeChart, 0, 0);
         statsPrestationsGrid.add(prestationsParVilleChart, 1, 0);

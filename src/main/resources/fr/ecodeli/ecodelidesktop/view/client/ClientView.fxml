@@ -16,7 +16,7 @@
       stylesheets="@client-list.css">
 
     <VBox styleClass="header-section" spacing="10">
-        <Label text="Gestion des Clients" styleClass="page-title"/>
+        <Label text="Gestion des Particuliers" styleClass="page-title"/>
         <Label fx:id="totalClientsLabel" text="0 clients au total" styleClass="subtitle"/>
     </VBox>
 
@@ -25,7 +25,7 @@
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
         <columns>
-            <TableColumn fx:id="clientColumn" text="Client" sortable="false" styleClass="table-column"/>
+            <TableColumn fx:id="clientColumn" text="Particulier" sortable="false" styleClass="table-column"/>
             <TableColumn fx:id="emailColumn" text="Email" styleClass="table-column"/>
             <TableColumn fx:id="nomAbonnementColumn" text="Abonnement" styleClass="table-column"/>
             <TableColumn fx:id="nbLivraisonsColumn" text="Livraisons" styleClass="table-column"/>

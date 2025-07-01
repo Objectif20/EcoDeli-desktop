@@ -17,6 +17,7 @@ import javafx.scene.layout.VBox;
 import javafx.util.Callback;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class ClientTableController {
 
@@ -34,7 +35,6 @@ public class ClientTableController {
 
     private ClientAPI clientAPI;
     private int currentPage = 1;
-    private int itemsPerPage = 10;
     private int totalPages = 1;
 
     @FXML
@@ -125,10 +125,9 @@ public class ClientTableController {
 
     private void setDefaultProfileImage(ImageView imageView) {
         try {
-            Image defaultImage = new Image(getClass().getResourceAsStream("/images/default-profile.png"));
+            Image defaultImage = new Image(Objects.requireNonNull(getClass().getResourceAsStream("/fr/ecodeli/ecodelidesktop/view/global/ecodeli.png")));
             imageView.setImage(defaultImage);
-        } catch (Exception e) {
-            // Handle exception
+        } catch (Exception ignored) {
         }
     }
 
@@ -159,6 +158,7 @@ public class ClientTableController {
 
     private void loadClients() {
         try {
+            int itemsPerPage = 10;
             ClientAPI.ClientResponse response = clientAPI.getAllClients(currentPage, itemsPerPage);
             ObservableList<Client> clients = FXCollections.observableArrayList(response.getData());
             clientTable.setItems(clients);
@@ -171,7 +171,7 @@ public class ClientTableController {
             }
         } catch (IOException e) {
             e.printStackTrace();
-            showAlert("Erreur", "Impossible de charger les clients: " + e.getMessage());
+            showAlert("Impossible de charger les clients: " + e.getMessage());
         }
     }
 
@@ -211,9 +211,9 @@ public class ClientTableController {
         }
     }
 
-    private void showAlert(String title, String message) {
+    private void showAlert(String message) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle(title);
+        alert.setTitle("Erreur");
         alert.setHeaderText(null);
         alert.setContentText(message);
         alert.showAndWait();
