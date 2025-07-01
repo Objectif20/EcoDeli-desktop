@@ -3,7 +3,6 @@ package fr.ecodeli.ecodelidesktop.model;
 import com.google.gson.annotations.SerializedName;
 
 public class AuthResponse {
-
     @SerializedName("access_token")
     private String accessToken;
 
@@ -12,6 +11,11 @@ public class AuthResponse {
 
     @SerializedName("two_factor_required")
     private boolean twoFactorRequired;
+
+    @SerializedName("message")
+    private String message;
+
+    public AuthResponse() {}
 
     public String getAccessToken() {
         return accessToken;
@@ -35,5 +39,23 @@ public class AuthResponse {
 
     public void setTwoFactorRequired(boolean twoFactorRequired) {
         this.twoFactorRequired = twoFactorRequired;
+    }
+
+    public String getMessage() {
+        return message;
+    }
+
+    public void setMessage(String message) {
+        this.message = message;
+    }
+
+    @Override
+    public String toString() {
+        return "AuthResponse{" +
+                "accessToken='" + (accessToken != null ? "[PRESENT]" : "null") + '\'' +
+                ", refreshToken='" + (refreshToken != null ? "[PRESENT]" : "null") + '\'' +
+                ", twoFactorRequired=" + twoFactorRequired +
+                ", message='" + message + '\'' +
+                '}';
     }
 }

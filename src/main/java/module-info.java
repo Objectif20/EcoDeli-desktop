@@ -3,7 +3,8 @@ module fr.ecodeli.ecodelidesktop {
     requires javafx.controls;
     requires javafx.fxml;
     requires javafx.web;
-
+    requires javafx.graphics;
+    requires javafx.base;
     requires org.controlsfx.controls;
     requires com.dlsc.formsfx;
     requires net.synedra.validatorfx;
@@ -26,7 +27,7 @@ module fr.ecodeli.ecodelidesktop {
     opens fr.ecodeli.ecodelidesktop.delivery to javafx.fxml, com.google.gson, javafx.base;
     opens fr.ecodeli.ecodelidesktop.merchant to com.google.gson, javafx.fxml, javafx.base;
     opens fr.ecodeli.ecodelidesktop.services to javafx.fxml, com.google.gson, javafx.base;
-
+    opens fr.ecodeli.ecodelidesktop.api to com.google.gson;
     opens fr.ecodeli.ecodelidesktop.view.client to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.merchant to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.delivery to javafx.fxml;
@@ -36,5 +37,4 @@ module fr.ecodeli.ecodelidesktop {
     exports fr.ecodeli.ecodelidesktop.view.auth;
     exports fr.ecodeli.ecodelidesktop.dashboard to javafx.fxml;
     exports fr.ecodeli.ecodelidesktop.clients to javafx.fxml;
-
 }

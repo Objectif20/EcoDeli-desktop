@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.TabPane?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/8"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ecodeli.ecodelidesktop.dashboard.DashboardWrapperController"
+      styleClass="dashboard-wrapper"
+      VBox.vgrow="ALWAYS"
+      stylesheets="@dashboard.css">
+
+    <TabPane fx:id="dashboardTabPane"
+             tabClosingPolicy="UNAVAILABLE"
+             VBox.vgrow="ALWAYS" />
+
+</VBox>

@@ -4,156 +4,236 @@ import fr.ecodeli.ecodelidesktop.api.AuthApi;
 import fr.ecodeli.ecodelidesktop.model.AuthResponse;
 import fr.ecodeli.ecodelidesktop.model.LoginRequest;
 import fr.ecodeli.ecodelidesktop.service.TokenStorage;
+import javafx.application.Platform;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.fxml.Initializable;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.PasswordField;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 
-public class AuthViewController {
+public class AuthViewController implements Initializable {
 
-    @FXML
-    private TextField emailField;
-    @FXML
-    private PasswordField passwordField;
-    @FXML
-    private TextField codeField;
+    @FXML private VBox loginForm;
+    @FXML private TextField emailField;
+    @FXML private PasswordField passwordField;
+    @FXML private Button loginButton;
+
+    @FXML private VBox twoFactorForm;
+    @FXML private TextField otp1, otp2, otp3, otp4, otp5, otp6;
+    @FXML private Button verifyButton;
+
+    @FXML private Label errorLabel;
 
     private final AuthApi authApi;
+    private LoginRequest currentLoginRequest;
 
     public AuthViewController() {
         this.authApi = new AuthApi();
     }
 
-    @FXML
-    private void handleLogin() {
-        String email = emailField.getText();
-        String password = passwordField.getText();
-        String code = codeField.getText();
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        setupOtpFields();
+        hideError();
+    }
 
-        if (email.isEmpty() || password.isEmpty()) {
-            System.out.println("Erreur : L'email et le mot de passe sont requis.");
-            return;
-        }
+    private void setupOtpFields() {
+        TextField[] otpFields = {otp1, otp2, otp3, otp4, otp5, otp6};
 
-        LoginRequest loginRequest = new LoginRequest(email, password);
+        for (int i = 0; i < otpFields.length; i++) {
+            final int index = i;
+            TextField field = otpFields[i];
 
-        try {
-            AuthResponse response;
-            if (code.isEmpty()) {
-                response = authApi.login(loginRequest);
-            } else {
-                response = authApi.loginWith2FA(loginRequest, code);
-            }
+            field.textProperty().addListener((observable, oldValue, newValue) -> {
+                if (!newValue.matches("\\d?")) {
+                    field.setText(oldValue);
+                } else if (newValue.length() > 1) {
+                    field.setText(newValue.substring(0, 1));
+                }
 
-            if (response.isTwoFactorRequired()) {
-                System.out.println("2FA requis : L'authentification à deux facteurs est nécessaire. Veuillez entrer votre code 2FA.");
-            } else {
-                System.out.println("Tokens : " + response.getAccessToken() + " " + response.getRefreshToken());
-                TokenStorage.saveTokens(response.getAccessToken(), response.getRefreshToken());
-                System.out.println("Succès : Connexion réussie !");
-            }
-        } catch (IOException e) {
-            System.out.println("Erreur : Une erreur est survenue pendant la connexion : " + e.getMessage());
+                if (newValue.length() == 1 && index < otpFields.length - 1) {
+                    otpFields[index + 1].requestFocus();
+                }
+            });
+
+            field.setOnKeyPressed(event -> {
+                switch (event.getCode()) {
+                    case BACK_SPACE:
+                        if (field.getText().isEmpty() && index > 0) {
+                            otpFields[index - 1].requestFocus();
+                        }
+                        break;
+                    case ENTER:
+                        if (index == otpFields.length - 1) {
+                            handleVerify2FA();
+                        }
+                        break;
+                }
+            });
         }
     }
 
     @FXML
-    private void handleGoToMainView(ActionEvent event) {
+    private void handleLogin() {
+        String email = emailField.getText().trim();
+        String password = passwordField.getText();
+
+        if (email.isEmpty() || password.isEmpty()) {
+            showError("L'email et le mot de passe sont requis.");
+            return;
+        }
+
+        currentLoginRequest = new LoginRequest(email, password);
+
+        loginButton.setDisable(true);
+        loginButton.setText("Connexion...");
+        hideError();
+
+        new Thread(() -> {
+            try {
+                AuthResponse response = authApi.login(currentLoginRequest);
+
+                Platform.runLater(() -> {
+                    loginButton.setDisable(false);
+                    loginButton.setText("Se connecter");
+
+                    if (response.isTwoFactorRequired()) {
+                        showTwoFactorForm();
+                    } else {
+                        handleSuccessfulLogin(response);
+                    }
+                });
+
+            } catch (IOException e) {
+                Platform.runLater(() -> {
+                    loginButton.setDisable(false);
+                    loginButton.setText("Se connecter");
+                    showError("Email ou mot de passe incorrect");
+                });
+            }
+        }).start();
+    }
+
+    @FXML
+    private void handleVerify2FA() {
+        String otpCode = getOtpCode();
+
+        if (otpCode.length() != 6) {
+            showError("Veuillez entrer un code à 6 chiffres.");
+            return;
+        }
+
+        verifyButton.setDisable(true);
+        verifyButton.setText("Vérification...");
+        hideError();
+
+        new Thread(() -> {
+            try {
+                AuthResponse response = authApi.loginWith2FA(currentLoginRequest, otpCode);
+
+                Platform.runLater(() -> {
+                    verifyButton.setDisable(false);
+                    verifyButton.setText("Vérifier");
+                    handleSuccessfulLogin(response);
+                });
+
+            } catch (IOException e) {
+                Platform.runLater(() -> {
+                    verifyButton.setDisable(false);
+                    verifyButton.setText("Vérifier");
+                    showError("Code incorrect ou erreur de vérification.");
+                    clearOtpFields();
+                    otp1.requestFocus();
+                });
+            }
+        }).start();
+    }
+
+    @FXML
+    private void handleBackToLogin() {
+        showLoginForm();
+        clearOtpFields();
+        hideError();
+    }
+
+    private void handleSuccessfulLogin(AuthResponse response) {
+        try {
+            TokenStorage.saveTokens(response.getAccessToken(), response.getRefreshToken());
+
+            redirectToMainApp();
+
+        } catch (Exception e) {
+            showError("Erreur lors de la sauvegarde : " + e.getMessage());
+        }
+    }
+
+    private void redirectToMainApp() {
         try {
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/navigation/MainView.fxml"));
             Parent mainView = loader.load();
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(mainView));
+            Stage stage = (Stage) emailField.getScene().getWindow();
+            Scene scene = new Scene(mainView);
+
+            stage.setScene(scene);
             stage.setTitle("EcoDeli - Tableau de bord");
+            stage.setMaximized(true);
             stage.show();
 
         } catch (IOException e) {
+            showError("Erreur lors de la redirection : " + e.getMessage());
             e.printStackTrace();
         }
     }
 
 
-    @FXML
-    private void handleGoToStats(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/dashboard/StatsView.fxml"));
-            Parent navigationRoot = loader.load();
+    private void showTwoFactorForm() {
+        loginForm.setVisible(false);
+        loginForm.setManaged(false);
 
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(navigationRoot));
-            stage.setTitle("EcoDeli - Tableau de bord");
-            stage.show();
+        twoFactorForm.setVisible(true);
+        twoFactorForm.setManaged(true);
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        Platform.runLater(() -> otp1.requestFocus());
     }
 
+    private void showLoginForm() {
+        twoFactorForm.setVisible(false);
+        twoFactorForm.setManaged(false);
 
-    @FXML
-    public void handleGoToMerchants(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/merchant/merchantView.fxml"));
-            Parent merchantView = loader.load();
-
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(merchantView));
-            stage.setTitle("Liste des Commerçants");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+        loginForm.setVisible(true);
+        loginForm.setManaged(true);
     }
 
-
-    @FXML
-    public void handleGoToClients(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/client/clientView.fxml"));
-            Parent clientView = loader.load();
-
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(clientView));
-            stage.setTitle("Liste des Clients");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private String getOtpCode() {
+        return otp1.getText() + otp2.getText() + otp3.getText() +
+                otp4.getText() + otp5.getText() + otp6.getText();
     }
 
-    @FXML
-    public void handleGoToDeliveries(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
-            Parent livraisonView = loader.load();
-            Stage stage = (Stage) ((javafx.scene.Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(livraisonView));
-            stage.setTitle("Liste des Livraisons");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void clearOtpFields() {
+        otp1.clear();
+        otp2.clear();
+        otp3.clear();
+        otp4.clear();
+        otp5.clear();
+        otp6.clear();
     }
 
-    @FXML
-    public void handleGoToServices(ActionEvent event) {
-        try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/fr/ecodeli/ecodelidesktop/view/service/ServicesView.fxml"));
-            Parent view = loader.load();
-            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-            stage.setScene(new Scene(view));
-            stage.setTitle("Liste des Prestations");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+    private void showError(String message) {
+        errorLabel.setText(message);
+        errorLabel.setVisible(true);
+    }
+
+    private void hideError() {
+        errorLabel.setVisible(false);
     }
 }

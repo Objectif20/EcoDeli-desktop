@@ -11,7 +11,6 @@
             prefWidth="1000" prefHeight="700"
             stylesheets="@sidebar.css">
 
-    <!-- Sidebar -->
     <left>
         <VBox spacing="10" style="-fx-background-color: #1C2A1F; -fx-padding: 20;" prefWidth="200">
             <HBox alignment="CENTER_LEFT" spacing="10">
@@ -22,12 +21,22 @@
                 </ImageView>
                 <Label text="EcoDeli" style="-fx-text-fill: white; -fx-font-size: 24;" />
             </HBox>
-            <Button text="Statistiques" fx:id="btnStats" styleClass="button"/>
-            <Button text="Statistiques des prestations" fx:id="btnStatspresta" styleClass="button"/>
-            <Button text="Clients" fx:id="btnClients" styleClass="button"/>
-            <Button text="Marchands" fx:id="btnMerchants" styleClass="button"/>
+
+            <Button text="Accueil" fx:id="btnStats" styleClass="button"/>
+            <Button text="Particuliers" fx:id="btnClients" styleClass="button"/>
+            <Button text="Commerçants" fx:id="btnMerchants" styleClass="button"/>
             <Button text="Livraisons" fx:id="btnDeliveries" styleClass="button"/>
             <Button text="Services" fx:id="btnServices" styleClass="button"/>
+
+            <Region VBox.vgrow="ALWAYS"/>
+
+            <Button text="📄 Générer PDF" fx:id="btnGeneratePdf"
+                    styleClass="pdf-button"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 10;"/>
+            <Button text="Déconnexion" fx:id="btnLogout"
+                    styleClass="pdf-button"
+                    style="-fx-background-color: #4CAF50; -fx-text-fill: white; -fx-font-weight: bold; -fx-background-radius: 5; -fx-border-radius: 5; -fx-padding: 10;"/>
+
         </VBox>
     </left>
 

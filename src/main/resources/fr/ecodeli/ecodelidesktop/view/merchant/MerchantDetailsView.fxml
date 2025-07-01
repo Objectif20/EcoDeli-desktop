@@ -1,0 +1,86 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ecodeli.ecodelidesktop.merchant.MerchantDetailsController">
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll-pane" stylesheets="@merchant-detail.css">
+            <content>
+                <VBox styleClass="main-container" alignment="TOP_CENTER">
+                    <HBox styleClass="header-section">
+                        <Button fx:id="retourButton" onAction="#handleRetour" styleClass="back-button" text="← Retour" />
+                    </HBox>
+
+                    <HBox styleClass="main-info-card">
+                        <VBox styleClass="left-info-section" HBox.hgrow="ALWAYS">
+                            <Label fx:id="merchantNameLabel" styleClass="merchant-title" text="Nom du commerçant" />
+                            <HBox styleClass="contact-row">
+                                <Label fx:id="emailLabel" styleClass="email-label" text="📧 email@example.com" />
+                                <Label fx:id="phoneLabel" styleClass="phone-label" text="📱 Téléphone" />
+                            </HBox>
+                            <Label fx:id="cityLabel" styleClass="city-label" text="📍 Ville" />
+                        </VBox>
+
+                        <VBox styleClass="right-info-section">
+                            <HBox styleClass="tags-row">
+                                <Label fx:id="statusLabel" styleClass="status-tag" text="Actif" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox styleClass="company-card">
+                        <Label styleClass="section-title-inline" text="Entreprise" />
+                        <VBox styleClass="company-info" HBox.hgrow="ALWAYS">
+                            <Label fx:id="companyNameLabel" styleClass="company-name" text="Nom de l'entreprise" />
+                            <Label fx:id="addressLabel" styleClass="company-address" text="Adresse de l'entreprise" wrapText="true" />
+                        </VBox>
+                    </HBox>
+
+                    <HBox styleClass="subscription-row">
+                        <VBox styleClass="subscription-section" HBox.hgrow="ALWAYS">
+                            <Label styleClass="section-title-inline" text="Abonnement" />
+                            <Label fx:id="subscriptionLabel" styleClass="subscription-type" text="Type d'abonnement" />
+                        </VBox>
+
+                        <VBox styleClass="delivery-count-section">
+                            <Label styleClass="section-title-inline" text="Livraisons" />
+                            <Label fx:id="deliveryRequestsLabel" styleClass="delivery-count" text="🚚 0" />
+                        </VBox>
+                    </HBox>
+
+                    <VBox fx:id="contractSection" styleClass="contract-card">
+                        <HBox styleClass="contract-header">
+                            <Label styleClass="section-title-inline" text="Contrat" />
+                            <HBox styleClass="contract-controls" HBox.hgrow="ALWAYS">
+                                <Button fx:id="downloadButton" text="📥 Télécharger" onAction="#handleDownloadContract" styleClass="contract-button" />
+                                <Button fx:id="refreshPdfButton" text="🔄 Actualiser" onAction="#handleRefreshPdf" styleClass="contract-button" />
+                                <Separator orientation="VERTICAL" />
+                                <Label fx:id="pageLabel" text="Page 1 / 1" styleClass="page-info" />
+                                <Button fx:id="prevPageButton" text="◀" onAction="#handlePrevPage" styleClass="nav-button" disable="true" />
+                                <Button fx:id="nextPageButton" text="▶" onAction="#handleNextPage" styleClass="nav-button" disable="true" />
+                                <Separator orientation="VERTICAL" />
+                                <Button fx:id="zoomInButton" text="🔍+" onAction="#handleZoomIn" styleClass="zoom-button" />
+                                <Button fx:id="zoomOutButton" text="🔍-" onAction="#handleZoomOut" styleClass="zoom-button" />
+                                <Label fx:id="zoomLabel" text="100%" styleClass="zoom-info" />
+                            </HBox>
+                        </HBox>
+
+                        <StackPane styleClass="pdf-container">
+                            <ScrollPane fx:id="pdfScrollPane" styleClass="pdf-scroll" fitToWidth="true" fitToHeight="true">
+                                <StackPane alignment="CENTER">
+                                <ImageView fx:id="pdfImageView" preserveRatio="true" smooth="true" />
+                                </StackPane>
+                            </ScrollPane>
+                            <VBox fx:id="noPdfMessage" styleClass="no-pdf-message" alignment="CENTER" spacing="10">
+                                <Label text="📄" styleClass="pdf-icon" />
+                                <Label text="Aucun contrat disponible" styleClass="pdf-message" />
+                            </VBox>
+                        </StackPane>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

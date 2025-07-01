@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.scene.image.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ecodeli.ecodelidesktop.services.ServiceDetailsController">
+    <center>
+        <ScrollPane fitToWidth="true" styleClass="main-scroll-pane" stylesheets="@service-detail.css">
+            <content>
+                <VBox styleClass="main-container" alignment="TOP_CENTER">
+                    <HBox styleClass="header-section">
+                        <Button fx:id="backButton" onAction="#handleRetour" styleClass="back-button" text="← Retour" />
+                    </HBox>
+
+                    <HBox styleClass="main-info-card">
+                        <VBox styleClass="left-info-section" HBox.hgrow="ALWAYS">
+                            <Label fx:id="serviceNameLabel" styleClass="service-title" text="Nom du service" />
+                            <HBox styleClass="location-duration-row">
+                                <Label fx:id="locationLabel" styleClass="location-label" text="Ville" />
+                                <Label fx:id="durationLabel" styleClass="duration-label" text="Durée" />
+                            </HBox>
+                            <Label fx:id="priceLabel" styleClass="price-label" text="€ 0.00" />
+                        </VBox>
+
+                        <VBox styleClass="right-info-section">
+                            <Label fx:id="ratingLabel" styleClass="rating-label" text="⭐ 0.0" />
+                            <HBox styleClass="tags-row">
+                                <Label fx:id="serviceTypeLabel" styleClass="service-type-tag" text="Type" />
+                                <Label fx:id="statusLabel" styleClass="status-tag" text="Statut" />
+                                <Label fx:id="availabilityLabel" styleClass="availability-tag" text="Disponible" />
+                            </HBox>
+                        </VBox>
+                    </HBox>
+
+                    <HBox styleClass="provider-card">
+                        <HBox styleClass="provider-info" HBox.hgrow="ALWAYS">
+                            <VBox styleClass="provider-avatar-container">
+                                <ImageView fx:id="authorAvatarImage" styleClass="provider-avatar" fitWidth="50" fitHeight="50" preserveRatio="true" />
+                                <Label fx:id="authorAvatarPlaceholder" styleClass="provider-avatar-placeholder" text="👤" visible="false" />
+                            </VBox>
+                            <VBox styleClass="provider-details">
+                                <Label fx:id="authorNameLabel" styleClass="provider-name" text="Nom de l'auteur" />
+                                <Label fx:id="authorEmailLabel" styleClass="provider-email" text="email@example.com" />
+                            </VBox>
+                            <Label fx:id="authorRatingLabel" styleClass="provider-rating" text="⭐ 0.0" />
+                        </HBox>
+                    </HBox>
+
+                    <VBox styleClass="description-card-compact">
+                        <Label styleClass="section-title-inline" text="Description" />
+                        <Label fx:id="descriptionLabel" styleClass="description-text-compact" text="Description du service..." wrapText="true" />
+                    </VBox>
+
+                    <HBox styleClass="keywords-reviews-row">
+                        <VBox fx:id="keywordsSection" styleClass="keywords-section" HBox.hgrow="ALWAYS">
+                            <Label styleClass="section-title-inline" text="Mots-clés" />
+                            <FlowPane fx:id="keywordsPane" styleClass="keywords-pane-compact" />
+                        </VBox>
+
+                        <VBox styleClass="reviews-count-section">
+                            <Label styleClass="section-title-inline" text="Avis" />
+                            <Label fx:id="commentsCountLabel" styleClass="comments-count-compact" text="💬 0" />
+                        </VBox>
+                    </HBox>
+
+                    <VBox fx:id="commentsSection" styleClass="comments-card-compact">
+                        <Label styleClass="section-title-inline" text="Commentaires" />
+                        <ScrollPane styleClass="comments-scroll-compact" fitToWidth="true" maxHeight="500">
+                            <VBox fx:id="commentsContainer" styleClass="comments-container-compact" />
+                        </ScrollPane>
+                    </VBox>
+                </VBox>
+            </content>
+        </ScrollPane>
+    </center>
+</BorderPane>

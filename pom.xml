@@ -31,6 +31,21 @@
             <version>21</version>
         </dependency>
         <dependency>
+            <groupId>com.lynden</groupId>
+            <artifactId>GMapsFX</artifactId>
+            <version>2.12.0</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-javafx</artifactId>
+            <version>12.3.1</version>
+        </dependency>
+        <dependency>
+            <groupId>org.kordamp.ikonli</groupId>
+            <artifactId>ikonli-fontawesome5-pack</artifactId>
+            <version>12.3.1</version>
+        </dependency>
+        <dependency>
             <groupId>org.openjfx</groupId>
             <artifactId>javafx-swing</artifactId>
             <version>21</version>
@@ -50,6 +65,25 @@
                     <artifactId>*</artifactId>
                 </exclusion>
             </exclusions>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+        <!-- PDFBox Tools pour PDFRenderer -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox-tools</artifactId>
+            <version>3.0.3</version>
+        </dependency>
+
+        <!-- Support pour les images (nécessaire pour le rendu) -->
+        <dependency>
+            <groupId>org.apache.pdfbox</groupId>
+            <artifactId>pdfbox-io</artifactId>
+            <version>3.0.3</version>
         </dependency>
         <dependency>
             <groupId>net.synedra</groupId>
