@@ -19,7 +19,7 @@ import java.util.Objects;
 public class MainController {
 
     @FXML private StackPane contentArea;
-    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnGeneratePdf, btnLogout;
+    @FXML private Button btnStats, btnClients, btnMerchants, btnDeliveries, btnServices, btnGeneratePdf, btnLogout, btnWarehouse;
     private static StackPane staticContentArea;
 
     private StatsViewController statsViewController;
@@ -33,7 +33,8 @@ public class MainController {
         btnClients.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/client/ClientView.fxml"));
         btnMerchants.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/merchant/MerchantView.fxml"));
         btnDeliveries.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/delivery/DeliveryTableView.fxml"));
-        btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/servicesView.fxml"));
+        btnServices.setOnAction(e -> loadPage("/fr/ecodeli/ecodelidesktop/view/service/ServicesView.fxml"));
+        btnWarehouse.setOnAction(e -> {loadPage("/fr/ecodeli/ecodelidesktop/view/warehouse/WarehouseView.fxml");});
         btnLogout.setOnAction(e -> handleLogout());
         btnGeneratePdf.setOnAction(e -> generateCompletePdf());
 

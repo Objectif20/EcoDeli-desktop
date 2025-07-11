@@ -7,11 +7,11 @@ import com.google.gson.Gson;
 
 import java.io.IOException;
 
-public class AuthApi {
+public class AuthAPI {
     private final CustomOkHttpClient httpClient;
     private final Gson gson;
 
-    public AuthApi() {
+    public AuthAPI() {
         this.httpClient = new CustomOkHttpClient();
         this.gson = new Gson();
     }

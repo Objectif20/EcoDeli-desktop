@@ -1,5 +1,6 @@
 package fr.ecodeli.ecodelidesktop.merchant;
 
+import com.github.javafaker.Faker;
 import fr.ecodeli.ecodelidesktop.api.MerchantAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -18,7 +20,7 @@ import javafx.stage.Stage;
 import javafx.util.Callback;
 
 import java.io.IOException;
-import java.util.Objects;
+import java.util.*;
 
 public class MerchantTableController {
 
@@ -34,15 +36,41 @@ public class MerchantTableController {
     @FXML private Button nextButton;
     @FXML private Label pageLabel;
     @FXML private Label totalMerchantsLabel;
+    @FXML private Button refreshButton;
+
+    @FXML private Label totalMerchantsCard;
+    @FXML private Label activeMerchantsCard;
+    @FXML private Label totalDeliveriesCard;
+    @FXML private Label monthlyRevenueCard;
+
+
+    @FXML private PieChart subscriptionChart;
+    @FXML private BarChart<String, Number> deliveryChart;
+    @FXML private LineChart<String, Number> merchantGrowthChart;
+    @FXML private BarChart<String, Number> revenueChart;
 
     private MerchantAPI merchantAPI;
     private int currentPage = 1;
     private int itemsPerPage = 10;
     private int totalPages = 1;
+    private Faker faker;
 
     @FXML
     public void initialize() {
         merchantAPI = new MerchantAPI();
+        faker = new Faker(new Locale("fr"));
+
+        setupTable();
+        setupCharts();
+        loadMerchants();
+        loadStatistics();
+
+        prevButton.setOnAction(e -> previousPage());
+        nextButton.setOnAction(e -> nextPage());
+        refreshButton.setOnAction(e -> refreshData());
+    }
+
+    private void setupTable() {
         setupMerchantColumn();
         companyColumn.setCellValueFactory(new PropertyValueFactory<>("companyName"));
         siretColumn.setCellValueFactory(new PropertyValueFactory<>("siret"));
@@ -57,10 +85,82 @@ public class MerchantTableController {
 
         setupDescriptionColumn();
         setupActionsColumn();
+    }
 
+    private void setupCharts() {
+        subscriptionChart.setTitle("Répartition des abonnements");
+        subscriptionChart.setLegendVisible(true);
+
+        CategoryAxis xAxis = new CategoryAxis();
+        NumberAxis yAxis = new NumberAxis();
+        xAxis.setLabel("Villes");
+        yAxis.setLabel("Nombre de livraisons");
+        deliveryChart.setTitle("Livraisons par ville");
+
+        CategoryAxis xAxisLine = new CategoryAxis();
+        NumberAxis yAxisLine = new NumberAxis();
+        xAxisLine.setLabel("Mois");
+        yAxisLine.setLabel("Nouveaux commerçants");
+        merchantGrowthChart.setTitle("Croissance mensuelle");
+
+        CategoryAxis xAxisRevenue = new CategoryAxis();
+        NumberAxis yAxisRevenue = new NumberAxis();
+        xAxisRevenue.setLabel("Trimestres");
+        yAxisRevenue.setLabel("Revenus (€)");
+        revenueChart.setTitle("Revenus trimestriels");
+    }
+
+
+    private void loadStatistics() {
+        int totalMerchants = faker.number().numberBetween(150, 300);
+        int activeMerchants = faker.number().numberBetween(120, totalMerchants);
+        int totalDeliveries = faker.number().numberBetween(1000, 5000);
+        double monthlyRevenue = faker.number().randomDouble(2, 50000, 200000);
+
+        totalMerchantsCard.setText(String.valueOf(totalMerchants));
+        activeMerchantsCard.setText(String.valueOf(activeMerchants));
+        totalDeliveriesCard.setText(String.valueOf(totalDeliveries));
+        monthlyRevenueCard.setText(String.format("%.2f €", monthlyRevenue));
+
+        ObservableList<PieChart.Data> subscriptionData = FXCollections.observableArrayList(
+                new PieChart.Data("Basic", faker.number().numberBetween(40, 60)),
+                new PieChart.Data("Premium", faker.number().numberBetween(30, 50)),
+                new PieChart.Data("Enterprise", faker.number().numberBetween(10, 30))
+        );
+        subscriptionChart.setData(subscriptionData);
+
+        XYChart.Series<String, Number> deliverySeries = new XYChart.Series<>();
+        deliverySeries.setName("Livraisons");
+        String[] cities = {"Paris", "Lyon", "Marseille", "Lille", "Toulouse", "Nantes"};
+        for (String city : cities) {
+            deliverySeries.getData().add(new XYChart.Data<>(city, faker.number().numberBetween(50, 200)));
+        }
+        deliveryChart.getData().clear();
+        deliveryChart.getData().add(deliverySeries);
+
+        XYChart.Series<String, Number> growthSeries = new XYChart.Series<>();
+        growthSeries.setName("Nouveaux commerçants");
+        String[] months = {"Jan", "Fév", "Mar", "Avr", "Mai", "Jun"};
+        for (String month : months) {
+            growthSeries.getData().add(new XYChart.Data<>(month, faker.number().numberBetween(5, 25)));
+        }
+        merchantGrowthChart.getData().clear();
+        merchantGrowthChart.getData().add(growthSeries);
+
+        XYChart.Series<String, Number> revenueSeries = new XYChart.Series<>();
+        revenueSeries.setName("Revenus");
+        String[] quarters = {"T1", "T2", "T3", "T4"};
+        for (String quarter : quarters) {
+            revenueSeries.getData().add(new XYChart.Data<>(quarter, faker.number().numberBetween(20000, 100000)));
+        }
+        revenueChart.getData().clear();
+        revenueChart.getData().add(revenueSeries);
+    }
+
+    @FXML
+    private void refreshData() {
+        loadStatistics();
         loadMerchants();
-        prevButton.setOnAction(e -> previousPage());
-        nextButton.setOnAction(e -> nextPage());
     }
 
     private <T> void centerCellContent(TableColumn<Merchant, T> column) {

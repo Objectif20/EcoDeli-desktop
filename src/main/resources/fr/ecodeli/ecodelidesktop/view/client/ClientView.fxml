@@ -6,6 +6,14 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.Region?>
+<?import javafx.scene.chart.PieChart?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.LineChart?>
+<?import javafx.scene.chart.NumberAxis?>
+
+
 <VBox xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml"
       fx:controller="fr.ecodeli.ecodelidesktop.clients.ClientTableController"
@@ -15,12 +23,66 @@
       prefHeight="700"
       stylesheets="@client-list.css">
 
-    <VBox styleClass="header-section" spacing="10">
-        <Label text="Gestion des Particuliers" styleClass="page-title"/>
-        <Label fx:id="totalClientsLabel" text="0 clients au total" styleClass="subtitle"/>
-    </VBox>
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <VBox styleClass="header-section" spacing="10">
+            <Label text="Gestion des Particuliers" styleClass="page-title"/>
+            <Label fx:id="totalClientsLabel" text="0 clients au total" styleClass="subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="refreshButton" text="Actualiser" styleClass="refresh-button" />
+    </HBox>
 
-    <TableView fx:id="clientTable" styleClass="modern-table" prefHeight="850">
+    <HBox spacing="10" alignment="CENTER">
+        <VBox styleClass="stat-card-small" spacing="5" alignment="CENTER">
+            <Label text="Total Clients" styleClass="card-title-small"/>
+            <Label fx:id="totalClientsCard" text="0" styleClass="card-value-small"/>
+        </VBox>
+        <VBox styleClass="stat-card-small" spacing="5" alignment="CENTER">
+            <Label text="Clients Transporteurs" styleClass="card-title-small"/>
+            <Label fx:id="clientsTransporteursCard" text="0" styleClass="card-value-small"/>
+        </VBox>
+        <VBox styleClass="stat-card-small" spacing="5" alignment="CENTER">
+            <Label text="Prestations Moyennes" styleClass="card-title-small"/>
+            <Label fx:id="prestationsMoyennesCard" text="0" styleClass="card-value-small"/>
+        </VBox>
+        <VBox styleClass="stat-card-small" spacing="5" alignment="CENTER">
+            <Label text="Revenu Moyen" styleClass="card-title-small"/>
+            <Label fx:id="revenuMoyenCard" text="0 €" styleClass="card-value-small"/>
+        </VBox>
+    </HBox>
+
+    <HBox spacing="15" alignment="CENTER">
+        <PieChart fx:id="abonnementChart" prefWidth="300" prefHeight="280" />
+
+        <BarChart fx:id="prestationsAbonnementChart" prefWidth="300" prefHeight="280">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </BarChart>
+
+        <LineChart fx:id="evolutionClientsChart" prefWidth="300" prefHeight="280">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </LineChart>
+
+        <BarChart fx:id="revenusTrimestreChart" prefWidth="300" prefHeight="280">
+            <xAxis>
+                <CategoryAxis side="BOTTOM" />
+            </xAxis>
+            <yAxis>
+                <NumberAxis side="LEFT" />
+            </yAxis>
+        </BarChart>
+    </HBox>
+
+    <TableView fx:id="clientTable" styleClass="modern-table" prefHeight="400">
         <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
         </columnResizePolicy>
