@@ -252,3 +252,8 @@
 .fade-in {
     -fx-opacity: 1;
 }
+
+.logo-image {
+    -fx-effect: dropshadow(gaussian, rgba(0,0,0,0.2), 5, 0.3, 0, 1);
+    -fx-padding: 10;
+}
