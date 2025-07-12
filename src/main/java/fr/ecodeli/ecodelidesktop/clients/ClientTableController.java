@@ -284,7 +284,8 @@ public class ClientTableController {
                 int total = response.getMeta().getTotal();
                 int limit = response.getMeta().getLimit();
                 totalPages = (int) Math.ceil((double) total / limit);
-                totalClientsLabel.setText(total + " clients au total");
+                String labelText = total + " particulier" + (total != 1 ? "s" : "") + " au total";
+                totalClientsLabel.setText(labelText);
                 updatePaginationControls();
             }
         } catch (IOException e) {

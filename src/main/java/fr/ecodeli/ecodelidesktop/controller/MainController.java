@@ -110,7 +110,7 @@ public class MainController {
 
             pdfMerger.generateCompletePdf();
 
-            showAlert("Succès", "Le rapport complet a été généré avec succès dans le dossier Téléchargements !", Alert.AlertType.INFORMATION);
+            showAlert("Succès", "Le rapport complet a été généré avec succès !", Alert.AlertType.INFORMATION);
 
         } catch (Exception e) {
             e.printStackTrace();

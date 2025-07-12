@@ -16,6 +16,8 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
+import javafx.stage.Screen;
+import javafx.geometry.Rectangle2D;
 import javafx.util.Duration;
 import java.io.IOException;
 import java.net.URL;
@@ -81,21 +83,14 @@ public class WarehouseTableController implements Initializable {
     private void setupActionsColumn() {
         actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Button editButton = new Button("Modifier");
-            private final Button deleteButton = new Button("Supprimer");
-            private final HBox buttonBox = new HBox(5, editButton, deleteButton);
+            private final HBox buttonBox = new HBox(5, editButton);
 
             {
                 editButton.getStyleClass().add("action-button");
-                deleteButton.getStyleClass().addAll("action-button", "delete-button");
 
                 editButton.setOnAction(e -> {
                     Warehouse warehouse = getTableView().getItems().get(getIndex());
                     openEditWarehouseModal(warehouse);
-                });
-
-                deleteButton.setOnAction(e -> {
-                    Warehouse warehouse = getTableView().getItems().get(getIndex());
-                    showDeleteConfirmation(warehouse);
                 });
             }
 
@@ -138,7 +133,7 @@ public class WarehouseTableController implements Initializable {
 
         task.setOnFailed(e -> {
             Throwable exception = task.getException();
-            exception.printStackTrace(); // Pour debug
+            exception.printStackTrace();
             showErrorAlert("Erreur", "Impossible de charger les entrepôts: " + exception.getMessage());
         });
 
@@ -149,11 +144,33 @@ public class WarehouseTableController implements Initializable {
         totalWarehousesLabel.setText(totalWarehouses + " entrepôts au total");
     }
 
+    private void configureModalStage(Stage modalStage) {
+        Stage primaryStage = (Stage) warehouseTable.getScene().getWindow();
+
+        double modalWidth = 950;
+        double modalHeight = 750;
+
+        modalStage.setWidth(modalWidth);
+        modalStage.setHeight(modalHeight);
+        modalStage.setMinWidth(950);
+        modalStage.setMinHeight(750);
+
+        if (primaryStage != null) {
+            double primaryCenterX = primaryStage.getX() + primaryStage.getWidth() / 2;
+            double primaryCenterY = primaryStage.getY() + primaryStage.getHeight() / 2;
+
+            modalStage.setX(primaryCenterX - modalWidth / 2);
+            modalStage.setY(primaryCenterY - modalHeight / 2);
+        } else {
+            Rectangle2D primaryScreenBounds = Screen.getPrimary().getVisualBounds();
+            modalStage.setX((primaryScreenBounds.getWidth() - modalWidth) / 2);
+            modalStage.setY((primaryScreenBounds.getHeight() - modalHeight) / 2);
+        }
+    }
+
     private void openAddWarehouseModal() {
         try {
-
             String fxmlPath = "/fr/ecodeli/ecodelidesktop/view/warehouse/WarehouseForm.fxml";
-
             URL resourceUrl = getClass().getResource(fxmlPath);
 
             if (resourceUrl == null) {
@@ -162,35 +179,27 @@ public class WarehouseTableController implements Initializable {
             }
 
             FXMLLoader loader = new FXMLLoader(resourceUrl);
-            System.out.println("FXMLLoader créé");
-
             Parent root = loader.load();
-            System.out.println("FXML chargé avec succès");
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Ajouter un entrepôt");
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setScene(new Scene(root));
-            System.out.println("Stage créé");
+
+            configureModalStage(modalStage);
 
             WarehouseFormController controller = loader.getController();
-            System.out.println("Contrôleur récupéré: " + (controller != null ? "OK" : "NULL"));
-
             if (controller != null) {
                 controller.setModalStage(modalStage);
                 controller.setOnWarehouseCreated(this::onWarehouseCreated);
-                System.out.println("Contrôleur configuré");
             }
 
             modalStage.showAndWait();
-            System.out.println("Modal fermée");
 
         } catch (IOException e) {
-            System.out.println("❌ ERREUR IOException:");
             e.printStackTrace();
             showErrorAlert("Erreur", "Impossible d'ouvrir la fenêtre d'ajout: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("❌ ERREUR générale:");
             e.printStackTrace();
             showErrorAlert("Erreur", "Erreur inattendue: " + e.getMessage());
         }
@@ -198,74 +207,40 @@ public class WarehouseTableController implements Initializable {
 
     private void openEditWarehouseModal(Warehouse warehouse) {
         try {
-            System.out.println("=== DEBUG: Ouverture modal modification entrepôt ===");
-            System.out.println("Entrepôt à modifier: " + (warehouse != null ? warehouse.toString() : "NULL"));
-
             String fxmlPath = "/fr/ecodeli/ecodelidesktop/view/warehouse/WarehouseForm.fxml";
-            System.out.println("Tentative de chargement: " + fxmlPath);
-
             URL resourceUrl = getClass().getResource(fxmlPath);
-            System.out.println("URL ressource: " + resourceUrl);
 
             if (resourceUrl == null) {
-                System.out.println("❌ ERREUR: Ressource non trouvée!");
                 showErrorAlert("Erreur", "Fichier FXML introuvable: " + fxmlPath);
                 return;
             }
 
             FXMLLoader loader = new FXMLLoader(resourceUrl);
-            System.out.println("FXMLLoader créé");
-
             Parent root = loader.load();
-            System.out.println("FXML chargé avec succès");
 
             Stage modalStage = new Stage();
             modalStage.setTitle("Modifier l'entrepôt");
             modalStage.initModality(Modality.APPLICATION_MODAL);
             modalStage.setScene(new Scene(root));
-            System.out.println("Stage créé");
+
+            configureModalStage(modalStage);
 
             WarehouseFormController controller = loader.getController();
-            System.out.println("Contrôleur récupéré: " + (controller != null ? "OK" : "NULL"));
-
             if (controller != null) {
                 controller.setModalStage(modalStage);
                 controller.setWarehouse(warehouse);
                 controller.setOnWarehouseUpdated(this::onWarehouseUpdated);
-                System.out.println("Contrôleur configuré avec entrepôt");
             }
 
             modalStage.showAndWait();
-            System.out.println("Modal fermée");
 
         } catch (IOException e) {
-            System.out.println("❌ ERREUR IOException:");
             e.printStackTrace();
             showErrorAlert("Erreur", "Impossible d'ouvrir la fenêtre de modification: " + e.getMessage());
         } catch (Exception e) {
-            System.out.println("❌ ERREUR générale:");
             e.printStackTrace();
             showErrorAlert("Erreur", "Erreur inattendue: " + e.getMessage());
         }
-    }
-
-    private void showDeleteConfirmation(Warehouse warehouse) {
-        Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
-        alert.setTitle("Confirmer la suppression");
-        alert.setHeaderText("Supprimer l'entrepôt");
-        alert.setContentText("Êtes-vous sûr de vouloir supprimer l'entrepôt de " + warehouse.getCity() + " ?");
-
-        alert.showAndWait().ifPresent(response -> {
-            if (response == ButtonType.OK) {
-                deleteWarehouse(warehouse);
-            }
-        });
-    }
-
-    private void deleteWarehouse(Warehouse warehouse) {
-        // Implémentation de la suppression si l'API le permet
-        // Pour l'instant, on simule juste le rafraîchissement
-        loadWarehouses();
     }
 
     private void onWarehouseCreated() {

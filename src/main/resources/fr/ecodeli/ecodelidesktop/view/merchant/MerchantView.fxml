@@ -24,7 +24,7 @@
     <HBox spacing="10" alignment="CENTER_LEFT">
         <VBox styleClass="header-section" spacing="10">
             <Label text="Gestion des Commerçants" styleClass="page-title"/>
-            <Label fx:id="totalMerchantsLabel" text="0 marchands au total" styleClass="subtitle"/>
+            <Label fx:id="totalMerchantsLabel" text="0 commerçant au total" styleClass="subtitle"/>
         </VBox>
         <Region HBox.hgrow="ALWAYS"/>
         <Button fx:id="refreshButton" text="Actualiser" styleClass="refresh-button"/>

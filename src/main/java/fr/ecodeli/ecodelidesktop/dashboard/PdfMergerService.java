@@ -7,6 +7,7 @@ import org.apache.pdfbox.pdmodel.common.PDRectangle;
 import org.apache.pdfbox.pdmodel.font.PDType1Font;
 import org.apache.pdfbox.pdmodel.graphics.image.PDImageXObject;
 import org.apache.pdfbox.multipdf.PDFMergerUtility;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 import java.io.IOException;
@@ -30,8 +31,19 @@ public class PdfMergerService {
         String coverPath = tempDir + File.separator + "temp_cover.pdf";
         String statsPath = tempDir + File.separator + "temp_stats.pdf";
         String prestationsPath = tempDir + File.separator + "temp_prestations.pdf";
-        String finalPath = System.getProperty("user.home") + File.separator + "Downloads"
-                + File.separator + "rapport-complet-ecodeli.pdf";
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport PDF");
+        fileChooser.setInitialFileName("rapport-complet-ecodeli.pdf");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+
+        File selectedFile = fileChooser.showSaveDialog(null); // Remplace `null` par `stage` si tu l’as
+
+        if (selectedFile == null) {
+            System.out.println("❌ Export annulé par l'utilisateur.");
+            return; // Annule le processus si l'utilisateur n'a rien choisi
+        }
+
+        String finalPath = selectedFile.getAbsolutePath();
 
         try {
             // 1. Créer la page de couverture dans un PDF séparé
@@ -46,8 +58,6 @@ public class PdfMergerService {
 
             // 4. Nettoyer les fichiers temporaires
             cleanupTempFiles(coverPath, statsPath, prestationsPath);
-
-            System.out.println("✅ Rapport complet généré : " + finalPath);
 
         } catch (Exception e) {
             e.printStackTrace();

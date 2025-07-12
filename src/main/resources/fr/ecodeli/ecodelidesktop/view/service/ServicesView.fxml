@@ -18,6 +18,7 @@
 
     <VBox styleClass="header-section" spacing="10">
         <Label text="Gestion des Services" styleClass="page-title"/>
+        <Label fx:id="totalServicesLabel" text="0 prestation au total" styleClass="subtitle"/>
     </VBox>
 
     <TableView fx:id="serviceTable" styleClass="modern-table" prefHeight="850">

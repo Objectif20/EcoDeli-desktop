@@ -30,10 +30,8 @@ public class WarehouseAPI {
             JsonObject obj = json.getAsJsonObject();
             Warehouse warehouse = new Warehouse();
 
-            // Identifiant
             warehouse.setWarehouseId(obj.has("warehouse_id") ? obj.get("warehouse_id").getAsString() : null);
 
-            // Champs simples
             warehouse.setCity(obj.has("city") ? obj.get("city").getAsString() : null);
             warehouse.setCapacity(obj.has("capacity") ? obj.get("capacity").getAsInt() : 0);
             warehouse.setDescription(obj.has("description") ? obj.get("description").getAsString() : null);
@@ -41,7 +39,6 @@ public class WarehouseAPI {
             warehouse.setPostalCode(obj.has("postal_code") ? obj.get("postal_code").getAsString() : null);
             warehouse.setPhoto(obj.has("photo") ? obj.get("photo").getAsString() : null);
 
-            // Coordonnées (array de chaînes)
             if (obj.has("coordinates") && obj.get("coordinates").isJsonArray()) {
                 JsonArray coordsArray = obj.getAsJsonArray("coordinates");
                 List<String> coords = new ArrayList<>();
@@ -101,15 +98,19 @@ public class WarehouseAPI {
         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         multipartBuilder.addFormDataPart("city", warehouse.city);
         multipartBuilder.addFormDataPart("capacity", String.valueOf(warehouse.capacity));
-        multipartBuilder.addFormDataPart("coordinates", warehouse.coordinates); // [longitude, latitude] stringifiée
         multipartBuilder.addFormDataPart("address", warehouse.address);
         multipartBuilder.addFormDataPart("postal_code", warehouse.postalCode);
+
         if (warehouse.description != null) {
             multipartBuilder.addFormDataPart("description", warehouse.description);
         }
+
         if (file != null) {
-            multipartBuilder.addFormDataPart("file", file.getName(),
-                    RequestBody.create(file, MediaType.parse("application/octet-stream")));
+            multipartBuilder.addFormDataPart(
+                    "file",
+                    file.getName(),
+                    RequestBody.create(file, MediaType.parse("application/octet-stream"))
+            );
         }
 
         RequestBody requestBody = multipartBuilder.build();
@@ -121,9 +122,11 @@ public class WarehouseAPI {
                 .build();
 
         try (Response response = CustomOkHttpClient.getInstance().newCall(request).execute()) {
-            if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
-            assert response.body() != null;
-            response.body().string(); // Ignoré ici
+            String responseBody = response.body() != null ? response.body().string() : "Aucun contenu";
+
+            if (!response.isSuccessful()) {
+                throw new IOException("🚨 Requête échouée - Code " + response.code() + ": " + responseBody);
+            }
         }
     }
 
@@ -135,7 +138,6 @@ public class WarehouseAPI {
         MultipartBody.Builder multipartBuilder = new MultipartBody.Builder().setType(MultipartBody.FORM);
         if (warehouse.city != null) multipartBuilder.addFormDataPart("city", warehouse.city);
         if (warehouse.capacity != null) multipartBuilder.addFormDataPart("capacity", String.valueOf(warehouse.capacity));
-        if (warehouse.coordinates != null) multipartBuilder.addFormDataPart("coordinates", warehouse.coordinates);
         if (warehouse.address != null) multipartBuilder.addFormDataPart("address", warehouse.address);
         if (warehouse.postalCode != null) multipartBuilder.addFormDataPart("postal_code", warehouse.postalCode);
         if (warehouse.description != null) multipartBuilder.addFormDataPart("description", warehouse.description);
@@ -155,7 +157,7 @@ public class WarehouseAPI {
         try (Response response = CustomOkHttpClient.getInstance().newCall(request).execute()) {
             if (!response.isSuccessful()) throw new IOException("Unexpected code " + response);
             assert response.body() != null;
-            response.body().string(); // Ignoré ici
+            response.body().string();
         }
     }
 
@@ -186,7 +188,7 @@ public class WarehouseAPI {
     public static class WarehouseCreateRequest {
         public String city;
         public int capacity;
-        public String coordinates; // JSON array sous forme de string : ["longitude", "latitude"]
+        public String coordinates;
         public String description;
         public String address;
         public String postalCode;

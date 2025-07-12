@@ -12,6 +12,7 @@ import javafx.scene.Node;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.image.WritableImage;
 import javafx.embed.swing.SwingFXUtils;
+import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -66,8 +67,20 @@ public class StatsPrestationsViewController {
     }
 
     private void exportChartsToPdf() {
-        String filePath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "dashboard-prestations.pdf";
-        exportChartsToPdf(filePath);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport PDF");
+        fileChooser.setInitialFileName("dashboard-prestations.pdf");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+
+        File selectedFile = fileChooser.showSaveDialog(null); // Remplace `null` par `stage` si tu l’as
+
+        if (selectedFile == null) {
+            System.out.println("❌ Export annulé par l'utilisateur.");
+            return; // Annule le processus si l'utilisateur n'a rien choisi
+        }
+
+        String finalPath = selectedFile.getAbsolutePath();
+        exportChartsToPdf(finalPath);
     }
 
     public void exportChartsToPdf(String customPath) {

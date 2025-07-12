@@ -9,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.scene.chart.BarChart;
 import javafx.scene.chart.PieChart;
 import javafx.scene.layout.GridPane;
+import javafx.stage.FileChooser;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.pdmodel.PDPage;
 import org.apache.pdfbox.pdmodel.PDPageContentStream;
@@ -55,8 +56,20 @@ public class StatsViewController {
     }
 
     private void exportChartsToPdf() {
-        String filePath = System.getProperty("user.home") + File.separator + "Downloads" + File.separator + "dashboard.pdf";
-        exportChartsToPdf(filePath);
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.setTitle("Enregistrer le rapport PDF");
+        fileChooser.setInitialFileName("dashboard.pdf");
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Fichiers PDF", "*.pdf"));
+
+        File selectedFile = fileChooser.showSaveDialog(null); // Remplace `null` par `stage` si tu l’as
+
+        if (selectedFile == null) {
+            System.out.println("❌ Export annulé par l'utilisateur.");
+            return;
+        }
+
+        String finalPath = selectedFile.getAbsolutePath();
+        exportChartsToPdf(finalPath);
     }
 
     public void exportChartsToPdf(String customPath) {

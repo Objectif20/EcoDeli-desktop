@@ -6,6 +6,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
+<?import javafx.scene.layout.Region?>
 <VBox xmlns="http://javafx.com/javafx/11.0.1"
       xmlns:fx="http://javafx.com/fxml/1"
       fx:controller="fr.ecodeli.ecodelidesktop.warehouse.WarehouseTableController"
@@ -15,13 +16,14 @@
       prefHeight="700"
       stylesheets="@warehouse-management.css">
 
-    <VBox styleClass="header-section" spacing="10">
-        <HBox spacing="20" alignment="CENTER_LEFT">
+    <HBox spacing="10" alignment="CENTER_LEFT">
+        <VBox styleClass="header-section" spacing="10">
             <Label text="Gestion des Entrepôts" styleClass="page-title"/>
-            <Button fx:id="addWarehouseButton" text="+ Ajouter un entrepôt" styleClass="action-button add-button"/>
-        </HBox>
-        <Label fx:id="totalWarehousesLabel" text="0 entrepôts au total" styleClass="subtitle"/>
-    </VBox>
+            <Label fx:id="totalWarehousesLabel" text="0 entrepôts au total" styleClass="subtitle"/>
+        </VBox>
+        <Region HBox.hgrow="ALWAYS"/>
+        <Button fx:id="addWarehouseButton" text="+ Ajouter un entrepôt" styleClass="action-button"/>
+    </HBox>
 
     <TableView fx:id="warehouseTable" styleClass="modern-table" prefHeight="600">
         <columnResizePolicy>

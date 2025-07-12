@@ -313,8 +313,8 @@ public class MerchantTableController {
                 int total = response.getMeta().getTotal();
                 int limit = response.getMeta().getLimit();
                 totalPages = (int) Math.ceil((double) total / limit);
-                totalMerchantsLabel.setText(total + " marchands au total");
-                updatePaginationControls();
+                String labelText = total + " commerçant" + (total > 1 ? "s" : "") + " au total";
+                totalMerchantsLabel.setText(labelText);                updatePaginationControls();
             }
         } catch (IOException e) {
             e.printStackTrace();

@@ -38,6 +38,7 @@ public class WarehouseFormController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         setupEventHandlers();
         setupFieldValidation();
+        setupFormBehavior();
     }
 
     private void setupEventHandlers() {
@@ -60,8 +61,25 @@ public class WarehouseFormController implements Initializable {
         });
     }
 
+    private void setupFormBehavior() {
+        capacityField.setOnAction(e -> saveWarehouse());
+
+        Platform.runLater(() -> {
+            if (cityField != null) {
+                cityField.requestFocus();
+            }
+        });
+    }
+
     public void setModalStage(Stage modalStage) {
         this.modalStage = modalStage;
+
+        if (modalStage != null) {
+            modalStage.setResizable(true);
+            modalStage.setOnShowing(e -> {
+                modalStage.toFront();
+            });
+        }
     }
 
     public void setWarehouse(Warehouse warehouse) {
@@ -71,6 +89,7 @@ public class WarehouseFormController implements Initializable {
             populateFields(warehouse);
         } else {
             formTitle.setText("Ajouter un entrepôt");
+            clearFields();
         }
     }
 
@@ -80,6 +99,19 @@ public class WarehouseFormController implements Initializable {
         postalCodeField.setText(warehouse.getPostalCode());
         capacityField.setText(String.valueOf(warehouse.getCapacity()));
         descriptionField.setText(warehouse.getDescription());
+
+        selectedFile = null;
+        fileLabel.setText("Aucun fichier sélectionné");
+    }
+
+    private void clearFields() {
+        cityField.clear();
+        addressField.clear();
+        postalCodeField.clear();
+        capacityField.clear();
+        descriptionField.clear();
+        selectedFile = null;
+        fileLabel.setText("Aucun fichier sélectionné");
     }
 
     private void selectFile() {
@@ -103,6 +135,7 @@ public class WarehouseFormController implements Initializable {
 
         saveButton.setDisable(true);
         saveButton.setText("Enregistrement...");
+        cancelButton.setDisable(true);
 
         Task<Void> task = new Task<>() {
             @Override
@@ -149,6 +182,7 @@ public class WarehouseFormController implements Initializable {
             Platform.runLater(() -> {
                 saveButton.setDisable(false);
                 saveButton.setText("Enregistrer");
+                cancelButton.setDisable(false);
 
                 Throwable exception = task.getException();
                 showErrorAlert("Erreur", "Impossible d'enregistrer l'entrepôt: " + exception.getMessage());
