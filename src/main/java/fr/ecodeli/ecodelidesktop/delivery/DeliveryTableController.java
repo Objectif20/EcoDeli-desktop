@@ -120,7 +120,9 @@ public class DeliveryTableController {
                 rows.add(new DeliveryRow(d));
             }
             livraisonTable.setItems(rows);
-            totalDeliveriesLabel.setText(response.getTotalRows() + " livraisons au total");
+            int total = response.getTotalRows();
+            String labelText = total + " livraison" + (total > 1 ? "s" : "") + " au total";
+            totalDeliveriesLabel.setText(labelText);
             updatePaginationControls();
         } catch (IOException e) {
             e.printStackTrace();

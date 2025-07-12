@@ -1,16 +1,16 @@
 package fr.ecodeli.ecodelidesktop.service;
 
-import fr.ecodeli.ecodelidesktop.api.AuthApi;
+import fr.ecodeli.ecodelidesktop.api.AuthAPI;
 import fr.ecodeli.ecodelidesktop.model.AuthResponse;
 import fr.ecodeli.ecodelidesktop.model.LoginRequest;
 
 import java.io.IOException;
 
 public class AuthService {
-    private AuthApi authApi;
+    private AuthAPI authApi;
 
     public AuthService() {
-        this.authApi = new AuthApi();
+        this.authApi = new AuthAPI();
     }
 
     public AuthResponse login(LoginRequest loginRequest) throws IOException {

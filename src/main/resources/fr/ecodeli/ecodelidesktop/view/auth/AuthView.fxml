@@ -1,10 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.scene.control.*?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.*?>
 
-<HBox xmlns="http://javafx.com/javafx/11.0.1" xmlns:fx="http://javafx.com/fxml/1" fx:controller="fr.ecodeli.ecodelidesktop.view.auth.AuthViewController" styleClass="root-container"
-stylesheets="auth-style.css">
+<?import javafx.scene.image.Image?>
+<HBox xmlns="http://javafx.com/javafx/11.0.1"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="fr.ecodeli.ecodelidesktop.view.auth.AuthViewController"
+      styleClass="root-container"
+      stylesheets="auth-style.css">
 
     <VBox styleClass="login-section" HBox.hgrow="ALWAYS">
         <children>
@@ -14,6 +19,18 @@ stylesheets="auth-style.css">
                     <Label styleClass="app-subtitle" text="Connexion au tableau de bord" />
                 </children>
             </VBox>
+
+            <ImageView fx:id="logoImageView"
+                       fitHeight="120"
+                       fitWidth="120"
+                       pickOnBounds="true"
+                       preserveRatio="true"
+                       styleClass="logo-image"
+                       >
+                <image>
+                    <Image url="@ecodeli.png" />
+                </image>
+            </ImageView>
 
             <VBox fx:id="loginForm" styleClass="form-container">
                 <children>
@@ -31,16 +48,24 @@ stylesheets="auth-style.css">
                         </children>
                     </VBox>
 
-                    <Button fx:id="loginButton" styleClass="primary-button" onAction="#handleLogin" text="Se connecter" />
+                    <Button fx:id="loginButton"
+                            styleClass="primary-button"
+                            onAction="#handleLogin"
+                            text="Se connecter" />
                 </children>
             </VBox>
 
-            <VBox fx:id="twoFactorForm" styleClass="form-container, two-factor-form" visible="false" managed="false">
+            <VBox fx:id="twoFactorForm"
+                  styleClass="form-container, two-factor-form"
+                  visible="false"
+                  managed="false">
                 <children>
                     <VBox styleClass="two-factor-header">
                         <children>
                             <Label styleClass="two-factor-title" text="Authentification à deux facteurs" />
-                            <Label styleClass="two-factor-description" text="Entrez le code à 6 chiffres généré par votre application d'authentification" wrapText="true" />
+                            <Label styleClass="two-factor-description"
+                                   text="Entrez le code à 6 chiffres généré par votre application d'authentification"
+                                   wrapText="true" />
                         </children>
                     </VBox>
 
@@ -57,15 +82,20 @@ stylesheets="auth-style.css">
 
                     <HBox styleClass="button-group">
                         <children>
-                            <Button fx:id="backButton" styleClass="secondary-button" onAction="#handleBackToLogin" text="Retour" />
-                            <Button fx:id="verifyButton" styleClass="primary-button" onAction="#handleVerify2FA" text="Vérifier" />
+                            <Button fx:id="backButton"
+                                    styleClass="secondary-button"
+                                    onAction="#handleBackToLogin"
+                                    text="Retour" />
+                            <Button fx:id="verifyButton"
+                                    styleClass="primary-button"
+                                    onAction="#handleVerify2FA"
+                                    text="Vérifier" />
                         </children>
                     </HBox>
                 </children>
             </VBox>
 
             <Label fx:id="errorLabel" styleClass="error-label" visible="false" wrapText="true" />
-
         </children>
     </VBox>
 
@@ -74,7 +104,9 @@ stylesheets="auth-style.css">
             <VBox styleClass="welcome-content">
                 <children>
                     <Label styleClass="welcome-title" text="Bienvenue sur EcoDeli" />
-                    <Label styleClass="welcome-description" text="Gérez votre plateforme de livraison écologique" wrapText="true" />
+                    <Label styleClass="welcome-description"
+                           text="Gérez votre plateforme de livraison écologique"
+                           wrapText="true" />
                 </children>
             </VBox>
         </children>

@@ -1,5 +1,6 @@
 package fr.ecodeli.ecodelidesktop.clients;
 
+import com.github.javafaker.Faker;
 import fr.ecodeli.ecodelidesktop.api.ClientAPI;
 import fr.ecodeli.ecodelidesktop.controller.MainController;
 import javafx.collections.FXCollections;
@@ -8,6 +9,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.geometry.Pos;
 import javafx.scene.Parent;
+import javafx.scene.chart.*;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.image.Image;
@@ -32,10 +34,22 @@ public class ClientTableController {
     @FXML private Button nextButton;
     @FXML private Label pageLabel;
     @FXML private Label totalClientsLabel;
+    @FXML private Button refreshButton;
+
+
+    @FXML private Label totalClientsCard;
+    @FXML private Label clientsTransporteursCard;
+    @FXML private Label prestationsMoyennesCard;
+    @FXML private Label revenuMoyenCard;
+    @FXML private PieChart abonnementChart;
+    @FXML private BarChart<String, Number> prestationsAbonnementChart;
+    @FXML private LineChart<String, Number> evolutionClientsChart;
+    @FXML private BarChart<String, Number> revenusTrimestreChart;
 
     private ClientAPI clientAPI;
     private int currentPage = 1;
     private int totalPages = 1;
+    private final Faker faker = new Faker();
 
     @FXML
     public void initialize() {
@@ -53,8 +67,112 @@ public class ClientTableController {
 
         setupActionsColumn();
         loadClients();
+        loadStatistics();
+        setupCharts();
         prevButton.setOnAction(e -> previousPage());
         nextButton.setOnAction(e -> nextPage());
+        refreshButton.setOnAction(e -> refreshData());
+    }
+
+    private void setupCharts() {
+        abonnementChart.setTitle("Répartition des abonnements");
+        abonnementChart.setLegendVisible(true);
+
+        CategoryAxis xAxisPrestations = new CategoryAxis();
+        NumberAxis yAxisPrestations = new NumberAxis();
+        xAxisPrestations.setLabel("Abonnements");
+        yAxisPrestations.setLabel("Prestations moyennes");
+        prestationsAbonnementChart.setTitle("Prestations par abonnement");
+
+        CategoryAxis xAxisEvolution = new CategoryAxis();
+        NumberAxis yAxisEvolution = new NumberAxis();
+        xAxisEvolution.setLabel("Mois");
+        yAxisEvolution.setLabel("Nouveaux clients");
+        evolutionClientsChart.setTitle("Évolution mensuelle des clients");
+
+        CategoryAxis xAxisRevenu = new CategoryAxis();
+        NumberAxis yAxisRevenu = new NumberAxis();
+        xAxisRevenu.setLabel("Trimestres");
+        yAxisRevenu.setLabel("Revenus (€)");
+        revenusTrimestreChart.setTitle("Revenus trimestriels");
+    }
+
+    private void loadStatistics() {
+        int totalClients = faker.number().numberBetween(800, 1200);
+        int clientsTransporteurs = faker.number().numberBetween(45, 85);
+        int prestationsMoyennes = faker.number().numberBetween(8, 15);
+        double revenuMoyen = faker.number().randomDouble(2, 85, 150);
+
+        totalClientsCard.setText(String.valueOf(totalClients));
+        clientsTransporteursCard.setText(String.valueOf(clientsTransporteurs));
+        prestationsMoyennesCard.setText(String.valueOf(prestationsMoyennes));
+        revenuMoyenCard.setText(String.format("%.2f €", revenuMoyen));
+
+        ObservableList<PieChart.Data> abonnementData = FXCollections.observableArrayList(
+                new PieChart.Data("Premium", faker.number().numberBetween(150, 250)),
+                new PieChart.Data("Standard", faker.number().numberBetween(300, 450)),
+                new PieChart.Data("Basic", faker.number().numberBetween(100, 200)),
+                new PieChart.Data("Entreprise", faker.number().numberBetween(50, 120)),
+                new PieChart.Data("Famille", faker.number().numberBetween(80, 180))
+        );
+        abonnementChart.setData(abonnementData);
+
+        XYChart.Series<String, Number> prestationsSeries = new XYChart.Series<>();
+        prestationsSeries.setName("Prestations moyennes");
+        String[] abonnements = {"Premium", "Standard", "Basic", "Entreprise", "Famille"};
+        for (String abonnement : abonnements) {
+            int prestations = switch (abonnement) {
+                case "Premium" -> faker.number().numberBetween(15, 25);
+                case "Standard" -> faker.number().numberBetween(8, 15);
+                case "Basic" -> faker.number().numberBetween(3, 8);
+                case "Entreprise" -> faker.number().numberBetween(20, 35);
+                case "Famille" -> faker.number().numberBetween(10, 18);
+                default -> faker.number().numberBetween(5, 15);
+            };
+            prestationsSeries.getData().add(new XYChart.Data<>(abonnement, prestations));
+        }
+        prestationsAbonnementChart.getData().clear();
+        prestationsAbonnementChart.getData().add(prestationsSeries);
+
+        XYChart.Series<String, Number> evolutionSeries = new XYChart.Series<>();
+        evolutionSeries.setName("Nouveaux clients");
+        String[] mois = {"Jan", "Fév", "Mar", "Avr", "Mai", "Jun", "Jul", "Aoû", "Sep", "Oct", "Nov", "Déc"};
+        int baseValue = 50;
+        for (String month : mois) {
+            int variation = faker.number().numberBetween(-15, 25);
+            baseValue = Math.max(20, baseValue + variation);
+
+            if (month.equals("Jul") || month.equals("Aoû") || month.equals("Déc")) {
+                baseValue += faker.number().numberBetween(10, 30);
+            }
+
+            evolutionSeries.getData().add(new XYChart.Data<>(month, baseValue));
+        }
+        evolutionClientsChart.getData().clear();
+        evolutionClientsChart.getData().add(evolutionSeries);
+
+        XYChart.Series<String, Number> revenuSeries = new XYChart.Series<>();
+        revenuSeries.setName("Revenus");
+        String[] trimestres = {"T1 2024", "T2 2024", "T3 2024", "T4 2024", "T1 2025"};
+        int baseRevenu = 25000;
+        for (String trimestre : trimestres) {
+            int variation = faker.number().numberBetween(-3000, 8000);
+            baseRevenu = Math.max(15000, baseRevenu + variation);
+
+            if (trimestre.contains("T4")) {
+                baseRevenu += faker.number().numberBetween(5000, 12000);
+            }
+
+            revenuSeries.getData().add(new XYChart.Data<>(trimestre, baseRevenu));
+        }
+        revenusTrimestreChart.getData().clear();
+        revenusTrimestreChart.getData().add(revenuSeries);
+    }
+
+    @FXML
+    private void refreshData() {
+        loadStatistics();
+        loadClients();
     }
 
     private <T> void centerCellContent(TableColumn<Client, T> column) {
@@ -166,7 +284,8 @@ public class ClientTableController {
                 int total = response.getMeta().getTotal();
                 int limit = response.getMeta().getLimit();
                 totalPages = (int) Math.ceil((double) total / limit);
-                totalClientsLabel.setText(total + " clients au total");
+                String labelText = total + " particulier" + (total != 1 ? "s" : "") + " au total";
+                totalClientsLabel.setText(labelText);
                 updatePaginationControls();
             }
         } catch (IOException e) {

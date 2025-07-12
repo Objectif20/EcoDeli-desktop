@@ -15,6 +15,7 @@ module fr.ecodeli.ecodelidesktop {
     requires org.apache.pdfbox;
     requires org.jfree.jfreechart;
     requires de.rototor.pdfbox.graphics2d;
+    requires javafaker;
 
 
     opens fr.ecodeli.ecodelidesktop to javafx.fxml;
@@ -27,14 +28,20 @@ module fr.ecodeli.ecodelidesktop {
     opens fr.ecodeli.ecodelidesktop.delivery to javafx.fxml, com.google.gson, javafx.base;
     opens fr.ecodeli.ecodelidesktop.merchant to com.google.gson, javafx.fxml, javafx.base;
     opens fr.ecodeli.ecodelidesktop.services to javafx.fxml, com.google.gson, javafx.base;
-    opens fr.ecodeli.ecodelidesktop.api to com.google.gson;
+    opens fr.ecodeli.ecodelidesktop.api to com.google.gson, javafx.fxml, javafx.base;
+    opens fr.ecodeli.ecodelidesktop.warehouse to javafx.fxml, javafx.base;
+
+
     opens fr.ecodeli.ecodelidesktop.view.client to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.merchant to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.delivery to javafx.fxml;
     opens fr.ecodeli.ecodelidesktop.view.service to javafx.fxml;
+    opens fr.ecodeli.ecodelidesktop.view.warehouse to javafx.fxml;
 
     exports fr.ecodeli.ecodelidesktop;
     exports fr.ecodeli.ecodelidesktop.view.auth;
     exports fr.ecodeli.ecodelidesktop.dashboard to javafx.fxml;
     exports fr.ecodeli.ecodelidesktop.clients to javafx.fxml;
+    exports fr.ecodeli.ecodelidesktop.services to javafx.fxml;
+    exports fr.ecodeli.ecodelidesktop.warehouse to javafx.fxml;
 }

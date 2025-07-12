@@ -9,7 +9,7 @@ import okhttp3.Response;
 import java.io.IOException;
 
 public class CustomOkHttpClient {
-    public static final String BASE_URL = "http://localhost:3000";
+    public static final String BASE_URL = "https://app.ecodeli.remythibaut.fr";
     public static final MediaType JSON = MediaType.get("application/json; charset=utf-8");
 
     private static OkHttpClient instance;

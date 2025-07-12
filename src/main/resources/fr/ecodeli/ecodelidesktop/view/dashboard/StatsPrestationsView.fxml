@@ -18,6 +18,7 @@
                 GridPane.rowIndex="4"
                 GridPane.columnIndex="0"
                 GridPane.columnSpan="3"
+                styleClass="pdf-button"
                 style="-fx-margin-top: 20px; -fx-min-width: 250px" />
     </children>
 </GridPane>

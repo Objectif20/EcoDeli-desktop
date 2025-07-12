@@ -29,6 +29,7 @@ public class ServiceTableController {
     @FXML private Button prevButton;
     @FXML private Button nextButton;
     @FXML private Label pageLabel;
+    @FXML private Label totalServicesLabel;
 
     private final ServicesAPI servicesAPI = new ServicesAPI();
 
@@ -172,6 +173,10 @@ public class ServiceTableController {
             prevButton.setDisable(currentPage == 1);
             nextButton.setDisable(currentPage == totalPages);
 
+            int total = response.getTotal();
+            String labelText = total + " prestation" + (total > 1 ? "s" : "") + " au total";
+            totalServicesLabel.setText(labelText);
+
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -182,9 +187,10 @@ public class ServiceTableController {
             @Override
             public TableCell<Service, Void> call(final TableColumn<Service, Void> param) {
                 return new TableCell<>() {
-                    private final Button btn = new Button("Afficher");
+                    private final Button btn = new Button("Détails");
 
                     {
+                        btn.getStyleClass().add("action-button");
                         btn.setOnAction(event -> {
                             Service service = getTableView().getItems().get(getIndex());
                             if (service != null) {

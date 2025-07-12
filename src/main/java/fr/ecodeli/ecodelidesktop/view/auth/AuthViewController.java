@@ -1,15 +1,13 @@
 package fr.ecodeli.ecodelidesktop.view.auth;
 
-import fr.ecodeli.ecodelidesktop.api.AuthApi;
+import fr.ecodeli.ecodelidesktop.api.AuthAPI;
 import fr.ecodeli.ecodelidesktop.model.AuthResponse;
 import fr.ecodeli.ecodelidesktop.model.LoginRequest;
 import fr.ecodeli.ecodelidesktop.service.TokenStorage;
 import javafx.application.Platform;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
-import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -33,11 +31,11 @@ public class AuthViewController implements Initializable {
 
     @FXML private Label errorLabel;
 
-    private final AuthApi authApi;
+    private final AuthAPI authApi;
     private LoginRequest currentLoginRequest;
 
     public AuthViewController() {
-        this.authApi = new AuthApi();
+        this.authApi = new AuthAPI();
     }
 
     @Override
